@@ -15,6 +15,15 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->integer('client_id')->nullable();
+            $table->string('ref')->nullable();
+            $table->integer('ref_id')->nullable();
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
+            $table->text('remark')->nullable();
+            $table->datetime('publish_date')->nullable();
+            $table->json('meta')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

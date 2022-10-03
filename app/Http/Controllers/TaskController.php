@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -14,7 +15,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Tasks/List', [
+            'tasks' => Task::orderByDesc('id')->paginate(20),
+        ]);
     }
 
     /**
@@ -24,7 +27,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Tasks/Create');
     }
 
     /**
@@ -35,7 +38,11 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Task::create($request->validate([
+            'title' => ['required', 'max:255'],
+        ]));
+        return redirect()->route('tasks.index');
+        // dd($request->all());
     }
 
     /**
