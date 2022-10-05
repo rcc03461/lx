@@ -18,9 +18,12 @@ return new class extends Migration
             $table->integer('client_id')->nullable();
             $table->string('ref')->nullable();
             $table->integer('ref_id')->nullable();
+            $table->integer('job_id')->nullable();
+            $table->string('job_code')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->text('remark')->nullable();
+            $table->datetime('job_in_date')->nullable();
             $table->datetime('publish_date')->nullable();
             $table->json('meta')->nullable();
             $table->softDeletes();

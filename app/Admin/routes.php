@@ -1,8 +1,9 @@
 <?php
 
+use Dcat\Admin\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Dcat\Admin\Admin;
+use App\Admin\Controllers\InvoiceController;
 
 Admin::routes();
 
@@ -13,5 +14,20 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
+
+    $router->resource('c8c_job', 'C8CJobController');
+
+    $router->resource('client', 'ClientController');
+    $router->resource('task', 'TaskController');
+    $router->resource('invoice', 'InvoiceController');
+
+    // $router->get('jobs/build', [JobController::class, 'build']);
+    // $router->post('jobs/build-save', [JobController::class, 'buildSave']);
+    // $router->get('jobs/build', 'JobController@build');
+    $router->get('invoice', [InvoiceController::class, 'index']);
+    $router->get('invoice/create', [InvoiceController::class, 'invoiceCreate']);
+    $router->get('invoice/{job}', [InvoiceController::class, 'single']);
+    $router->put('invoice/{job}', [InvoiceController::class, 'update']);
+    $router->get('invoice/{job}/edit', [InvoiceController::class, 'buildEdit']);
 
 });
