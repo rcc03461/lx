@@ -24,7 +24,8 @@ Route::post('/c8c_jobs', function () {
     // return request()->all();
     Log::info(request()->all());
 
-    foreach (request()->all() as $key => $value) {
+    foreach (request()->jobs as $key => $value) {
+
         C8CJob::where('job_id', $value['job_id'])->updateOrCreate(
             ['job_id' => $value['job_id']],
             [
