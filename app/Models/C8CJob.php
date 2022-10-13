@@ -23,7 +23,7 @@ class C8CJob extends Model
     ];
 
     protected $casts = [
-        'meta' => 'Object',
+        'meta' => 'object',
     ];
 
 }
