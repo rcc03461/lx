@@ -10,4 +10,24 @@ class Invoice extends Model
 {
 	use HasDateTimeFormatter;
     use SoftDeletes;
-    }
+
+    protected $fillable = [
+        "task_id",
+        "idjob",
+        "invoiceCode",
+        "InvoiceNo",
+        "version",
+        "ApproveId",
+        "Transtatus",
+        "InvoiceTime",
+        "tranRemark",
+        "total",
+        "invoiceDate",
+        "reviseDate",
+        "words",
+        "pages",
+        "other",
+        "less",
+        "meta",
+    ];
+}

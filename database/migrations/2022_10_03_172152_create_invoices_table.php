@@ -16,6 +16,15 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('task_id')->nullable();
+            $table->integer('idjob')->nullable(); //
+
+            $table->string('invoiceCode')->nullable(); // C8C
+            $table->integer('InvoiceNo')->nullable(); // C8C
+            $table->integer('version')->nullable(); // C8C
+            $table->integer('ApproveId')->nullable(); // C8C
+            $table->integer('Transtatus')->nullable(); // C8C
+            $table->dateTime('InvoiceTime')->nullable(); // C8C
+
             $table->text('tranRemark')->nullable();
             $table->double('total')->nullable();
             $table->date('invoiceDate')->nullable();

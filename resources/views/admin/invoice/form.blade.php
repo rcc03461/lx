@@ -2,190 +2,146 @@
     @verbatim
     <div id="vue-app">
 
-        <datalist id="size_list">
-            <option v-for="item in size_list">{{item}}</option>
-        </datalist>
-
-        <datalist id="pagination_list">
-            <option v-for="item in pagination_list">{{item}}</option>
-        </datalist>
-
-        <datalist id="color_list">
-            <option v-for="item in color_list">{{item}}</option>
-        </datalist>
-
-        <datalist id="material_list">
-            <option v-for="item in material_list">{{item}}</option>
-        </datalist>
-
-        <datalist id="binding_list">
-            <option v-for="item in binding_list">{{item}}</option>
-        </datalist>
-
-
-
-        <section class="flex flex-start gap-4">
-            <div class="cursor-pointer btn btn-xs" :class="{'btn-success' : tag_display == 'info'}" @click="tag_display = 'info'">Job Details</div>
-            <div class="cursor-pointer btn btn-xs"
-                v-for="(product,index) in form.products"
-                :key="index"
-                :class="{
-                    'btn-success' : tag_display == 'product' && product_showing_index == index,
-                    'text-red-500' : product._delete_
-                    }"
-                @click="showProduct(index)">{{product.product_name}}</div>
-
-            <div class="cursor-pointer btn btn-xs btn-primary"  @click="addProduct">Add Product</div>
-            <span class="ml-auto btn btn-xs" @click="modern_form_show = true">現代</span>
-            <div class="w-48" >
-                <select class="form-control" v-model="templated">
-                    <option value="">Templates</option>
-                    {{-- <option value="_mordern">現代</option> --}}
+        <div class="flex items-center my-2">
+            <label class="w-40" for="">Job Number:</label>
+            <div>
+                <select class="form-control" name="" id="">
+                    <option value="Chi">Chi Words</option>
+                    <option value="Eng">Eng Words</option>
                 </select>
             </div>
-            <div class="cursor-pointer btn btn-xs btn-primary "  @click="submitJob">Submit</div>
-        </section>
-
-        <div v-show="tag_display == 'info'" title="Job Detail" class="w-full">
-            <div v-show="form.created_at" class="flex items-center my-2">
-                <label class="w-40" for="">Created At</label>
-                <div>{{form.created_at}}</div>
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Company</label>
-                <select v-model="form.company_id" class="flex-1 form-control">
-                    <option v-for="company in companies" :value="company.id">{{company.name}}</option>
-                </select>
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Job Title</label>
-                <input class="flex-1 form-control" type="text" v-model="form.job_title" >
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Job description</label>
-                <textarea class="flex-1 form-control"  v-model="form.job_description" ></textarea>
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Ref. no</label>
-                <input class="flex-1 form-control" type="text" v-model="form.ref_no" >
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Job In At</label>
-                <input class="flex-1 form-control" type="datetime-local" v-model="form.job_in_at" >
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Attachments</label>
-                <div class="">
-                    <input class="flex-1 form-control" name="attachments[]" type="file" multiple @change="uploadFiles">
-                    <ul class="ml-1 border-l border-gray-500 pl-1 my-1">
-                        <li v-for="(url,index) in form.attachments" :key="url" class="hover:bg-gray-300 px-1">
-                            <a :href="'/'+url" target="_blank">File {{index + 1}}</a> <span class="pl-4" @click="removeAttachment(url)"> <i class="">Trash</i> </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Is Sample</label>
-                <input class="" type="checkbox" v-model="form.is_sample" >
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Delivery Date</label>
-                <input class="flex-1 form-control" type="datetime-local" v-model="form.delivery_date" >
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Delivery Instructions</label>
-                <textarea class="flex-1 form-control"  v-model="form.delivery_instructions" ></textarea>
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Payment Terms</label>
-                <textarea class="flex-1 form-control"  v-model="form.payment_terms" ></textarea>
-            </div>
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Status</label>
-                <select v-model="form.status" class="flex-1 form-control">
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Product Ready">Product Ready</option>
-                    <option value="Delivered">Delivered</option>
-                </select>
-            </div>
-
-            <div class="flex items-center my-2">
-                <label class="w-40" for="">Is Outsource</label>
-                <input class="" type="checkbox" v-model="form.is_outsource" >
-            </div>
-            <div v-show="form.is_outsource">
-                <div class="flex items-center my-2">
-                    <label class="w-40" for="">Oursource Remark</label>
-                    <textarea class="flex-1 form-control"  v-model="form.outsource_remark" ></textarea>
-                </div>
-                <!-- <div class="flex items-center my-2">
-                    <label class="w-40" for="">Oursource Cost</label>
-                    <input class="flex-1 form-control" type="number"  v-model="form.outsource_cost" >
-                </div>
-                <div class="flex items-center my-2">
-                    <label class="w-40" for="">Outsource Supportings</label>
-                    <input class="flex-1 form-control" type="file" v-model="form.outsource_supportings" >
-                </div> -->
-            </div>
-
         </div>
 
 
-
-        <div v-show="modern_form_show" class="fixed inset-0 z-20 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
-                <div @click="modern_form_show = false" v-show="modern_form_show"
-                    x-transition:enter="transition ease-out duration-300 transform"
-                    x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100"
-                    x-transition:leave="transition ease-in duration-200 transform"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40" aria-hidden="true"
-                ></div>
-
-                <div v-show="modern_form_show"
-                    x-transition:enter="transition ease-out duration-300 transform"
-                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave="transition ease-in duration-200 transform"
-                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    class="inline-block w-full max-w-7xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl"
-                >
-                    <div class="flex items-center justify-between space-x-4">
-                        <h1 class="text-xl font-medium text-gray-800 ">現代訂印單</h1>
-
-                        <button @click="modern_form_show = false" class="text-gray-600 focus:outline-none hover:text-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <p class="mt-2 text-sm text-gray-500 ">
-                        Add your teammate to your team and start work to get things done
-                    </p>
-
-                    <form class="mt-2">
-
-
-
-
-
-                        <div class="flex justify-end mt-6">
-                            <button @click="submit_mordern" type="button" class="px-2 py-1 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
-                                Submit
-                            </button>
-                        </div>
-                    </form>
-                </div>
+        <div class="flex items-center my-2">
+            <label class="w-40" for="">Invoice Date:</label>
+            <div>
+                <input class="form-control" type="date" v-model="form.invoice_date">
             </div>
+        </div>
 
 
-</div>
+        <table class="w-full">
+            <tr>
+                <td class="w-40"></td>
+                <td>Words count</td>
+                <td>Unit Price</td>
+                <td>Unit</td>
+            </tr>
+            <tr>
+                <td>English:</td>
+                <td><input v-model="form.words.eng.words" class="form-control" type="text" name="" id=""></td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                        <input v-model="form.words.eng.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                    </div></td>
+                <td>
+                    <select v-model="form.words.eng.unit" class="form-control" name="" id="">
+                        <option value="Chi">Chi Words</option>
+                        <option value="Eng">Eng Words</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Chinese:</td>
+                <td><input v-model="form.words.chi.words" class="form-control" type="text" name="" id=""></td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                        <input v-model="form.words.chi.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                    </div></td>
+                <td>
+                    <select v-model="form.words.chi.unit" class="form-control" name="" id="">
+                        <option value="Chi">Chi Words</option>
+                        <option value="Eng">Eng Words</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Pages count</td>
+                <td>Unit Price</td>
+                <td>Unit</td>
+            </tr>
+            <tr>
+                <td>English:</td>
+                <td><input v-model="form.words.eng.pages" class="form-control" type="text" name="" id=""></td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                        <input v-model="form.words.eng.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                    </div>
+                </td>
+                <td>Pages</td>
+            </tr>
+            <tr>
+                <td>Chinese:</td>
+                <td><input v-model="form.words.chi.pages" class="form-control" type="text" name="" id=""></td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                        <input v-model="form.words.chi.pages" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                    </div>
+                </td>
+                <td>Pages</td>
+            </tr>
+        </table>
 
+
+        <div class="flex items-center my-2">
+            <label class="w-40" for="">Overtime / Remarks:</label>
+            <div class="flex-1">
+                <textarea class="form-control" name="" id="" rows="4"></textarea>
+            </div>
+        </div>
+
+
+        <label class="w-40" for="">Other Cost: <button @click="addOther"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+</svg>
+</button></label>
+        <table class="w-full">
+            <tr v-for="(item,i) in form.other">
+                <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
+                <td><input v-model="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                        <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                    </div>
+                </td>
+                <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
+                <td>
+                    <button class="btn" @click="removeOther(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                </td>
+            </tr>
+        </table>
+
+
+        <label class="w-40" for="">LESS: <button @click="addLess"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+</svg>
+</button></label>
+        <table class="w-full">
+            <tr v-for="(item,i) in form.less">
+
+                <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
+                <td><input v-model="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                        <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                    </div>
+                </td>
+                <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
+                <td>
+                    <button class="btn" @click="removeLess(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                </td>
+            </tr>
+        </table>
 
     </div>
     @endverbatim
@@ -216,6 +172,16 @@
             },
             data(){
                return {
+                form:{
+                    job_id: null,
+                    invoice_date: dayjs().format('YYYY-MM-DD'),
+                    tranRemark:"",
+                    words:{eng:{type:"eng",words:"",price:"",unit:"Chi"},chi:{type:"chi",words:"1253",price:"0.8",unit:"Chi"}},
+                    pages:{eng:{type:"eng",pages:"",price:""},chi:{type:"chi",pages:"",price:""}},
+                    other:[{desc:"Package",price:"3200",qty:"1",unit:"Package"}],
+                    less:[{desc:" 2021-10-04_cyc 006 (E to C) - Copied from cyc 005",price:"0.8",qty:"4496",unit:"Chi Words"}]
+                    total:0
+                },
                }
             },
             filters:{
@@ -228,6 +194,21 @@
             watch:{
             },
             methods:{
+
+                addOther(){
+                    this.form.other.push({desc:"",price:"",qty:1,unit:"Package"})
+                },
+                addLess(){
+                    this.form.less.push({desc:"",price:"",qty:1,unit:"Package"})
+                },
+                removeOther(index){
+                    this.form.other.splice(index,1)
+                },
+                removeLess(index){
+                    this.form.less.splice(index,1)
+                },
+
+
                 uploadFiles( event ){
                     const files = event.target.files
                     const formData = new FormData()
