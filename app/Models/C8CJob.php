@@ -12,5 +12,18 @@ class C8CJob extends Model
     use SoftDeletes;
 
     protected $table = 'c8_c_jobs';
-    
+
+    protected $fillable = [
+        "job_id",
+        "job_code",
+        "jobdescription",
+        "company",
+        "description",
+        "meta",
+    ];
+
+    protected $casts = [
+        'meta' => 'Object',
+    ];
+
 }
