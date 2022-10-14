@@ -12,9 +12,7 @@ class Task extends Model
 	use HasDateTimeFormatter;
     use SoftDeletes;
     use HasFactory;
-    ref
-    ref_id
-    job_code
+
     protected $fillable = [
         'client_id',
         // 'ref',

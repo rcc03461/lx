@@ -24,7 +24,7 @@ class TaskController extends AdminController
         return Grid::make(new Task(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('client_id');
-            $grid->column('ref');
+            // $grid->column('ref');
             $grid->column('idjob');
             $grid->column('title')
             // ->modal(function ($modal) {
@@ -59,7 +59,7 @@ class TaskController extends AdminController
         return Show::make($id, new Task(), function (Show $show) {
             $show->field('id');
             $show->field('client_id');
-            $show->field('ref');
+            // $show->field('ref');
             $show->field('idjob');
             $show->field('title');
             $show->field('description');
@@ -81,8 +81,8 @@ class TaskController extends AdminController
         return Form::make(new Task(), function (Form $form) {
             $form->display('id');
             $form->select('client_id')->options(Client::all()->pluck('name', 'id'))->required()->default(1);
-            $form->text('ref');
-            $form->number('ref_id');
+            // $form->text('ref');
+            // $form->number('ref_id');
             // $form->text('idjob');
             $form->selectTable('idjob', 'Job')
             ->title('C8C Jobs')
