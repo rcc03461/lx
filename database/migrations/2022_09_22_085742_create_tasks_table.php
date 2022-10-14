@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->integer('client_id')->nullable();
-            $table->string('ref')->nullable();
-            $table->integer('ref_id')->nullable();
-            $table->integer('job_id')->nullable();
-            $table->string('job_code')->nullable();
+            // $table->string('ref')->nullable();
+            // $table->integer('ref_id')->nullable();
+            $table->integer('idjob')->nullable();
+            // $table->string('job_code')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->text('remark')->nullable();

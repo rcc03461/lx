@@ -14,7 +14,7 @@ class C8CJob extends Model
     protected $table = 'c8_c_jobs';
 
     protected $fillable = [
-        "job_id",
+        "idjob",
         "job_code",
         "jobdescription",
         "company",

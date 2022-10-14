@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\C8CJob;
+use App\Models\C8CJob as C8CJobModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -19,7 +20,7 @@ class C8CJobController extends AdminController
     {
         return Grid::make(new C8CJob(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('job_id');
+            $grid->column('idjob');
             $grid->column('job_code');
             $grid->column('jobdescription');
             $grid->column('company');
@@ -27,10 +28,10 @@ class C8CJobController extends AdminController
             $grid->column('meta');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
-        
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
-        
+
             });
         });
     }
@@ -46,7 +47,7 @@ class C8CJobController extends AdminController
     {
         return Show::make($id, new C8CJob(), function (Show $show) {
             $show->field('id');
-            $show->field('job_id');
+            $show->field('idjob');
             $show->field('job_code');
             $show->field('jobdescription');
             $show->field('company');
@@ -66,15 +67,25 @@ class C8CJobController extends AdminController
     {
         return Form::make(new C8CJob(), function (Form $form) {
             $form->display('id');
-            $form->text('job_id');
+            $form->text('idjob');
             $form->text('job_code');
             $form->text('jobdescription');
             $form->text('company');
             $form->text('description');
             $form->text('meta');
-        
+
             $form->display('created_at');
             $form->display('updated_at');
         });
+    }
+
+    public function apiSearch(){
+        $q = request()->get('q');
+        $data = C8CJobModel::where('job_code', 'like', "%$q%")->orWhere('company', 'like', "%$q%")->take(20)->get();
+        return $data;
+    }
+
+    public function apiGetJob( C8CJobModel $job ){
+        return $job;
     }
 }

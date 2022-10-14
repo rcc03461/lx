@@ -26,8 +26,8 @@ Route::post('/c8c_jobs', function () {
 
     foreach (request()->jobs as $key => $value) {
 
-        C8CJob::where('job_id', $value['job_id'])->updateOrCreate(
-            ['job_id' => $value['job_id']],
+        C8CJob::where('idjob', $value['idjob'])->updateOrCreate(
+            ['idjob' => $value['idjob']],
             [
                 'job_code' => $value['job_code'],
                 'jobdescription' => $value['jobdescription'],

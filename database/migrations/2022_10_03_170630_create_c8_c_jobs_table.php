@@ -15,12 +15,12 @@ class CreateC8CJobsTable extends Migration
     {
         Schema::create('c8_c_jobs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('job_id');
+            $table->integer('idjob');
             $table->string('job_code')->default('');
-            $table->text('jobdescription');
-            $table->text('company');
-            $table->text('description');
-            $table->json('meta');
+            $table->text('jobdescription')->nullable();
+            $table->text('company')->nullable();
+            $table->text('description')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

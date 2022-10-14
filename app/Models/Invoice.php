@@ -30,4 +30,13 @@ class Invoice extends Model
         "less",
         "meta",
     ];
+
+
+    protected $casts = [
+        'words' => 'object',
+        'pages' => 'object',
+        'other' => 'array',
+        'less' => 'array',
+        'meta' => 'object',
+    ];
 }

@@ -7,6 +7,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Repositories\Invoice;
+use App\Models\Invoice as InvoiceModel;
 use Dcat\Admin\Http\Controllers\AdminController;
 
 class InvoiceController extends AdminController
@@ -20,16 +21,17 @@ class InvoiceController extends AdminController
     {
         return Grid::make(new Invoice(), function (Grid $grid) {
             $grid->column('id')->sortable();
+            $grid->column('idjob');
             $grid->column('task_id');
             $grid->column('tranRemark');
             $grid->column('total');
             $grid->column('invoiceDate');
             $grid->column('reviseDate');
-            $grid->column('words');
-            $grid->column('pages');
-            $grid->column('other');
-            $grid->column('less');
-            $grid->column('meta');
+            // $grid->column('words');
+            // $grid->column('pages');
+            // $grid->column('other');
+            // $grid->column('less');
+            // $grid->column('meta');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
@@ -51,6 +53,7 @@ class InvoiceController extends AdminController
     {
         return Show::make($id, new Invoice(), function (Show $show) {
             $show->field('id');
+            $show->field('idjob');
             $show->field('task_id');
             $show->field('tranRemark');
             $show->field('total');
@@ -98,5 +101,13 @@ class InvoiceController extends AdminController
             ->body(view('admin.invoice.form', [
 
             ]));
+    }
+
+    public function save(){
+        return InvoiceModel::create(array_merge(request()->all(), [
+            "InvoiceDate" => now(),
+            "task_id" => 1,
+        ]));
+        return request()->all();
     }
 }
