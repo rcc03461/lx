@@ -8,11 +8,25 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function apiGetTask( Task $task ){
+        return $task->load(['job', 'client']);
+    }
+
+    public function apiSearch( ){
+
+        $q = request()->get('q');
+        $data = Task::with([
+            // 'client',
+            'job',
+        ])
+        ->where('title', 'like', "%$q%")
+        ->orHasByNonDependentSubquery('job', fn($subq)=>$subq->where('job_code', 'like', "%$q%"))
+        ->take(20)
+        ->get();
+        return $data;
+    }
+
     public function index()
     {
         return Inertia::render('Tasks/List', [

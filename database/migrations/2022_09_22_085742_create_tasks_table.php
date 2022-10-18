@@ -19,7 +19,7 @@ return new class extends Migration
             // $table->string('ref')->nullable();
             // $table->integer('ref_id')->nullable();
             $table->integer('idjob')->nullable();
-            // $table->string('job_code')->nullable();
+            $table->integer('lx_no')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->text('remark')->nullable();

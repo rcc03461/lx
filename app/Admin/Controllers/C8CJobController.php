@@ -22,11 +22,14 @@ class C8CJobController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('idjob');
             $grid->column('job_code');
-            $grid->column('jobdescription');
             $grid->column('company');
-            $grid->column('description');
-            $grid->column('meta');
-            $grid->column('created_at');
+            $grid->column('jobdescription');
+            // $grid->column('description');
+            $grid->column('sales')->display(function ($sales) {
+                return $this->meta->sales->name;
+            });
+            // $grid->column('meta');
+            // $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {

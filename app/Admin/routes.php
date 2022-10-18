@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Task;
 use Dcat\Admin\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
 use App\Admin\Controllers\C8CJobController;
 use App\Admin\Controllers\InvoiceController;
 
@@ -15,6 +17,12 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
+    $router->get('/try', function(){
+        return Task::with([
+            'client',
+            'invoices'
+        ])->get();
+    });
 
     $router->resource('c8c_job', 'C8CJobController');
 
@@ -25,15 +33,20 @@ Route::group([
     // $router->get('jobs/build', [JobController::class, 'build']);
     // $router->post('jobs/build-save', [JobController::class, 'buildSave']);
     // $router->get('jobs/build', 'JobController@build');
-    $router->get('invoice', [InvoiceController::class, 'index']);
-    $router->get('invoice/create', [InvoiceController::class, 'invoiceCreate']);
+    $router->get('invoices', [InvoiceController::class, 'index']);
+    $router->get('invoices/build', [InvoiceController::class, 'build']);
+    $router->get('invoices/create', [InvoiceController::class, 'invoiceCreate']);
+    $router->get('invoices/{invoice}', [InvoiceController::class, 'single']);
+    $router->put('invoices/{invoice}', [InvoiceController::class, 'update']);
+    $router->get('invoices/{invoice}/edit', [InvoiceController::class, 'invoiceEdit']);
+    $router->get('invoices/{invoice}/view', [InvoiceController::class, 'view']);
     $router->post('api/invoice', [InvoiceController::class, 'save']);
-    $router->get('invoice/{job}', [InvoiceController::class, 'single']);
-    $router->put('invoice/{job}', [InvoiceController::class, 'update']);
-    $router->get('invoice/{job}/edit', [InvoiceController::class, 'buildEdit']);
 
 
     $router->get('api/c8c-jobs/{job:job_id}', [C8CJobController::class, 'apiGetJob']);
     $router->get('api/c8c-jobs', [C8CJobController::class, 'apiSearch']);
+    $router->get('api/tasks/{task}', [TaskController::class, 'apiGetTask']);
+    $router->get('api/tasks', [TaskController::class, 'apiSearch']);
+    $router->get('api/generate-invoice-no', [InvoiceController::class, 'apiGenerateInvoiceNo']);
 
 });

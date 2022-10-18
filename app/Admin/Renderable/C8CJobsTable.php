@@ -13,9 +13,10 @@ class C8CJobsTable extends LazyRenderable
         return Grid::make(new C8CJob(), function (Grid $grid) {
             $grid->column('idjob')->sortable();
             $grid->column('job_code');
+            $grid->column('jobdescription');
             $grid->column('company');
 
-            // $grid->quickSearch(['id', 'name']);
+            $grid->quickSearch(['idjob', 'company', 'job_code', 'jobdescription']);
 
             $grid->paginate(10);
             $grid->disableActions();

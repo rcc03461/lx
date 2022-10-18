@@ -19,6 +19,7 @@ class Task extends Model
         // 'ref_id',
         'idjob',
         // 'job_code',
+        'lx_no',
         'title',
         'description',
         'remark',
@@ -33,10 +34,28 @@ class Task extends Model
     protected $dates = [
         'publish_date',
     ];
+    protected $appends = [
+        'code',
+    ];
+
+    public function getCodeAttribute(){
+        return $this->lx_no;
+    }
+
 
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(C8CJob::class, 'idjob', 'idjob');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
     }
 
 

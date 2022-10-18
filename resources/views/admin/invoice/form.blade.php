@@ -6,14 +6,35 @@
             <button class="btn btn-primary" @click="submitForm"> Submit </button>
         </div>
 
-        <div class="flex items-center my-2">{{form.task_id}}
+        <div class="flex items-center my-2">
             <label class="w-40" for="">Task:</label>
             <div class="flex-1">
                 <selec-with-ajax-search v-model="form.task_id">
-                    <template slot="item" scope="{item}">
-                       {{item.job_code}} - {{item.company}}
+                    <template #selected="{selected}">
+                       {{selected.title}} - {{selected.job?.job_code}}
+                    </template>
+                    <template #item="{item}">
+                       {{item.title}} - {{item.job?.job_code}}
                     </template>
                 </selec-with-ajax-search>
+            </div>
+        </div>
+
+        <div class="flex items-center my-2">
+            <label class="w-40" for="">Invoice No:</label>
+            <div class="flex-1">
+                <div class="input-group">
+                    <span class="input-group-prepend"><span class="input-group-text bg-white">Lx-</span></span>
+                    <input v-model.number="form.InvoiceNo" type="number" name="InvoiceNo" value="" class="form-control _normal_" placeholder="Invoice No">
+                    <span @click="generateInvoiceNo" class="input-group-prepend cursor-pointer hover:bg-slate-200"><span class="input-group-text bg-white">Generate Invoice No</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center my-2">
+            <label class="w-40" for="">Invoice Date:</label>
+            <div class="flex-1">
+                {{form.invoiceDate}}
             </div>
         </div>
 
@@ -31,7 +52,8 @@
                     <div class="input-group">
                         <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
                         <input v-model.number="form.words.eng.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
-                    </div></td>
+                    </div>
+                </td>
                 <td>
                     <select v-model="form.words.eng.unit" class="form-control" name="" id="">
                         <option value="Chi">Chi Words</option>
@@ -141,6 +163,8 @@
         <div>{{total | digi}}</div>
     </div>
 
+
+    {{form}}
     </section>
     @endverbatim
     {{-- mordern popup form with tailwindcss --}}
@@ -160,87 +184,6 @@
     <script>
         Dcat.ready(function () {
             // 写你的逻辑
-            Vue.directive('click-outside', {
-                bind: function (el, binding, vnode) {
-                    el.clickOutsideEvent = function (event) {
-                    // here I check that click was outside the el and his children
-                    if (!(el == event.target || el.contains(event.target))) {
-                        // and if it did, call method provided in attribute value
-                        vnode.context[binding.expression](event);
-                    }
-                    };
-                    document.body.addEventListener('click', el.clickOutsideEvent)
-                },
-                unbind: function (el) {
-                    document.body.removeEventListener('click', el.clickOutsideEvent)
-                },
-            });
-
-        Vue.component('selec-with-ajax-search', {
-            props: [
-                'value',
-
-            ],
-            data() {
-                return {
-                    showSearch: false,
-                    options: [],
-                    selected: {},
-                }
-            },
-            watch:{
-                value(val) {
-                    const {value} = this;
-                    this.ajaxGetJob(value);
-                }
-            },
-            mounted(){
-
-            },
-            methods: {
-                clickOutside: function (e) {
-                    this.showSearch = false;
-                },
-                async ajaxGetJob( job_id ) {
-                    let {data} = await axios.get('/admin/api/c8c-jobs/' + job_id);
-                    this.selected = data;
-                },
-                ajaxSearch: _.debounce(async function (e) {
-                    this.showSearch = true;
-                    if (e.target.value) {
-                        let res = await axios.get('/admin/api/c8c-jobs?q=' + e.target.value);
-                        this.options = res.data;
-                    }
-                }, 300),
-                select(e) {
-                    // console.log(e);
-                    this.$emit('input', e.job_id);
-                    this.selected = e;
-                    this.showSearch = false;
-                },
-                focusInput(e) {
-                    this.showSearch = true;
-                    // console.log(this.$refs);
-                    setTimeout(() => {
-                        this.$refs.searchinput.focus();
-                    }, 100);
-                }
-            },
-            template: `<div class="relative" v-click-outside="clickOutside">
-                <input ref="searchinput" v-show="showSearch" class="form-control" type="text" @keyup="ajaxSearch" @focus="showSearch = true"/>
-                <div v-show="!showSearch" class="form-control cursor-pointer" @click="focusInput">@{{selected.job_code || ""}} - @{{selected.company || ""}}</div>
-                <div v-show="showSearch" class="absolute border shadow-lg top-12 left-0 bg-white w-full max-h-72 overflow-y-auto px-1 py-1 z-10">
-                    <div v-if="options.length == 0" class="text-center">Type to search...</div>
-                    <ul v-else>
-                        <li class="hover:bg-gray-100 cursor-pointer py-0.5 px-0.5" v-for="item in options" @click="select(item)">
-                            <slot name="item" :item="item">
-                                @{{item.job_code}} - @{{item.company}}
-                            </slot>
-                        </li>
-                    </ul>
-                </div>
-            </div>`
-        })
 
         // Vue.component('vue-multiselect', window.VueMultiselect.default)
 
@@ -253,8 +196,10 @@
                return {
                 loading: false,
                 form:{
-                    idjob: null,
+                    task_id: @json(request('task_id', null)),
                     tranRemark:"",
+                    InvoiceNo:"",
+                    invoiceDate: dayjs().format('YYYY-MM-DD'),
                     words:{eng:{type:"eng",words:"",price:"",unit:"Chi"},chi:{type:"chi",words:"1253",price:"0.8",unit:"Chi"}},
                     pages:{eng:{type:"eng",pages:"",price:""},chi:{type:"chi",pages:"",price:""}},
                     other:[{desc:"Package",price:"3200",qty:"1",unit:"Package"}],
@@ -294,8 +239,6 @@
                 removeLess(index){
                     this.form.less.splice(index,1)
                 },
-
-
                 uploadFiles( event ){
                     const files = event.target.files
                     const formData = new FormData()
@@ -317,27 +260,37 @@
                         this.form.attachments = this.form.attachments.filter(f=>f != url)
                     });
                 },
+                generateInvoiceNo(){
+                    axios.get('/admin/api/generate-invoice-no').then(({data}) => {
+                        console.log(data);
+                        this.form.InvoiceNo = data.invoiceNo
+                    })
+                },
                 submitForm: _.debounce(async function(){
                     this.loading = true;
-                    const {form} = this;
+                    const {form, total} = this;
                     const {words,pages,other,less} = form;
-
-
                     // alert(total);
                     const {data} = await axios.post('/admin/api/invoice', {
                         ...this.form,
                         total
                     })
-                    // .then(response => {
-                    //     console.log(response.data);
-                    //     // window.location.href = '/admin/c8c-invoices';
-                    // })
-                    // console.log(data);
                     Dcat.success('保存成功');
+                    window.location.href = `/admin/invoices/${data.id}/edit`;
                     this.loading = false;
                 }, 300)
             },
             async mounted(){
+
+                const invoice = @json($invoice);
+
+                console.log(invoice);
+
+                this.form = {
+                    ...this.form,
+                    ...invoice,
+                    invoiceDate: invoice.invoiceDate ? dayjs(invoice.invoiceDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
+                };
 
                 // if (this.job_id) {
                 //     this.fetchJob()

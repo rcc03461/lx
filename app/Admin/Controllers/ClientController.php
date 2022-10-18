@@ -65,9 +65,10 @@ class ClientController extends AdminController
         return Form::make(new Client(), function (Form $form) {
             $form->display('id');
             $form->text('name');
+            $form->text('attn');
             $form->text('email');
             $form->text('phone');
-            $form->text('address');
+            $form->textarea('address');
             // $form->text('meta');
 
             $form->display('created_at');

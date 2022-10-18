@@ -12,20 +12,30 @@ use Dcat\Admin\Http\Controllers\AdminController;
 
 class InvoiceController extends AdminController
 {
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
+
+    public function apiGenerateInvoiceNo()
+    {
+        $invoiceNo = InvoiceModel::generateInvoiceNo();
+        return response()->json([
+            'invoiceNo' => $invoiceNo,
+        ]);
+    }
+
+
     protected function grid()
     {
         return Grid::make(new Invoice(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('idjob');
+            $grid->column('id')->sortable()
+            // $grid->column('idjob');
+            ->display(function ($id) {
+                return <<<HTML
+                <a data-popup href="/admin/invoices/$id/view" target="_blank">$id</a>
+                HTML;
+            });
             $grid->column('task_id');
-            $grid->column('tranRemark');
             $grid->column('total');
             $grid->column('invoiceDate');
+            $grid->column('tranRemark');
             $grid->column('reviseDate');
             // $grid->column('words');
             // $grid->column('pages');
@@ -94,20 +104,46 @@ class InvoiceController extends AdminController
         });
     }
 
+    public function view(InvoiceModel $invoice){
+        return view('admin.invoice.view', [
+            'invoice' => $invoice->load([
+                'task.client',
+                'task.job',
+            ]),
+        ]);
+    }
+
+    public function build(Content $content){
+        return view('admin.invoice.view', [
+
+        ]);
+    }
+
     public function invoiceCreate(Content $content){
+        $invoice = new InvoiceModel();
+        $invoice->InvoiceNo = InvoiceModel::max('InvoiceNo') + 1;
+        // dd($invoice);
         return $content
             ->header('Create Invoice')
             ->description('Description...')
             ->body(view('admin.invoice.form', [
-
+                'invoice' => $invoice,
+            ]));
+    }
+    public function invoiceEdit(Content $content, InvoiceModel $invoice){
+        return $content
+            ->header('Edit Invoice')
+            ->description('Description...')
+            ->body(view('admin.invoice.form', [
+                'invoice' => $invoice,
             ]));
     }
 
     public function save(){
-        return InvoiceModel::create(array_merge(request()->all(), [
-            "InvoiceDate" => now(),
-            "task_id" => 1,
-        ]));
+        return InvoiceModel::updateOrCreate(
+            ['id' => request('id', null)],
+            array_merge(request()->all())
+        );
         return request()->all();
     }
 }
