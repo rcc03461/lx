@@ -46,28 +46,10 @@ Route::post('/c8c_jobs', function () {
 
 Route::post('/lx/translation', function () {
 
+    return request()->all();
+
     return Invoice::updateOrCreate([
         'idtranslation' => request('idtranslation'),
     ], request()->all());
 
-    // return request()->all();
-    // Log::info(request()->all());
-
-    // foreach (request()->jobs as $key => $value) {
-
-    //     C8CJob::where('idjob', $value['idjob'])->updateOrCreate(
-    //         ['idjob' => $value['idjob']],
-    //         [
-    //             'job_code' => $value['job_code'],
-    //             'jobdescription' => $value['jobdescription'],
-    //             'company' => $value['company'],
-    //             'description' => $value['description'],
-    //             'meta' => $value['meta'],
-    //         ]
-    //     );
-
-    // }
-
-
-    //  (request()->all());
 });
