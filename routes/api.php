@@ -57,6 +57,4 @@ Route::post('/lx/translation', function () {
         'other' => json_decode(request('other', null)),
         'less' => json_decode(request('less', null)),
     ]));
-);
-
 });
