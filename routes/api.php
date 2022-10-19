@@ -46,7 +46,7 @@ Route::post('/c8c_jobs', function () {
 
 Route::post('/lx/translation', function () {
 
-    return request()->all();
+    // return request()->all();
 
     return Invoice::updateOrCreate([
         'idtranslation' => request('idtranslation'),
