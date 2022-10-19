@@ -216,10 +216,10 @@
             computed:{
                 total: function(){
                     const {form:{words,pages,other,less}} = this;
-                    const total =   this.form.words.eng.price * this.form.words.eng.words + this.form.words.chi.price * this.form.words.chi.words +
-                                    this.form.pages.eng.price * this.form.pages.eng.pages + this.form.pages.chi.price * this.form.pages.chi.pages +
-                                    this.form.other.reduce((a,b)=>a + b.price * b.qty,0) -
-                                    this.form.less.reduce((a,b)=>a + b.price * b.qty,0);
+                    const total =   words.eng.price * words.eng.words + words.chi.price * words.chi.words +
+                                    pages.eng.price * pages.eng.pages + pages.chi.price * pages.chi.pages +
+                                    other?.reduce((a,b)=>a + b.price * b.qty,0) -
+                                    less?.reduce((a,b)=>a + b.price * b.qty,0);
                     return +total;
                 }
             },
