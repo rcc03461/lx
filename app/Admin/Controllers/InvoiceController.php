@@ -33,6 +33,8 @@ class InvoiceController extends AdminController
                 HTML;
             });
             $grid->column('task_id');
+            $grid->column('invoiceCode');
+            $grid->column('InvoiceNo');
             $grid->column('total');
             $grid->column('invoiceDate');
             $grid->column('tranRemark');

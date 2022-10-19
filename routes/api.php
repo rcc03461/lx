@@ -47,9 +47,16 @@ Route::post('/c8c_jobs', function () {
 Route::post('/lx/translation', function () {
 
     // return request()->all();
-    Log::info('/lx/translation', request()->all());
+    // Log::info('/lx/translation', request()->all());
     return Invoice::updateOrCreate([
         'idtranslation' => request('idtranslation'),
-    ], request()->all());
+    ],
+    array_merge(request()->all(), [
+        'words' => json_decode(request('words', null)),
+        'pages' => json_decode(request('pages', null)),
+        'other' => json_decode(request('other', null)),
+        'less' => json_decode(request('less', null)),
+    ]));
+);
 
 });
