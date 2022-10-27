@@ -53,7 +53,7 @@ Route::post('/c8c_jobs', function () {
             'idjob'             => $inv->idjob,
             'refInvNo'          => $inv->lx_code,
             'refInvAmt'         => $inv->total,
-            'refInvDate'        => $inv->invoiceDate,
+            'refInvDate'        => $inv->invoiceDate->format('Y-m-d H:i:s'),
         ];
     })
     ;
