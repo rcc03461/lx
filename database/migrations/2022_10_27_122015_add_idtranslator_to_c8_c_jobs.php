@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('invoices', function (Blueprint $table) {
+        Schema::table('c8_c_jobs', function (Blueprint $table) {
             $table->unsignedBigInteger('idtranslator')->nullable()->after('idjob');
             $table->json('othertranslator')->nullable();
         });
@@ -26,7 +26,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('invoices', function (Blueprint $table) {
+        Schema::table('c8_c_jobs', function (Blueprint $table) {
             $table->dropColumn('idtranslator');
             $table->dropColumn('othertranslator');
             //
