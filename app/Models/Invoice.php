@@ -84,7 +84,7 @@ class Invoice extends Model
 
     public function generateInvoiceNo()
     {
-        $prefix = $this->invoiceDate->format('Ym');
+        $prefix = $this->invoiceDate->format('ym');
         if ($this->idjob) {
             $max = Invoice::whereBetween('invoiceDate', [ $this->invoiceDate->firstOfMonth(), $this->invoiceDate->lastOfMonth() ] )->whereNotNull('idjob')->max('lx_number') ?: 0;
             $max = str($max)->replaceFirst($prefix, '')->toString();
