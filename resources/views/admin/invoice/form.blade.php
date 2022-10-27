@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div class="flex items-center my-2">
+        <!-- <div class="flex items-center my-2">
             <label class="w-40" for="">Invoice No:</label>
             <div class="flex-1">
                 <div class="input-group">
@@ -29,12 +29,31 @@
                     <span @click="generateInvoiceNo" class="input-group-prepend cursor-pointer hover:bg-slate-200"><span class="input-group-text bg-white">Generate Invoice No</span></span>
                 </div>
             </div>
+        </div> -->
+
+
+        <div class="flex">
+            <div class="flex items-center my-2">
+                <label class="w-40" for="">No:</label>
+                <div class="flex-1">
+                    <input  class="form-control" type="text" v-model="form.lx_number" readonly>
+                </div>
+            </div>
+
+            <div class="flex items-center my-2">
+                <label class="w-40" for="">Code:</label>
+                <div class="flex-1">
+                    <input class="form-control" type="text" v-model="form.lx_code" readonly>
+                </div>
+            </div>
+
         </div>
+
 
         <div class="flex items-center my-2">
             <label class="w-40" for="">Invoice Date:</label>
             <div class="flex-1">
-                {{form.invoiceDate}}
+                <input class="form-control" type="date" v-model="form.invoiceDate">
             </div>
         </div>
 
@@ -77,6 +96,12 @@
                 </td>
             </tr>
             <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
                 <td></td>
                 <td>Pages count</td>
                 <td>Unit Price</td>
@@ -114,50 +139,51 @@
             </div>
         </div>
 
+        <div class="flex items-center my-2">
 
-        <label class="w-40" for="">Other Cost: <button @click="addOther"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-</svg>
-</button></label>
-        <table class="w-full">
-            <tr v-for="(item,i) in form.other">
-                <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
-                <td><input v-model.number="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                        <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
-                    </div>
-                </td>
-                <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
-                <td>
-                    <button class="btn" @click="removeOther(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
-                </td>
-            </tr>
-        </table>
+            <label class="w-40" for="">Other Cost: <button @click="addOther"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg></button>
+            </label>
+            <table class="flex-1">
+                <tr v-for="(item,i) in form.other">
+                    <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
+                    <td><input v-model.number="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                            <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                        </div>
+                    </td>
+                    <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
+                    <td>
+                        <button class="btn" @click="removeOther(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
+        <div class="flex items-center my-2">
 
-        <label class="w-40" for="">LESS: <button @click="addLess"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg></button></label>
+            <label class="w-40" for="">LESS: <button @click="addLess"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg></button></label>
 
-        <table class="w-full">
-            <tr v-for="(item,i) in form.less">
+            <table class="flex-1">
+                <tr v-for="(item,i) in form.less">
 
-                <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
-                <td><input v-model.number="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                        <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
-                    </div>
-                </td>
-                <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
-                <td>
-                    <button class="btn" @click="removeLess(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
-                </td>
-            </tr>
-        </table>
+                    <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
+                    <td><input v-model.number="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
+                            <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                        </div>
+                    </td>
+                    <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
+                    <td>
+                        <button class="btn" @click="removeLess(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
     <div class="text-2xl">
         <div>Total : </div>
         <div>{{total | digi}}</div>
@@ -197,6 +223,8 @@
                     task_id: @json(request('task_id', null)),
                     tranRemark:"",
                     InvoiceNo:"",
+                    lx_number:"",
+                    lx_code:"",
                     invoiceDate: dayjs().format('YYYY-MM-DD'),
                     words:{eng:{type:"eng",words:"",price:"",unit:"Chi"},chi:{type:"chi",words:"1253",price:"0.8",unit:"Chi"}},
                     pages:{eng:{type:"eng",pages:"",price:""},chi:{type:"chi",pages:"",price:""}},
@@ -258,12 +286,12 @@
                         this.form.attachments = this.form.attachments.filter(f=>f != url)
                     });
                 },
-                generateInvoiceNo(){
-                    axios.get('/admin/api/generate-invoice-no').then(({data}) => {
-                        console.log(data);
-                        this.form.InvoiceNo = data.invoiceNo
-                    })
-                },
+                // generateInvoiceNo(){
+                //     axios.get('/admin/api/generate-invoice-no').then(({data}) => {
+                //         console.log(data);
+                //         this.form.InvoiceNo = data.invoiceNo
+                //     })
+                // },
                 submitForm: _.debounce(async function(){
                     this.loading = true;
                     const {form, total} = this;

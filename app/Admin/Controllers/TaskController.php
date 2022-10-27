@@ -8,6 +8,7 @@ use Dcat\Admin\Show;
 use App\Models\C8CJob;
 use App\Models\Client;
 use App\Admin\Repositories\Task;
+use App\Models\Task as TaskModel;
 use App\Models\Task as ModelsTask;
 use App\Admin\Forms\TranslationForm;
 use App\Admin\Renderable\C8CJobsTable;
@@ -22,6 +23,20 @@ class TaskController extends AdminController
         return view('admin.task.view', [
            'task' => $task->load(['job', 'client'])
         ] );
+    }
+
+    public function apiGetTask( ModelsTask $task ){
+        return $task->load(['job', 'client']);
+    }
+
+    public function apiSearch( ){
+        $q = request()->get('q');
+        return TaskModel::where('lx_no', 'like', "%$q%")
+            ->orWhere('title', 'like', "%$q%")
+            ->orHasByNonDependentSubquery('job', function($query) use ($q){
+                $query->where('job_code', 'like', "%$q%");
+            })
+            ->get();
     }
 
     protected function grid()

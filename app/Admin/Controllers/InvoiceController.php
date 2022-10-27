@@ -5,10 +5,11 @@ namespace App\Admin\Controllers;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use App\Models\Client;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Repositories\Invoice;
-use App\Models\Client;
 use App\Models\Invoice as InvoiceModel;
+use App\Admin\Actions\Grid\GenerateInvoiceNo;
 use Dcat\Admin\Http\Controllers\AdminController;
 
 class InvoiceController extends AdminController
@@ -16,42 +17,71 @@ class InvoiceController extends AdminController
 
     public function apiGenerateInvoiceNo()
     {
-        $invoiceNo = InvoiceModel::generateInvoiceNo();
-        return response()->json([
-            'invoiceNo' => $invoiceNo,
-        ]);
+        // $invoiceNo = InvoiceModel::generateInvoiceNo();
+        // return response()->json([
+        //     'invoiceNo' => $invoiceNo,
+        // ]);
     }
 
 
     protected function grid()
     {
-        return Grid::make(new Invoice(), function (Grid $grid) {
-            $grid->column('id')->sortable()
-            ;
-            $grid->column('idjob');
-            $grid->column('task_id');
-            $grid->column('invoiceCode')->display(function ($invoiceCode) {
+        return Grid::make(new Invoice(['task', 'job']), function (Grid $grid) {
+            $grid->model()->orderBy('id', 'desc');
+            $grid->column('id')->display(function ($id) {
                 return <<<HTML
-                <a data-popup href="/admin/invoices/$this->id/view" target="_blank">$invoiceCode</a>
+                <a class="text-blue-600" data-popup href="/admin/invoices/$this->id/view" target="_blank">View</a>
                 HTML;
-            });
-            $grid->column('InvoiceNo');
+            })
+            ->sortable();
+            $grid->column('idjob');
+            // $grid->column('task_id');
+            $grid->column('task.title');
+            $grid->column('job.job_code');
+            $grid->column('invoiceCode');
+            $grid->column('lx_code', 'LX Invoice No');
             $grid->column('total');
-            $grid->column('invoiceDate');
-            $grid->column('tranRemark');
+            $grid->column('invoiceDate')->display(function ($invoiceDate) {
+                return $invoiceDate?->format('Y-m-d');
+            });
+            // $grid->column('tranRemark')->width(300);
             $grid->column('reviseDate');
             // $grid->column('words');
             // $grid->column('pages');
             // $grid->column('other');
             // $grid->column('less');
             // $grid->column('meta');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
-
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-
+            $grid->column('translator')->display(function () {
+                return $this->job?->meta?->translator?->name ?? '';
             });
+            $grid->column('Transtatus')->display(function ($Transtatus) {
+                return $this->invoicestatus;
+            });
+            $grid->column('ApproveId');
+            $grid->column('sales')->display(function ($sales) {
+                return $this->job?->meta?->sales?->name;
+            });
+            // $grid->column('created_at')->display(function ($created_at) {
+            //     return $created_at->format('Y-m-d');
+            // });
+            // $grid->column('updated_at')->dispaly(function($updated_at){
+            //     return $updated_at->format('Y-m-d');
+            // })->sortable();
+
+            // $grid->filter(function (Grid\Filter $filter) {
+            //     $filter->equal('id');
+
+            // });
+
+            $grid->actions([
+                // ReScanAttachmentRowAction::make()
+                GenerateInvoiceNo::make(),
+                // JobPurchaseOrderAction::make()
+            ]);
+
+            $grid->quickSearch(['lx_code', 'invoiceCode', 'job.company', 'job.job_code']);
+
+
         });
     }
 
@@ -116,7 +146,7 @@ class InvoiceController extends AdminController
             'job',
         ]);
 
-        dump($invoice);
+        // dump($invoice);
 
         return view('admin.invoice.view', [
             'invoice' => $invoice,

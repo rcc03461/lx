@@ -18,6 +18,7 @@ class Invoice extends Model
         "invoiceCode", // final invoice number
         "InvoiceNo", // monthly invoice number
         "lx_number",
+        "lx_code",
         "version",
         "ApproveId",
         "Transtatus",
@@ -44,7 +45,12 @@ class Invoice extends Model
 
     protected $appends = [
         'code',
-        // 'invoicestatus',
+        'invoicestatus',
+    ];
+
+    protected $dates = [
+        'invoiceDate',
+        'reviseDate',
     ];
 
     public const TRANSTATUS = [
@@ -66,19 +72,31 @@ class Invoice extends Model
     // }
 
 
-    public function getCodeAttribute()
+    public function getInvoicestatusAttribute()
     {
-        // return "";
-        return $this->invoiceCode ?: "LX-" . $this->lx_number;
+        return self::TRANSTATUS[$this->Transtatus] ?? $this->Transtatus;
     }
 
-    public static function generateInvoiceNo()
+    public function getCodeAttribute()
     {
-        // $invoiceNo = date("ym") . str_pad($invoiceNo + 1, 3, "0", STR_PAD_LEFT);
-        $invoiceNo = Invoice::max('lx_number')+ 1;
-        // $invoiceNo = Invoice::max('InvoiceNo')+ 1;
+        return $this->lx_code;
+    }
 
-        return $invoiceNo;
+    public function generateInvoiceNo()
+    {
+        $prefix = $this->invoiceDate->format('Ym');
+        if ($this->idjob) {
+            $max = Invoice::whereBetween('invoiceDate', [ $this->invoiceDate->firstOfMonth(), $this->invoiceDate->lastOfMonth() ] )->whereNotNull('idjob')->max('lx_number') ?: 0;
+            $max = str($max)->replaceFirst($prefix, '')->toString();
+            $max = intval($max) + 1;
+            $code = $prefix . sprintf('%02d', $max);
+            return [$code, 'Cre8-'. $code];
+        }else{
+            $max = Invoice::whereNull('idjob')->max('lx_number') + 1;
+            $code = $max;
+            return [$code, 'LI-'. $code];
+        }
+
     }
 
     public function task()

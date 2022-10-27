@@ -42,6 +42,22 @@ Route::post('/c8c_jobs', function () {
 
     }
 
+    return Invoice::where('updated_at', '>=' , now()->subHours(1))
+    ->whereNotNull('idtranslation')
+    ->whereNotNull('idjob')
+    ->whereNotNull('InvoiceNo')
+    ->whereNotNull('lx_code')
+    ->get()
+    ->map(function($inv){
+        return [
+            'idtranslation'     => $inv->idtranslation,
+            'idjob'             => $inv->idjob,
+            'refInvNo'          => $inv->lx_code,
+            'refInvAmt'         => $inv->total,
+            'refInvDate'        => $inv->invoiceDate,
+        ];
+    })
+    ;
 
     //  (request()->all());
 });
