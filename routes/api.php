@@ -34,6 +34,8 @@ Route::post('/c8c_jobs', function () {
                 'jobdescription' => $value['jobdescription'],
                 'company' => $value['company'],
                 'description' => $value['description'],
+                'idtranslator' => $value['idtranslator'],
+                'othertranslator' => $value['othertranslator'],
                 'meta' => $value['meta'],
             ]
         );
