@@ -4,7 +4,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\TaskController;
-
+use App\Models\Invoice as InvoiceModel;
+use App\Models\Client;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +25,21 @@ Route::get('/', function () {
     //     'laravelVersion' => Application::VERSION,
     //     'phpVersion' => PHP_VERSION,
     // ]);
+});
+
+Route::get('/lx/invoices/{invoice}/view', function (InvoiceModel $invoice) {
+    $invoice->load([
+        'task.client',
+        'task.job',
+        'job',
+    ]);
+
+    // dump($invoice);
+
+    return view('admin.invoice.view', [
+        'invoice' => $invoice,
+        'cre' => Client::find(1),
+    ]);
 });
 
 // Route::group(['middleware' => ['auth', 'verified']], function () {

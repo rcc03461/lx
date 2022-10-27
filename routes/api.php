@@ -54,6 +54,7 @@ Route::post('/c8c_jobs', function () {
             'refInvNo'          => $inv->lx_code,
             'refInvAmt'         => $inv->total,
             'refInvDate'        => $inv->invoiceDate->format('Y-m-d H:i:s'),
+            'invoiceInfo'       => "//panel.lingxpert.com/lx/invoices/{inv->id}/view",
         ];
     })
     ;
