@@ -16,11 +16,14 @@ use Dcat\Admin\Http\Controllers\AdminController;
 
 class TaskController extends AdminController
 {
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
+
+    public function view( ModelsTask $task ){
+        // return $task->load(['job', 'client']);
+        return view('admin.task.view', [
+           'task' => $task->load(['job', 'client'])
+        ] );
+    }
+
     protected function grid()
     {
         return Grid::make(new Task(['job', 'client', 'invoices']), function (Grid $grid) {
@@ -52,7 +55,7 @@ class TaskController extends AdminController
             });
             $grid->column('title')->display(function ($job) {
                 return <<<HTML
-                <div>{$this->title}</div>
+                <div class="hove:text-blue-600" data-popup href="/admin/task/{$this->id}/view" target="_blank">{$this->title}</div>
                 <div class="text-xs text-gray-300">{$this->description}</div>
 HTML;
             });

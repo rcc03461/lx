@@ -4,7 +4,7 @@ use App\Models\Task;
 use Dcat\Admin\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaskController;
+use App\Admin\Controllers\TaskController;
 use App\Admin\Controllers\C8CJobController;
 use App\Admin\Controllers\InvoiceController;
 
@@ -33,6 +33,7 @@ Route::group([
     // $router->get('jobs/build', [JobController::class, 'build']);
     // $router->post('jobs/build-save', [JobController::class, 'buildSave']);
     // $router->get('jobs/build', 'JobController@build');
+    $router->get('task/{task}/view', [TaskController::class, 'view']);
     $router->get('invoices', [InvoiceController::class, 'index']);
     $router->get('invoices/build', [InvoiceController::class, 'build']);
     $router->get('invoices/create', [InvoiceController::class, 'invoiceCreate']);

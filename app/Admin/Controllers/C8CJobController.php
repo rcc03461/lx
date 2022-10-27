@@ -19,11 +19,21 @@ class C8CJobController extends AdminController
     protected function grid()
     {
         return Grid::make(new C8CJob(), function (Grid $grid) {
+
+            $grid->model()->orderBy('idjob', 'desc');
+
             $grid->column('id')->sortable();
-            $grid->column('idjob');
+            $grid->column('idjob')->sortable();
             $grid->column('job_code');
-            $grid->column('company');
-            $grid->column('jobdescription');
+            $grid->column('company')->width(500)->display(function ($company) {
+                return <<<HTML
+                <div>$this->company</div>
+                <div class="text-xs text-gray-300">$this->jobdescription</div>
+
+HTML;
+            });
+            $grid->column('idtranslator');
+            $grid->column('othertranslator');
             // $grid->column('description');
             $grid->column('sales')->display(function ($sales) {
                 return $this->meta->sales->name;
@@ -36,6 +46,8 @@ class C8CJobController extends AdminController
                 $filter->equal('id');
 
             });
+
+            $grid->quickSearch(['idjob' ,'job_code', 'company', 'jobdescription']);
         });
     }
 

@@ -7,6 +7,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Repositories\Invoice;
+use App\Models\Client;
 use App\Models\Invoice as InvoiceModel;
 use Dcat\Admin\Http\Controllers\AdminController;
 
@@ -26,14 +27,14 @@ class InvoiceController extends AdminController
     {
         return Grid::make(new Invoice(), function (Grid $grid) {
             $grid->column('id')->sortable()
-            // $grid->column('idjob');
-            ->display(function ($id) {
+            ;
+            $grid->column('idjob');
+            $grid->column('task_id');
+            $grid->column('invoiceCode')->display(function ($invoiceCode) {
                 return <<<HTML
-                <a data-popup href="/admin/invoices/$id/view" target="_blank">$id</a>
+                <a data-popup href="/admin/invoices/$this->id/view" target="_blank">$invoiceCode</a>
                 HTML;
             });
-            $grid->column('task_id');
-            $grid->column('invoiceCode');
             $grid->column('InvoiceNo');
             $grid->column('total');
             $grid->column('invoiceDate');
@@ -90,6 +91,7 @@ class InvoiceController extends AdminController
     {
         return Form::make(new Invoice(), function (Form $form) {
             $form->display('id');
+            $form->text('job');
             $form->text('task_id');
             $form->text('tranRemark');
             $form->text('total');
@@ -107,11 +109,18 @@ class InvoiceController extends AdminController
     }
 
     public function view(InvoiceModel $invoice){
+
+        $invoice->load([
+            'task.client',
+            'task.job',
+            'job',
+        ]);
+
+        dump($invoice);
+
         return view('admin.invoice.view', [
-            'invoice' => $invoice->load([
-                'task.client',
-                'task.job',
-            ]),
+            'invoice' => $invoice,
+            'cre' => Client::find(1),
         ]);
     }
 

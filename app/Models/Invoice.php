@@ -57,10 +57,19 @@ class Invoice extends Model
         9 => "Deleted",
     ];
 
+    // public function setTaskIdAttribute($value)
+    // {
+    //     if ( empty($value) ) {
+    //         $this->attributes['task_id'] = 1;
+    //     }
+    //     $this->attributes['task_id'] = $value;
+    // }
+
+
     public function getCodeAttribute()
     {
         // return "";
-        return $this->InvoiceNo ?: "LX-" . $this->lx_number;
+        return $this->invoiceCode ?: "LX-" . $this->lx_number;
     }
 
     public static function generateInvoiceNo()
@@ -79,7 +88,7 @@ class Invoice extends Model
 
     public function job()
     {
-        return $this->belongsTo(C8CJob::class);
+        return $this->belongsTo(C8CJob::class, 'idjob', 'idjob');
     }
 
 

@@ -20,10 +20,13 @@ class C8CJob extends Model
         "company",
         "description",
         "meta",
+        "idtranslator",
+        "othertranslator",
     ];
 
     protected $casts = [
         'meta' => 'object',
+        'othertranslator' => 'array',
     ];
 
 }

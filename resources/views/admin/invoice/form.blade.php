@@ -158,13 +158,11 @@
                 </td>
             </tr>
         </table>
-    <div>
+    <div class="text-2xl">
         <div>Total : </div>
         <div>{{total | digi}}</div>
     </div>
 
-
-    {{form}}
     </section>
     @endverbatim
     {{-- mordern popup form with tailwindcss --}}

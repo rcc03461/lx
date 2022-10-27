@@ -220,27 +220,27 @@
                 <tr>
                   <td style="vertical-align:middle;width:13%">Client Ref</td>
                   <td style="vertical-align:middle;width:2%">:</td>
-                  <td style="vertical-align:middle;width:45%">{{$invoice->task?->job?->job_code ?: " - "}}</td>
+                  <td style="vertical-align:middle;width:45%">{{$invoice->task?->code ?? $invoice?->job?->job_code ?? " - "}}</td>
                   <td style="vertical-align:middle;width:1%"></td>
                   <td style="vertical-align:middle;width:20%">Invoice Number</td>
                   <td style="vertical-align:middle;width:2%">:</td>
-                  <td style="vertical-align:middle;width:22%" class="text-right">{{$invoice->InvoiceNo ?: " - "}}</td>
+                  <td style="vertical-align:middle;width:22%" class="text-right">{{$invoice->code ?? " - "}}</td>
                 </tr>
                 <tr>
                   <tr>
                     <td style="vertical-align:top">Company</td>
                     <td style="vertical-align:top">:</td>
-                    <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{$invoice->task->client->name ?: " - "}}<br>{{$invoice->task->client->address ?: " - "}}</td>
+                    <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{$invoice->task?->client->name ?? $cre->name ?? " - "}}<br>{{$invoice->task?->client->address ?: $cre->address ?? " - "}}</td>
                   </tr>
                 </tr>
                 <tr>
                   <td>Attention</td>
                   <td>:</td>
-                  <td>{{$invoice->task->client->attn ?: " - "}}</td>
+                  <td>{{$invoice->task?->client->attn ?? $cre->attn ??  " - "}}</td>
                   <td></td>
                   <td>LingXpert Job No.</td>
                   <td>:</td>
-                  <td class="text-right">{{$invoice->task->code ?: " - "}}</td>
+                  <td class="text-right">{{$invoice->task?->code ?: " - "}}</td>
                 </tr>
                 <tr>
                   <td style="vertical-align:middle">Date</td>
@@ -272,7 +272,7 @@
                 <tbody>
                     <tr>
                         <td>&nbsp;</td>
-                        <td><b>{{$invoice->task?->job?->company ?: " - "}}<b></td>
+                        <td><b>{{$invoice->job?->company ?? $invoice->task?->client?->name ?? " - "}}<b></td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -280,7 +280,7 @@
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
-                        <td><i><u>{{$invoice->task?->job?->jobdescription ?: " - "}}</u></i></td>
+                        <td><i><u>{{$invoice->job?->jobdescription ?? $invoice->task?->description ?? " - "}}</u></i></td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -289,103 +289,6 @@
                     @php
                         $i = 1;
                     @endphp
-                    {{-- words --}}
-                    @if ($invoice->words->eng?->words || $invoice->words->chi?->words )
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><b>Words:</b></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    @endif
-                    @if ($invoice->words->eng?->words)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td> - Chinese to English</td>
-                            <td>${{$invoice->words->eng?->price}}</td>
-                            <td>{{$invoice->words->eng?->words}}</td>
-                            <td>Words</td>
-                            <td>{{$invoice->words->eng?->words * $invoice->words->eng?->price > 0 ? number_format($invoice->words->eng?->words * $invoice->words->eng?->price, 2) : 'Waived'}}</td>
-                        </tr>
-                    @endif
-                    @if ($invoice->words->chi?->words)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td> - English to Chinese</td>
-                            <td>${{$invoice->words->chi?->price}}</td>
-                            <td>{{$invoice->words->chi?->words}}</td>
-                            <td>Words</td>
-                            <td>{{$invoice->words->chi?->words * $invoice->words->chi?->price > 0 ? number_format($invoice->words->chi?->words * $invoice->words->chi?->price, 2) : 'Waived'}}</td>
-                        </tr>
-                    @endif
-
-                    {{-- pages --}}
-                    @if ($invoice->words->eng?->words || $invoice->words->chi?->words )
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><b>Pages:</b></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    @endif
-                    @if ($invoice->pages->eng?->pages)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td> - Chinese to English</td>
-                            <td>${{$invoice->pages->eng?->price}}</td>
-                            <td>{{$invoice->pages->eng?->pages}}</td>
-                            <td>Pages</td>
-                            <td>{{$invoice->pages->eng?->pages * $invoice->pages->eng?->price > 0 ? number_format($invoice->pages->eng?->pages * $invoice->pages->eng?->price, 2) : 'Waived'}}</td>
-                        </tr>
-                    @endif
-                    @if ($invoice->pages->chi?->pages)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td> - English to Chinese</td>
-                            <td>${{$invoice->pages->chi?->price}}</td>
-                            <td>{{$invoice->pages->chi?->pages}}</td>
-                            <td>Pages</td>
-                            <td>{{$invoice->pages->chi?->pages * $invoice->pages->chi?->price > 0 ? number_format($invoice->pages->chi?->pages * $invoice->pages->chi?->price, 2) : 'Waived'}}</td>
-                        </tr>
-                    @endif
-
-                    {{-- other --}}
-                    @foreach ($invoice->other as $item)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td>{{$item['desc']}}</td>
-                            <td>${{$item['price']}}</td>
-                            <td>{{$item['qty']}}</td>
-                            <td>{{$item['unit']}}</td>
-                            <td>{{$item['qty'] * $item['price'] > 0 ? number_format($item['qty'] * $item['price'], 2) : 'Waived'}}</td>
-                        </tr>
-                    @endforeach
-
-                    {{-- less --}}
-                    @if ($invoice->other )
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><b>Less:</b></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    @endif
-                    @foreach ($invoice->less as $item)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td>{{$item['desc']}}</td>
-                            <td>${{$item['price']}}</td>
-                            <td>{{$item['qty']}}</td>
-                            <td>{{$item['unit']}}</td>
-                            <td>({{$item['qty'] * $item['price'] > 0 ? number_format($item['qty'] * $item['price'], 2) : 'Waived'}})</td>
-                        </tr>
-                    @endforeach
                     <tr>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -394,6 +297,115 @@
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>
+                    {{-- words --}}
+                    @if ($invoice->words->eng?->words || $invoice->words->chi?->words )
+
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><b>Words:</b></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        @if ($invoice->words->eng?->words)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td> - Chinese to English</td>
+                                <td>${{$invoice->words->eng?->price}}</td>
+                                <td>{{$invoice->words->eng?->words}}</td>
+                                <td>Words</td>
+                                <td>{{$invoice->words->eng?->words * $invoice->words->eng?->price > 0 ? number_format($invoice->words->eng?->words * $invoice->words->eng?->price, 2) : 'Waived'}}</td>
+                            </tr>
+                        @endif
+                        @if ($invoice->words->chi?->words)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td> - English to Chinese</td>
+                                <td>${{$invoice->words->chi?->price}}</td>
+                                <td>{{$invoice->words->chi?->words}}</td>
+                                <td>Words</td>
+                                <td>{{$invoice->words->chi?->words * $invoice->words->chi?->price > 0 ? number_format($invoice->words->chi?->words * $invoice->words->chi?->price, 2) : 'Waived'}}</td>
+                            </tr>
+                        @endif
+                    @endif
+
+                    {{-- pages --}}
+                    @if ($invoice->pages->eng?->pages || $invoice->pages->chi?->pages )
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><b>Pages:</b></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        @if ($invoice->pages->eng?->pages)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td> - Chinese to English</td>
+                                <td>${{$invoice->pages->eng?->price}}</td>
+                                <td>{{$invoice->pages->eng?->pages}}</td>
+                                <td>Pages</td>
+                                <td>{{$invoice->pages->eng?->pages * $invoice->pages->eng?->price > 0 ? number_format($invoice->pages->eng?->pages * $invoice->pages->eng?->price, 2) : 'Waived'}}</td>
+                            </tr>
+                        @endif
+                        @if ($invoice->pages->chi?->pages)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td> - English to Chinese</td>
+                                <td>${{$invoice->pages->chi?->price}}</td>
+                                <td>{{$invoice->pages->chi?->pages}}</td>
+                                <td>Pages</td>
+                                <td>{{$invoice->pages->chi?->pages * $invoice->pages->chi?->price > 0 ? number_format($invoice->pages->chi?->pages * $invoice->pages->chi?->price, 2) : 'Waived'}}</td>
+                            </tr>
+                        @endif
+                    @endif
+
+                    {{-- other --}}
+                    @if ($invoice->other )
+                        @foreach ($invoice->other as $item)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td>{{$item['desc']}}</td>
+                                <td>${{$item['price']}}</td>
+                                <td>{{$item['qty']}}</td>
+                                <td>{{$item['unit']}}</td>
+                                <td>{{$item['qty'] * $item['price'] > 0 ? number_format($item['qty'] * $item['price'], 2) : 'Waived'}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+
+
+                    {{-- less --}}
+                    @if ($invoice->less )
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><b>Less:</b></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        @foreach ($invoice->less as $item)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td>{{$item['desc']}}</td>
+                                <td>${{$item['price']}}</td>
+                                <td>{{$item['qty']}}</td>
+                                <td>{{$item['unit']}}</td>
+                                <td>({{$item['qty'] * $item['price'] > 0 ? number_format($item['qty'] * $item['price'], 2) : 'Waived'}})</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    @endif
                     <tr>
                         <td>&nbsp;</td>
                         <td style="white-space: pre-line;">{{$invoice->tranRemark}}</td>
