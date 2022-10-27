@@ -36,10 +36,10 @@ class InvoiceController extends AdminController
             ->sortable();
             $grid->column('idjob');
             // $grid->column('task_id');
+            $grid->column('lx_code', 'LX Invoice No');
             $grid->column('task.title');
             $grid->column('job.job_code');
             $grid->column('invoiceCode');
-            $grid->column('lx_code', 'LX Invoice No');
             $grid->column('total');
             $grid->column('invoiceDate')->display(function ($invoiceDate) {
                 return $invoiceDate?->format('Y-m-d');
