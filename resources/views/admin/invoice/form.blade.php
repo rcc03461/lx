@@ -36,14 +36,14 @@
             <div class="flex items-center my-2">
                 <label class="w-40" for="">No:</label>
                 <div class="flex-1">
-                    <input  class="form-control" type="text" v-model="form.lx_number" readonly>
+                    <input  class="form-control" type="text" v-model="form.lx_number" placeholder="221001 | 111878">
                 </div>
             </div>
 
             <div class="flex items-center my-2">
                 <label class="w-40" for="">Code:</label>
                 <div class="flex-1">
-                    <input class="form-control" type="text" v-model="form.lx_code" readonly>
+                    <input class="form-control" type="text" v-model="form.lx_code" placeholder="Cre8-221001 | LI-111878">
                 </div>
             </div>
 
