@@ -23,6 +23,8 @@ class CreateC8CJobsTable extends Migration
             $table->string('jobtypeKey')->nullable();
             $table->string('status')->nullable();
             $table->json('meta')->nullable();
+            $table->unsignedBigInteger('idtranslator')->nullable();
+            $table->json('othertranslator')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

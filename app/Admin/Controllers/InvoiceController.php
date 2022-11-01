@@ -31,7 +31,7 @@ class InvoiceController extends AdminController
 
             // $grid->column('idjob');
             $grid->column('job.job_code', 'Job No.');
-            $grid->column('idjob', 'Job Status');
+            $grid->column('job.status', 'Job Status');
             $grid->column('task_id', 'Client')->display(function ($task_id) {
                 if ($task_id) {
                     return $this->task->client->name;
@@ -48,9 +48,9 @@ class InvoiceController extends AdminController
                 <div class="text-gray-400">{$this->job?->jobdescription}</div>
                 HTML;
             });
-            $grid->column('jobtype')->display(function(){
+            $grid->column('job.jobtypeKey')->display(function(){
                 return <<<HTML
-                {$this->job?->jobtype}
+                {$this->job?->jobtypeKey}
                 HTML;
             });
             $grid->column('lx_code', 'LX Invoice No');

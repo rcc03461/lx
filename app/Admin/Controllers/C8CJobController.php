@@ -25,6 +25,7 @@ class C8CJobController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('idjob')->sortable();
             $grid->column('job_code');
+            $grid->column('jobtypeKey');
             $grid->column('company')->width(500)->display(function ($company) {
                 return <<<HTML
                 <div>$this->company</div>
@@ -34,6 +35,7 @@ HTML;
             });
             $grid->column('idtranslator');
             $grid->column('othertranslator');
+            $grid->column('status');
             // $grid->column('description');
             $grid->column('sales')->display(function ($sales) {
                 return $this->meta->sales->name;
