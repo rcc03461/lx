@@ -26,38 +26,53 @@ class InvoiceController extends AdminController
 
     protected function grid()
     {
-        return Grid::make(new Invoice(['task', 'job']), function (Grid $grid) {
+        return Grid::make(new Invoice(['task.client', 'job']), function (Grid $grid) {
             $grid->model()->orderBy('id', 'desc');
-            $grid->column('id')->display(function ($id) {
-                return <<<HTML
-                <a class="text-blue-600" data-popup href="/admin/invoices/$this->id/view" target="_blank">View</a>
-                HTML;
-            })
-            ->sortable();
-            $grid->column('idjob');
+
+            // $grid->column('idjob');
+            $grid->column('job.job_code', 'Job No.');
+            $grid->column('idjob', 'Job Status');
+            $grid->column('task_id', 'Client')->display(function ($task_id) {
+                if ($task_id) {
+                    return $this->task->client->name;
+                }else{
+                    return 'Cre8';
+                }
+            });
+            $grid->column('task.title', 'Client\'s Job No.');
             // $grid->column('task_id');
+            $grid->column('invoiceCode', 'C8 Inv.');
+            $grid->column('company')->width(300)->display(function(){
+                return <<<HTML
+                {$this->job?->company}
+                <div class="text-gray-400">{$this->job?->jobdescription}</div>
+                HTML;
+            });
+            $grid->column('jobtype')->display(function(){
+                return <<<HTML
+                {$this->job?->jobtype}
+                HTML;
+            });
             $grid->column('lx_code', 'LX Invoice No');
-            $grid->column('task.title');
-            $grid->column('job.job_code');
-            $grid->column('invoiceCode');
-            $grid->column('total');
             $grid->column('invoiceDate')->display(function ($invoiceDate) {
                 return $invoiceDate?->format('Y-m-d');
             });
+            $grid->column('total');
+            $grid->column('vendor_total');
             // $grid->column('tranRemark')->width(300);
-            $grid->column('reviseDate');
+            // $grid->column('reviseDate');
             // $grid->column('words');
             // $grid->column('pages');
             // $grid->column('other');
             // $grid->column('less');
             // $grid->column('meta');
-            $grid->column('translator')->display(function () {
-                return $this->job?->meta?->translator?->name ?? '';
-            });
+            // $grid->column('translator')->display(function () {
+            //     return $this->job?->meta?->translator?->name ?? '';
+            // });
             $grid->column('Transtatus')->display(function ($Transtatus) {
                 return $this->invoicestatus;
             });
-            $grid->column('ApproveId');
+            // $grid->column('ApproveId');
             $grid->column('sales')->display(function ($sales) {
                 return $this->job?->meta?->sales?->name;
             });
@@ -67,6 +82,12 @@ class InvoiceController extends AdminController
             // $grid->column('updated_at')->dispaly(function($updated_at){
             //     return $updated_at->format('Y-m-d');
             // })->sortable();
+            $grid->column('id')->display(function ($id) {
+                return <<<HTML
+                <a class="text-blue-600" data-popup href="/admin/invoices/$this->id/view" target="_blank">View</a>
+                HTML;
+            })
+            ->sortable();
 
             // $grid->filter(function (Grid\Filter $filter) {
             //     $filter->equal('id');

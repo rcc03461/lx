@@ -226,10 +226,10 @@
                     lx_number:"",
                     lx_code:"",
                     invoiceDate: dayjs().format('YYYY-MM-DD'),
-                    words:{eng:{type:"eng",words:"",price:"",unit:"Chi"},chi:{type:"chi",words:"1253",price:"0.8",unit:"Chi"}},
+                    words:{eng:{type:"eng",words:"",price:"",unit:"Chi"},chi:{type:"chi",words:"",price:"",unit:"Chi"}},
                     pages:{eng:{type:"eng",pages:"",price:""},chi:{type:"chi",pages:"",price:""}},
-                    other:[{desc:"Package",price:"3200",qty:"1",unit:"Package"}],
-                    less:[{desc:" 2021-10-04_cyc 006 (E to C) - Copied from cyc 005",price:"0.8",qty:"4496",unit:"Chi Words"}],
+                    other:[{desc:"Package",price:"0",qty:"0",unit:"Package"}],
+                    less:[{desc:"",price:"0",qty:"0",unit:"Chi Words"}],
                     total:0
                 },
                }

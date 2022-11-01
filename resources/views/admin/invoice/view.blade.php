@@ -22,6 +22,13 @@
       body {
         -webkit-print-color-adjust: exact;
       }
+      #footnote{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding-bottom: 4px;
+        border-bottom: 8px solid #006600;
+      }
     </style>
     <style>
       .datetimepicker{
@@ -32,7 +39,7 @@
       }
       body *{
         box-sizing: border-box;
-        font-size: 14px;
+        font-size: 9px;
       }
       body{
         box-sizing: border-box;
@@ -120,12 +127,8 @@
       .fatBorder thead tr{
         border-bottom: 2px solid #000;
       }
-      .smallFont{
-        font-size: 14px;
-      }
-      .smallFont thead td{
-        font-size: 13px;
-      }
+
+
       .smallFont td{
         padding: 2px 0;
       }
@@ -138,9 +141,9 @@
       }
       table thead tr th{
         text-align: center;
-        font-weight: normal;
+        font-weight: bold;
         font-style: italic;
-        font-size: 15px;
+        font-size: 12px;
       }
       table tbody tr td{
         vertical-align: top;
@@ -148,10 +151,13 @@
       .borderContainer{
         border: 2px solid rgb(0, 0, 0);
       }
+      .borderContainer *{
+        font-size: 12px;
+      }
       h3{
         padding: 6px 0;
         text-align: center;
-        border-top: 2px solid rgb(0, 0, 0);
+        /* border-top: 2px solid rgb(0, 0, 0); */
         border-bottom: 1px solid rgb(0, 0, 0);
       }
       .detailContent {
@@ -159,11 +165,11 @@
 
       }
       .detailContent thead{
-        background-color: rgb(215, 215, 215) !important;
+        background-color: #99ccff !important;
       }
       @media print {
         .detailContent thead{
-          background-color: rgb(215, 215, 215) !important;
+          background-color: #99ccff !important;
         }
       }
       .detailContent thead tr th{
@@ -207,16 +213,16 @@
 
 
         <div class="max-w-3xl mx-auto bg-white p-4">
-          <div class="borderContainer">
             <section class="mb-1">
-              <img src="/assets/lx_logo.png" alt="" style="height:110px;margin: 0 auto; display:block" >
+              <img src="/assets/lx_logo.png" alt="" style="height:90px;margin: 0 auto 10px; display:block" >
               <!-- <span class="typeTitle" style="float:right;">Translation Invoice</span> -->
             </section>
+          <div class="borderContainer">
 
             <section>
 
-              <h3>INVOICE</h3>
-              <table style="margin-left:1%;margin-right:1%;width:98%;">
+              <h3 class="font-black text-lg">INVOICE</h3>
+              <table class="my-2" style="margin-left:1%;margin-right:1%;width:98%;">
                 <tr>
                   <td style="vertical-align:middle;width:13%">Client Ref</td>
                   <td style="vertical-align:middle;width:2%">:</td>
@@ -246,7 +252,7 @@
                   <td style="vertical-align:middle">Date</td>
                   <td style="vertical-align:middle">:</td>
                   <td style="vertical-align:middle;position:relative">
-                        {{$invoice->invoiceDate ?: " - "}}
+                        {{$invoice->invoiceDate?->format('Y-m-d') ?: " - "}}
                   </td>
                   <td style="vertical-align:middle"></td>
                   <td style="vertical-align:middle">Page Number	</td>
@@ -469,32 +475,82 @@
         </div>
         <section style="font-size: xx-small;">
             <div class="flex justify-end my-2">
-                <div class="w-1/3 h-24">
-                    <img src="/assets/chop.png" alt="" class="h-20 mx-auto mb-1" style="display:block" >
-                    <div class="border-t border-black" style="font-size: 9pt">
+                <div class="w-2/5 h-24 relative" >
+                    <span class="text-sm">Lingxpert Language Services Limited</span>
+                    <img src="/assets/LXChop.jpg" alt="" class="absolute right-8 h-20 mx-auto mb-1" style="display:block;" >
+                    <div class="mt-20 border-t border-black relative z-10" style="font-size: 9pt">
                         Company Chop
                     </div>
                 </div>
             </div>
-            <div class="leading-3" style="font-size: 9pt">
-                Remarks:<br/>
-                1. Payment in full shall be due 30 days after the date of the invoice.<br/>
-                2. Any overdue amount is subject to interest payments at a monthly interest rate of 1.5%.<br/>
-                3. Cheque should be crossed and made payable to “Lingxpert Language Services Limited”.<br/>
-                4. Please quote invoice number on the back of the cheque or of the bank-in receipt (where appropriate).<br/>
-                5. No receipt will be issued unless specifically requested.<br/>
 
-            </div>
-            <div class="text-center mt-2">
-                <div class="my-1">
-                    LingXpert Language Services Limited
+            <div id="footnote">
+
+                <div class="mb-4">
+                    <span class="font-bold">Bank Account Information</span>
+                    <ul>
+                        <li class="flex">
+                            <span class="w-1/6">Beneficiary Name:</span>
+                            <span class="flex-1">Lingxpert Language Services Limited</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-1/6">Account Number:</span>
+                            <span class="flex-1">400-882171-838</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-1/6">Bank Name:</span>
+                            <span class="flex-1">The Hongkong and Shanghai Banking Corporation Limited</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-1/6">Bank Address:</span>
+                            <span class="flex-1">HSBC Main Building, No. 1 Queen’s Road Central, Central, Hong Kong</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-1/6">Swift Code: </span>
+                            <span class="flex-1">HSBCHKHHHKH</span>
+                        </li>
+                    </ul>
+
                 </div>
-                <div class=""  style="font-size: 9pt">
-                    <span class="px-2">T 電話: 8101 1028 </span>
-                    <span class="px-2">F 傳真: 8101 1281 </span>
-                    <span class="px-2">Room 1106, 11/F, Office Plus @ Sheung Wan, 93-103 Wing Lok Street, Sheung Wan, Hong Kong</span>
-                    <span class="px-2">香港上環永樂街93-103號協成行上環中心1106室</span>
 
+                <div class="leading-3" style="font-size: 9pt">
+                    Remarks:<br/>
+                    <ul>
+                        <li class="flex">
+                            <span class="w-6">1. </span>
+                            <span>Payment in full shall be due 30 days after the date of the invoice.</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-6">2. </span>
+                            <span>Any overdue amount is subject to interest payments at a monthly interest rate of 1.5%.</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-6">3. </span>
+                            <span>Cheque should be crossed and made payable to “Lingxpert Language Services Limited”.</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-6">4. </span>
+                            <span>Please quote invoice number on the back of the cheque or of the bank-in receipt (where appropriate).</span>
+                        </li>
+                        <li class="flex">
+                            <span class="w-6">5. </span>
+                            <span>No receipt will be issued unless specifically requested.</span>
+                        </li>
+                    </ul>
+                    <br/>
+
+                </div>
+                <div class="text-center mt-2 leading-3">
+                    <div class="text-xs my-1 font-black" style="color:#006600">
+                        LingXpert Language Services Limited
+                    </div>
+                    <div class="text-gray-500" >
+                        <span class="px-2">T 電話: 8101 1028 </span>
+                        <span class="px-2">F 傳真: 8101 1281 </span>
+                        <span class="px-2">Room 1106, 11/F, Office Plus @ Sheung Wan, 93-103 Wing Lok Street, Sheung Wan, Hong Kong</span>
+                        <div class="px-2">香港上環永樂街93-103號協成行上環中心1106室</div>
+
+                    </div>
                 </div>
             </div>
         </section>

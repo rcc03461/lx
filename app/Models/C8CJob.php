@@ -18,6 +18,8 @@ class C8CJob extends Model
         "job_code",
         "jobdescription",
         "company",
+        "jobtypeKey",
+        "status",
         "description",
         "meta",
         "idtranslator",
@@ -28,5 +30,14 @@ class C8CJob extends Model
         'meta' => 'object',
         'othertranslator' => 'array',
     ];
+
+    protected $appends = [
+        'jobtype',
+    ];
+
+    public function getJobtypeAttribute()
+    {
+        return str($this->attributes['job_code'])->between('_', '[')->trim();
+    }
 
 }
