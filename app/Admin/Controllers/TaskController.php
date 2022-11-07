@@ -13,6 +13,7 @@ use App\Models\Task as ModelsTask;
 use App\Admin\Forms\TranslationForm;
 use App\Admin\Renderable\C8CJobsTable;
 use App\Admin\Renderable\TaskInvoiceTable;
+use App\Admin\Actions\Grid\CreatePOByTaskId;
 use Dcat\Admin\Http\Controllers\AdminController;
 
 class TaskController extends AdminController
@@ -116,9 +117,20 @@ HTML;
             $grid->column('remark');
             $grid->column('publish_date')->sortable();
             // $grid->column('meta');
-            $grid->column('created_at')->sortable();
+
+            // $grid->column('PO')->display(function () {
+            //     return <<< HTML
+            //     <a href="/admin/purchase_orders/create?task_id={$this->id}">Create</a>
+            //     HTML;
+            // });
+            // $grid->column('created_at')->sortable();
             $grid->column('updated_at')->sortable();
 
+            $grid->actions([
+                // ReScanAttachmentRowAction::make()
+                CreatePOByTaskId::make(),
+                // JobPurchaseOrderAction::make()
+            ]);
 
             $grid->quickSearch(['id', 'title', 'client.name', 'job.job_code', 'job.jobdescription']);
 

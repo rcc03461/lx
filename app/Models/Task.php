@@ -58,5 +58,10 @@ class Task extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function pos()
+    {
+        return $this->hasMany(PurchaseOrder::class);
+    }
+
 
 }

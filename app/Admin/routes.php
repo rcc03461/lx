@@ -25,6 +25,8 @@ Route::group([
     });
 
     $router->resource('c8c_job', 'C8CJobController');
+    $router->resource('vendors', 'VendorController');
+    $router->resource('purchase_orders', 'PurchaseOrderController');
 
     $router->resource('client', 'ClientController');
     $router->resource('task', 'TaskController');

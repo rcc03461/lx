@@ -1,11 +1,12 @@
 <?php
 
+use App\Models\Task;
 use Inertia\Inertia;
+use App\Models\Client;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
-use App\Http\Controllers\TaskController;
 use App\Models\Invoice as InvoiceModel;
-use App\Models\Client;
+use App\Http\Controllers\TaskController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,10 @@ use App\Models\Client;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/try', function () {
+    return Task::doesntHave('invoices')->get();
+});
 
 Route::get('/', function () {
     return redirect('/admin');

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Task;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -26,6 +27,7 @@ class InvoiceController extends AdminController
 
     protected function grid()
     {
+        // dd(Task::doesntHaveByNonDependentSubquery('invoices')->get());
         return Grid::make(new Invoice(['task.client', 'job']), function (Grid $grid) {
             $grid->model()->orderBy('id', 'desc');
 
@@ -39,8 +41,11 @@ class InvoiceController extends AdminController
                     return 'Cre8';
                 }
             });
-            $grid->column('task.title', 'Client\'s Job No.');
-            // $grid->column('task_id');
+            $grid->column('task.lx_no');
+            $grid
+            ->column('task_id', 'Client\'s Job No.')
+            // ->select('task_id')
+            ->select(array_merge([0 => ""],Task::doesntHave('invoices')->pluck('lx_no', 'id')->toArray()));
             $grid->column('invoiceCode', 'C8 Inv.');
             $grid->column('company')->width(300)->display(function(){
                 return <<<HTML

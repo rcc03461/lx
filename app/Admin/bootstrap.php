@@ -47,7 +47,7 @@ Admin::css('//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css
 // Admin::css('//unpkg.com/vue-multiselect@2.1.4/dist/vue-multiselect.min.css');
 
 Admin::style(<<<CSS
-    [type=button].btn.btn-primary,[type=submit].btn.btn-primary {
+    [type=button].btn.btn-primary:not(.btn-outline),[type=submit].btn.btn-primary:not(.btn-outline) {
         background-color: #586cb1;
         border-color: #586cb1;
     }
