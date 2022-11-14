@@ -35,7 +35,8 @@ class TaskController extends AdminController
 
     public function apiSearch( ){
         $q = request()->get('q');
-        return TaskModel::where('lx_no', 'like', "%$q%")
+        return TaskModel::with(['job'])
+            ->where('lx_no', 'like', "%$q%")
             ->orWhere('title', 'like', "%$q%")
             ->orHasByNonDependentSubquery('job', function($query) use ($q){
                 $query->where('job_code', 'like', "%$q%");

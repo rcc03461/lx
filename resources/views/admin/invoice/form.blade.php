@@ -11,10 +11,10 @@
             <div class="flex-1">
                 <selec-with-ajax-search v-model="form.task_id">
                     <template #selected="{selected}">
-                        {{selected.code}} {{selected.title}} - {{selected.job?.job_code}}
+                        {{selected.code}} - {{selected.title}} - {{selected.job?.job_code}}
                     </template>
                     <template #item="{item}">
-                        {{item.code}} {{item.title}} - {{item.job?.job_code}}
+                        {{item.code}} - {{item.title}} - {{item.job?.job_code}}
                     </template>
                 </selec-with-ajax-search>
             </div>

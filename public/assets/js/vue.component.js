@@ -17,7 +17,6 @@ Vue.directive('click-outside', {
 Vue.component('selec-with-ajax-search', {
     props: [
         'value',
-
     ],
     data() {
         return {
