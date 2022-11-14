@@ -70,6 +70,8 @@ class TaskController extends AdminController
 
             });
 
+            $grid->model()->orderBy('id', 'desc');
+
             $grid->column('id')->sortable();
             $grid->column('lx_no');
             $grid->column('client')->display(function ($client) {
