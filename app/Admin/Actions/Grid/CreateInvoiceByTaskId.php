@@ -35,7 +35,7 @@ class CreateInvoiceByTaskId extends RowAction
         // dump($inv->generateInvoiceNo());
 
         return $this->response()
-            ->redirect('/admin/invoices/create?task_id='.$this->getKey())
+            ->redirect('/invoices/create?task_id='.$this->getKey())
             ->success('Processed successfully: '.$this->getKey())
             // ->refresh()
             ;
