@@ -28,7 +28,7 @@ class InvoiceController extends AdminController
     protected function grid()
     {
         // dd(Task::doesntHaveByNonDependentSubquery('invoices')->get());
-        return Grid::make(new Invoice(['task.client', 'job']), function (Grid $grid) {
+        return Grid::make(InvoiceModel::with(['task.client', 'task.pos',  'job']), function (Grid $grid) {
             $grid->model()->orderBy('id', 'desc');
 
             // $grid->column('idjob');
@@ -45,7 +45,7 @@ class InvoiceController extends AdminController
             $grid
             ->column('task_id', 'Client\'s Job No.')
             // ->select('task_id')
-            ->select(array_merge([0 => ""],Task::doesntHave('invoices')->pluck('lx_no', 'id')->toArray()));
+            ->select(Task::doesntHave('invoices')->pluck('lx_no', 'id')->prepend('', 0));
             $grid->column('invoiceCode', 'C8 Inv.');
             $grid->column('company')->width(300)->display(function(){
                 return <<<HTML
@@ -63,7 +63,13 @@ class InvoiceController extends AdminController
                 return $invoiceDate?->format('Y-m-d');
             });
             $grid->column('total');
-            $grid->column('vendor_total');
+            // $grid->column('vendor_total');
+            $grid->column('vendor_total')->display(function () {
+                if ($this->task_id) {
+                    return $this->task->pos->sum('total');
+                }
+                return "";
+            });
             // $grid->column('tranRemark')->width(300);
             // $grid->column('reviseDate');
             // $grid->column('words');

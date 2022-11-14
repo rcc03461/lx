@@ -24,7 +24,9 @@ class Task extends Model
         'description',
         'remark',
         'job_in_date',
+        'end_date',
         'publish_date',
+        'estimated_revenue',
         'meta',
     ];
 
@@ -33,6 +35,8 @@ class Task extends Model
     ];
     protected $dates = [
         'publish_date',
+        'job_in_date',
+        'end_date',
     ];
     protected $appends = [
         'code',

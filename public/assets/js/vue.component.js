@@ -29,7 +29,9 @@ Vue.component('selec-with-ajax-search', {
     watch:{
         value(val) {
             const {value} = this;
-            this.ajaxGet(value);
+            if (value) {
+                this.ajaxGet(value);
+            }
         }
     },
     mounted(){
@@ -64,14 +66,21 @@ Vue.component('selec-with-ajax-search', {
             setTimeout(() => {
                 this.$refs.searchinput.focus();
             }, 100);
+        },
+        clearResult() {
+            this.selected = {};
+            this.$emit('input', null);
         }
     },
     template: `<div class="relative w-full" v-click-outside="clickOutside">
-        <input ref="searchinput" v-show="showSearch" class="form-control w-full outline-none px-1 focus:border-b bg-gray-100 " type="text" @keyup="ajaxSearch" @focus="showSearch = true"/>
-        <div v-show="!showSearch" class="form-control cursor-pointer hover:bg-gray-50" @click="focusInput">
-            <slot name="selected" :selected="selected">
-                @{{selected.title}}
-            </slot>
+        <div class="flex items-center">
+            <input ref="searchinput" v-show="showSearch" class="form-control w-full outline-none px-1 focus:border-b bg-gray-100 " type="text" @keyup="ajaxSearch" @focus="showSearch = true"/>
+            <div v-show="!showSearch" class="flex-1 form-control cursor-pointer hover:bg-gray-50" @click="focusInput">
+                <slot name="selected" :selected="selected">
+                    @{{selected.title}}
+                </slot>
+            </div>
+            <div @click="clearResult" class="w-12 text-center hover:bg-gray-50 cursor-pointer">Clear</div>
         </div>
         <div v-show="showSearch" class="absolute border shadow-lg left-0 bg-white w-full max-h-72 overflow-y-auto px-1 py-1 z-10" style="top:110%">
             <div v-if="options.length == 0" class="text-center">Type to search...</div>

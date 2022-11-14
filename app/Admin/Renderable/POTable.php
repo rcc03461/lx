@@ -7,43 +7,27 @@ use Dcat\Admin\Layout\Row;
 use Illuminate\Support\Str;
 use App\Admin\Repositories\Invoice;
 use App\Models\Invoice as InvoiceModel;
+use App\Models\PurchaseOrder;
 use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Grid\LazyRenderable;
 
-class TaskInvoiceTable extends LazyRenderable
+class POTable extends LazyRenderable
 {
 
     public function grid(): Grid
     {
         // $purchase_order_id = $this->purchase_order_id;
-        return Grid::make(new Invoice(), function (Grid $grid) {
+        return Grid::make(new PurchaseOrder(), function (Grid $grid) {
             $grid->model()
                 ->where("task_id", $this->task_id)
                 // ->orderBy('id', 'desc');
                 ;
 
             $grid->column('id', 'ID');
-            $grid->column('idjob');
-            $grid->column('invoiceCode');
-            $grid->column('InvoiceNo')->display(function ($InvoiceNo) {
-                $code = $this->code ?: '---';
-                return <<<HTML
-                <a href="/admin/invoices/$this->id/edit">$code</a>
-                HTML;
-            });
-            $grid->column('version');
-            $grid->column('ApproveId');
+            $grid->column('vender_id');
+            $grid->column('job_date');
             $grid->column('total');
-            $grid->column('invoiceDate')->display(function ($invoiceDate) {
-                return $invoiceDate->format('d/m/Y') ?: '---';
-            });
-            $grid->column('reviseDate');
-            $grid->column('view')->display(function () {
-                return <<<HTML
-                <a class="text-blue-500" data-popup href="/admin/invoices/$this->id/view" target="_blank">View</a>
-                HTML;
-            });
 
 
             $grid->disablerefreshButton();

@@ -19,7 +19,8 @@ use App\Http\Controllers\TaskController;
 */
 
 Route::get('/try', function () {
-    return Task::doesntHave('invoices')->get();
+    // return Task::with(['job', 'client', 'invoices'])->withSum('pos', 'total')->withSum('invoices', 'total')->get();
+    // return Task::doesntHave('invoices')->get();
 });
 
 Route::get('/', function () {

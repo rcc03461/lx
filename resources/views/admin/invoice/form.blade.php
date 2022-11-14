@@ -75,8 +75,8 @@
                 </td>
                 <td>
                     <select v-model="form.words.eng.unit" class="form-control" name="" id="">
-                        <option value="Chi">Chi Words</option>
                         <option value="Eng">Eng Words</option>
+                        <option value="Chi">Chi Words</option>
                     </select>
                 </td>
             </tr>
@@ -242,10 +242,12 @@
             computed:{
                 total: function(){
                     const {form:{words,pages,other,less}} = this;
-                    const total =   words.eng.price * words.eng.words + words.chi.price * words.chi.words +
-                                    pages.eng.price * pages.eng.pages + pages.chi.price * pages.chi.pages +
-                                    other?.reduce((a,b)=>a + b.price * b.qty,0) -
-                                    less?.reduce((a,b)=>a + b.price * b.qty,0);
+                    // console.log(words, pages, other, less);
+                    const total =   +words.eng.price * +words.eng.words + +words.chi.price * +words.chi.words +
+                                    +pages.eng.price * +pages.eng.pages + +pages.chi.price * +pages.chi.pages +
+                                    (other?.reduce((a,b)=>a + +b.price * +b.qty,0) || 0) -
+                                    (less?.reduce((a,b)=>a + +b.price * +b.qty,0) || 0)
+                                    ;
                     return +total;
                 }
             },
