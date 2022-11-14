@@ -46,7 +46,7 @@ class InvoiceController extends AdminController
             ->column('task_id', 'Client\'s Job No.')
             // ->select('task_id')
             ->select(Task::doesntHave('invoices')->pluck('lx_no', 'id')->prepend('', 0));
-            $grid->column('invoiceCode', 'C8 Inv.');
+            $grid->column('invoiceCode', 'C8 Inv.')->sortable();
             $grid->column('company')->width(300)->display(function(){
                 return <<<HTML
                 {$this->job?->company}
@@ -58,11 +58,11 @@ class InvoiceController extends AdminController
                 {$this->job?->jobtypeKey}
                 HTML;
             });
-            $grid->column('lx_code', 'LX Invoice No');
+            $grid->column('lx_code', 'LX Invoice No')->sortable();
             $grid->column('invoiceDate')->display(function ($invoiceDate) {
                 return $invoiceDate?->format('Y-m-d');
-            });
-            $grid->column('total');
+            })->sortable();
+            $grid->column('total')->sortable();
             // $grid->column('vendor_total');
             $grid->column('vendor_total')->display(function () {
                 if ($this->task_id) {
@@ -82,7 +82,7 @@ class InvoiceController extends AdminController
             // });
             $grid->column('Transtatus')->display(function ($Transtatus) {
                 return $this->invoicestatus;
-            });
+            })->sortable();
             // $grid->column('ApproveId');
             $grid->column('sales')->display(function ($sales) {
                 return $this->job?->meta?->sales?->name;
