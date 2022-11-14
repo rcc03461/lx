@@ -73,7 +73,7 @@ class TaskController extends AdminController
             $grid->model()->orderBy('id', 'desc');
 
             $grid->column('id')->sortable();
-            $grid->column('lx_no');
+            $grid->column('lx_no')->sortable();
             $grid->column('client')->display(function ($client) {
                 return $client->name;
             });
@@ -123,7 +123,7 @@ HTML;
             // })
             // $grid->column('description');
             // $grid->column('remark');
-            $grid->column('end_date')->display(function($endDate){
+            $grid->column('end_date')->width(120)->display(function($endDate){
                 return $endDate ? $endDate->format('Y-m-d') : "";
             })->sortable();
             $grid->column('invoices_sum_total')
