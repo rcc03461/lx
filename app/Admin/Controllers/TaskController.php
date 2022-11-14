@@ -77,7 +77,7 @@ class TaskController extends AdminController
             $grid->column('client')->display(function ($client) {
                 return $client->name;
             });
-            $grid->column('title')->display(function ($job) {
+            $grid->column('title')->width(400)->display(function ($job) {
                 return <<<HTML
                 <div class="hove:text-blue-600" data-popup href="/admin/task/{$this->id}/view" target="_blank">{$this->title}</div>
                 <div class="text-xs text-gray-300">{$this->description}</div>
