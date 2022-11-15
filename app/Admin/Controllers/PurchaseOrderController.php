@@ -6,6 +6,7 @@ use App\Models\Task;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use Dcat\Admin\Admin;
 use App\Models\Vendor;
 use App\Admin\Repositories\PurchaseOrder;
 use Dcat\Admin\Http\Controllers\AdminController;
@@ -49,7 +50,7 @@ class PurchaseOrderController extends AdminController
             // $grid->column('task_id');
             $grid->column('po_no')->display(function () {
                 return $this->code;
-            });
+            })->editable(true);
             $grid->column('vendor.name', 'Vendor');
             $grid->column('task.lx_no', 'LX Ref');
             $grid->column('task.title', 'Title')->width(300)->display(function(){
@@ -105,6 +106,22 @@ class PurchaseOrderController extends AdminController
      */
     protected function form()
     {
+        Admin::script(
+            <<<JS
+                Dcat.ready(function () {
+                    $(document).on('keyup', "[name^=items]", function(){
+                        let total = 0;
+                        $(".has-many-items-form.fields-group").each(function(){
+                            let qty = $(this).find('input.field_qty').val();
+                            let price = $(this).find('input.field_unit_price').val();
+                            total = total + (Number(qty) * Number(price));
+                        });
+                        $("[name=total]").val(total);
+                    });
+                    console.log('所有JS脚本都加载完了');
+                });
+            JS
+        );
         return Form::make(new PurchaseOrder(), function (Form $form) {
             $form->display('id');
             $form->select('task_id')
@@ -124,15 +141,16 @@ class PurchaseOrderController extends AdminController
                 $table->textarea('description');
                 $table->number('qty');
                 $table->text('unit');
-                $table->currency('unit_price');
+                $table->decimal('unit_price');
             })
             // ->useTable()
             ;
-            $form->currency('total');
+            $form->decimal('total');
 
             $form->display('created_at');
             $form->display('updated_at');
         });
+
     }
 
     public function view(PurchaseOrderModel $po){

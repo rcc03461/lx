@@ -51,6 +51,10 @@ Admin::style(<<<CSS
         background-color: #586cb1;
         border-color: #586cb1;
     }
+    .boostrap-datetimepicker-widge{
+        min-width: 300px;
+    }
+
 CSS);
 
 Admin::script(<<<JS

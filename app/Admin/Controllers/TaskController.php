@@ -130,8 +130,10 @@ HTML;
             })
             ->sortable()
             ->editable(true)
+            // ->editableDate(true)
             ;
             $grid->column('invoices_sum_total')
+            // ->addTableClass(['text-right'])
             ->display(function($total){
                 return $total ? number_format($total, 2) : "";
             })
@@ -141,6 +143,7 @@ HTML;
                 ]);
             });
             $grid->column('pos_sum_total')
+            // ->addTableClass(['text-right'])
             ->display(function($total){
                 return $total ? number_format($total, 2) : "";
             })
@@ -151,6 +154,7 @@ HTML;
             });
 
             $grid->column('estimated_revenue')
+            // ->addTableClass(['text-right'])
             ->display(function($total){
                 return $total ? number_format($total, 2) : "";
             })
