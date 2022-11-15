@@ -2,13 +2,14 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Repositories\PurchaseOrder;
 use App\Models\Task;
-use App\Models\Vendor;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use App\Models\Vendor;
+use App\Admin\Repositories\PurchaseOrder;
 use Dcat\Admin\Http\Controllers\AdminController;
+use App\Models\PurchaseOrder as PurchaseOrderModel;
 
 class PurchaseOrderController extends AdminController
 {
@@ -19,20 +20,59 @@ class PurchaseOrderController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new PurchaseOrder(), function (Grid $grid) {
+        return Grid::make(new PurchaseOrder(['vendor', 'task']), function (Grid $grid) {
+
+            $grid->selector(function (Grid\Tools\Selector $selector) {
+
+                $selector->selectOne('vendor_id', 'Vendor', Vendor::pluck('name', 'id'));
+
+                // select month of last year from now
+                $months = [];
+                $maxEndDate = now();
+                // dd($maxEndDate);
+                for ($i = 0; $i < 12; $i++) {
+                    $months[$maxEndDate->format('Y-m')] = $maxEndDate->format('Y-m');
+                    $maxEndDate->subMonth();
+                }
+                // dd($months);
+                $selector->selectOne('job_date', 'Month', $months, function($query, $value){
+                    // $value = current($value);
+                    [$year, $month] = explode('-', $value);
+                    $query->whereYear('job_date', $year)->whereMonth('job_date', $month);
+                });
+
+            });
+
+            $grid->model()->orderBy('id', 'desc');
+
             $grid->column('id')->sortable();
-            $grid->column('task_id');
-            $grid->column('vender_id');
-            $grid->column('job_date');
-            $grid->column('items');
+            // $grid->column('task_id');
+            $grid->column('po_no')->display(function () {
+                return $this->code;
+            });
+            $grid->column('vendor.name', 'Vendor');
+            $grid->column('task.lx_no', 'LX Ref');
+            $grid->column('task.title', 'Title')->width(300)->display(function(){
+                return <<<HTML
+                {$this->task?->title}
+                <div class="text-xs text-gray-400">{$this->task?->description}</div>
+                HTML;
+            });
+
+            $grid->column('job_date')->display(function () {
+                return $this->job_date?->format('Y-m-d');
+            });
+            // $grid->column('items');
             $grid->column('total');
             // $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            // $grid->column('updated_at')->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
 
             });
+
+            $grid->quickSearch(['task.lx_no', 'vendor.name'])->placeholder('task.lx_no, vendor.name');
         });
     }
 
@@ -48,6 +88,7 @@ class PurchaseOrderController extends AdminController
         return Show::make($id, new PurchaseOrder(), function (Show $show) {
             $show->field('id');
             $show->field('task_id');
+            $show->field('po_no');
             $show->field('vender_id');
             $show->field('job_date');
             $show->field('items');
@@ -75,6 +116,7 @@ class PurchaseOrderController extends AdminController
             ->options(Vendor::all()->pluck('name', 'id'))
             ->required();
 
+            $form->text('po_no');
             $form->date('job_date');
 
             $form->array('items', 'Items', function($table) {
@@ -92,4 +134,20 @@ class PurchaseOrderController extends AdminController
             $form->display('updated_at');
         });
     }
+
+    public function view(PurchaseOrderModel $po){
+
+        $po->load([
+            'task.client',
+            'task.job',
+            'vendor',
+        ]);
+
+        // dump($invoice);
+
+        return view('admin.purchase-order.view', [
+            'po' => $po,
+        ]);
+    }
+
 }

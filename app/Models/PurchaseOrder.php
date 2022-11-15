@@ -15,7 +15,8 @@ class PurchaseOrder extends Model
 
     protected $fillable = [
         'task_id',
-        'vender_id',
+        'vendor_id',
+        'po_no',
         'job_date',
         'items',
         'total',
@@ -24,4 +25,25 @@ class PurchaseOrder extends Model
     protected $casts = [
         'items' => 'array',
     ];
+
+    protected $dates = [
+        'job_date',
+    ];
+
+    protected $appends = [
+        'code',
+    ];
+
+    public function getCodeAttribute(){
+        return 'LXPO-' . $this->po_no;
+    }
+
+    public function task(){
+        return $this->belongsTo(Task::class);
+    }
+
+    public function vendor(){
+        return $this->belongsTo(Vendor::class);
+    }
+
 }

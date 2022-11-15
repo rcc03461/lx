@@ -18,16 +18,31 @@ class POTable extends LazyRenderable
     public function grid(): Grid
     {
         // $purchase_order_id = $this->purchase_order_id;
-        return Grid::make(new PurchaseOrder(), function (Grid $grid) {
+        return Grid::make(PurchaseOrder::with(['vendor']), function (Grid $grid) {
             $grid->model()
                 ->where("task_id", $this->task_id)
                 // ->orderBy('id', 'desc');
                 ;
 
             $grid->column('id', 'ID');
-            $grid->column('vender_id');
-            $grid->column('job_date');
+            $grid->column('po_no')->display(function () {
+                return $this->code;
+            });
+            $grid->column('vendor.name', 'Vendor');
+            $grid->column('job_date')->display(function () {
+                return $this->job_date?->format('Y-m-d');
+            });
             $grid->column('total');
+            $grid->column('view')->display(function () {
+                return <<<HTML
+                <a class="text-blue-500" data-popup href="/admin/purchase-orders/$this->id/view" target="_blank">View</a>
+                HTML;
+            });
+            $grid->column('edit')->display(function () {
+                return <<<HTML
+                <a class="text-blue-500" href="/admin/purchase_orders/$this->id/edit" >Edit</a>
+                HTML;
+            });
 
 
             $grid->disablerefreshButton();

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Admin\Controllers\TaskController;
 use App\Admin\Controllers\C8CJobController;
 use App\Admin\Controllers\InvoiceController;
+use App\Admin\Controllers\PurchaseOrderController;
 
 Admin::routes();
 
@@ -46,6 +47,7 @@ Route::group([
     $router->post('api/invoice', [InvoiceController::class, 'save']);
 
 
+    $router->get('purchase-orders/{po}/view', [PurchaseOrderController::class, 'view']);
     $router->get('api/c8c-jobs/{job:job_id}', [C8CJobController::class, 'apiGetJob']);
     $router->get('api/c8c-jobs', [C8CJobController::class, 'apiSearch']);
     $router->get('api/tasks/{task}', [TaskController::class, 'apiGetTask']);

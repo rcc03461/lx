@@ -80,7 +80,7 @@ class TaskController extends AdminController
             });
             $grid->column('title')->width(400)->display(function ($job) {
                 return <<<HTML
-                <div class="hove:text-blue-600" data-popup href="/admin/task/{$this->id}/view" target="_blank">{$this->title}</div>
+                <div class="text-blue-500 hover:text-blue-300" data-popup href="/admin/task/{$this->id}/view" target="_blank">{$this->title}</div>
                 <div class="text-xs text-gray-300">{$this->description}</div>
 HTML;
             });
@@ -124,23 +124,37 @@ HTML;
             // })
             // $grid->column('description');
             // $grid->column('remark');
-            $grid->column('end_date')->width(120)->display(function($endDate){
+            $grid->column('end_date')->width(120)
+            ->display(function($endDate){
                 return $endDate ? $endDate->format('Y-m-d') : "";
-            })->sortable();
+            })
+            ->sortable()
+            ->editable(true)
+            ;
             $grid->column('invoices_sum_total')
+            ->display(function($total){
+                return $total ? number_format($total, 2) : "";
+            })
             ->expand(function(){
                 return TaskInvoiceTable::make([
                     "task_id" => $this->id
                 ]);
             });
             $grid->column('pos_sum_total')
+            ->display(function($total){
+                return $total ? number_format($total, 2) : "";
+            })
             ->expand(function(){
                 return POTable::make([
                     "task_id" => $this->id
                 ]);
             });
 
-            $grid->column('estimated_revenue')->sortable();
+            $grid->column('estimated_revenue')
+            ->display(function($total){
+                return $total ? number_format($total, 2) : "";
+            })
+            ->sortable();
             // $grid->column('publish_date')->sortable();
             // $grid->column('meta');
 
@@ -159,7 +173,7 @@ HTML;
                 // JobPurchaseOrderAction::make()
             ]);
 
-            $grid->quickSearch(['id', 'title', 'client.name', 'job.job_code', 'job.jobdescription']);
+            $grid->quickSearch(['id', 'title', 'client.name', 'job.job_code', 'job.jobdescription'])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
