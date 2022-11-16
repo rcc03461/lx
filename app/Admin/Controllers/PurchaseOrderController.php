@@ -137,7 +137,7 @@ class PurchaseOrderController extends AdminController
             ->options(Vendor::all()->pluck('name', 'id'))
             ->required();
 
-            $form->text('po_no');
+            $form->text('po_no')->default(PurchaseOrderModel::max('po_no') + 1)->required();
             $form->date('job_date');
 
             $form->array('items', 'Items', function($table) {
