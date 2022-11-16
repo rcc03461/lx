@@ -19,17 +19,19 @@ class VendorController extends AdminController
     {
         return Grid::make(new Vendor(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('name');
-            $grid->column('address');
-            $grid->column('phone');
-            $grid->column('email');
-            $grid->column('remark');
+            $grid->column('name')->sortable();
+            $grid->column('address')->sortable();
+            $grid->column('phone')->sortable();
+            $grid->column('email')->sortable();
+            $grid->column('remark')->sortable();
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
+
+            $grid->quickSearch(['name','address','phone','email','remark'])->placeholder('name, address, phone, email, remark');
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
-
             });
         });
     }

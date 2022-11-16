@@ -50,9 +50,11 @@ class PurchaseOrderController extends AdminController
             // $grid->column('task_id');
             $grid->column('po_no')->display(function () {
                 return $this->code;
-            })->editable(true);
-            $grid->column('vendor.name', 'Vendor');
-            $grid->column('task.lx_no', 'LX Ref');
+            })
+            ->sortable()
+            ->editable(true);
+            $grid->column('vendor.name', 'Vendor')->sortable();
+            $grid->column('task.lx_no', 'LX Ref')->sortable();
             $grid->column('task.title', 'Title')->width(300)->display(function(){
                 return <<<HTML
                 {$this->task?->title}
@@ -60,11 +62,13 @@ class PurchaseOrderController extends AdminController
                 HTML;
             });
 
-            $grid->column('job_date')->display(function () {
+            $grid->column('job_date')
+            ->display(function () {
                 return $this->job_date?->format('Y-m-d');
-            });
+            })
+            ->sortable();
             // $grid->column('items');
-            $grid->column('total');
+            $grid->column('total')->sortable();
             // $grid->column('created_at');
             // $grid->column('updated_at')->sortable();
 

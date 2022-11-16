@@ -90,10 +90,15 @@ class TaskController extends AdminController
 
             $grid->column('id')->sortable();
             $grid->column('lx_no')->sortable();
-            $grid->column('client')->display(function ($client) {
+            $grid->column('client')
+            ->display(function ($client) {
                 return $client->name;
-            });
-            $grid->column('title')->width(400)->display(function ($job) {
+            })
+            ->sortable();
+            $grid->column('title')
+            ->width(400)
+            ->sortable()
+            ->display(function ($job) {
                 return <<<HTML
                 <div class="text-blue-500 hover:text-blue-300" data-popup href="/admin/task/{$this->id}/view" target="_blank">{$this->title}</div>
                 <div class="text-xs text-gray-300">{$this->description}</div>

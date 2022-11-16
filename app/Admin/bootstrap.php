@@ -28,7 +28,8 @@ use Dcat\Admin\Show;
 
 // Admin::js('https://code.jquery.com/ui/1.13.0/jquery-ui.min.js');
 Admin::js('//cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.8/dayjs.min.js');
-
+// Admin::js('/vendor/dcat-admin/dcat/plugins/moment/moment-with-locales.min.js?v2.2.2-beta');
+// Admin::js('/vendor/dcat-admin/dcat/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js?v2.2.2-beta');
 
 Admin::js('//cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js');
 Admin::js('//cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
@@ -64,8 +65,11 @@ Admin::script(<<<JS
 
     $(document).off('click.popover').on('click.popover', '.popover-body .ie-content-end_date input', function(event){
         event.preventDefault();
-        $( this ).datepicker({
+        $( this )
+        .datepicker({
             dateFormat: "yy-mm-dd",
-        }).datepicker('show');
+        })
+        .datepicker('show');
+        console.log('datepicker')
     })
 JS);
