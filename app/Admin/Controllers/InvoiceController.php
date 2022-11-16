@@ -111,7 +111,9 @@ class InvoiceController extends AdminController
                 // JobPurchaseOrderAction::make()
             ]);
 
-            $grid->quickSearch(['lx_code', 'invoiceCode', 'job.company', 'job.job_code'])->placeholder('lx_code, invoiceCode, job.company, job.job_code');
+            $grid->quickSearch(['lx_code', 'invoiceCode', 'job.company', 'job.job_code', 'job.status', 'job.meta'])
+            ->placeholder('lx_code, invoiceCode, company, job_code, status, meta')
+            ;
 
 
         });
