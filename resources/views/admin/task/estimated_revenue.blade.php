@@ -41,13 +41,13 @@
             <section>
               <table class="text-sm w-full">
                 <thead>
-                  <tr>
+                  <tr data-selectable>
                     <th class="text-left border-b ">No</th>
-                    <th data-sort="lx_no" class="text-left border-b ">Lx Ref</th>
-                    <th data-sort="job_in_date" class="text-left border-b ">Job In</th>
-                    <th data-sort="end_date" class="text-left border-b ">Job End</th>
-                    <th data-sort="title" class="text-left border-b ">Title</th>
-                    <th data-sort="estimated_revenue" class="text-right border-b ">Sales</th>
+                    <th data-sort="lx_no"               class="cursor-pointer text-left border-b ">Lx Ref</th>
+                    <th data-sort="job_in_date"         class="cursor-pointer text-left border-b ">Job In</th>
+                    <th data-sort="end_date"            class="cursor-pointer text-left border-b ">Job End</th>
+                    <th data-sort="title"               class="cursor-pointer text-left border-b ">Title</th>
+                    <th data-sort="estimated_revenue"   class="cursor-pointer text-right border-b ">Sales</th>
                   </tr>
                 </thead>
 
@@ -89,26 +89,27 @@
     {{-- dayjs --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.8/dayjs.min.js"></script>
     <script>
-        let orderby = 'lx_no';
+        let orderby = '{{$orderby}}';
         let from = '{{$from}}';
         let to = '{{$to}}';
+
+        document.querySelectorAll('[data-sort]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const sort = e.target.dataset.sort
+                window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}&orderby=${sort}`
+            })
+        })
+
         const month = document.querySelector('input[type="month"]')
         month.addEventListener('change', (e) => {
             const date = dayjs(e.target.value)
-            const from = date.startOf('month').format('YYYY-MM-DD')
-            const to = date.endOf('month').format('YYYY-MM-DD')
-            window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}`
+            const mfrom = date.startOf('month').format('YYYY-MM-DD')
+            const mto = date.endOf('month').format('YYYY-MM-DD')
+            window.location.href = `/admin/print/estimated-revenue?from=${mfrom}&to=${mto}&orderby=${sort}`
         })
 
-        const sort = (e) => {
-            const sort = e.target.dataset.sort
-            if (sort === orderby) {
-                orderby = `-${sort}`
-            } else {
-                orderby = sort
-            }
-            window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}&orderby=${orderby}`
-        }
+
+
 
 
 

@@ -41,6 +41,7 @@ class TaskController extends AdminController
             'tasks' => $tasks,
             'from' => $from,
             'to' => $to,
+            'orderby' => $orderby,
         ]);
     }
 
