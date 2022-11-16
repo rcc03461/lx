@@ -90,7 +90,7 @@ class PurchaseOrderController extends AdminController
             $show->field('id');
             $show->field('task_id');
             $show->field('po_no');
-            $show->field('vender_id');
+            $show->field('vendor_id');
             $show->field('job_date');
             $show->field('items');
             $show->field('total');
@@ -129,7 +129,7 @@ class PurchaseOrderController extends AdminController
             ->required()
             ->default(request('task_id', null));
 
-            $form->select('vender_id')
+            $form->select('vendor_id')
             ->options(Vendor::all()->pluck('name', 'id'))
             ->required();
 

@@ -265,7 +265,7 @@
 
         <div class="max-w-3xl mx-auto bg-white p-4">
             <section class="mb-1">
-                <img src="/assets/lx_logo.png" alt="" style="height:90px;margin: 0 auto 10px; display:block">
+                @include('components.lx-header')
                 <!-- <span class="typeTitle" style="float:right;">Translation Invoice</span> -->
             </section>
             <div class="borderContainer">

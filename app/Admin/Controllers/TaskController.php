@@ -7,6 +7,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use App\Models\C8CJob;
 use App\Models\Client;
+use Illuminate\Support\Carbon;
 use App\Admin\Repositories\Task;
 use App\Admin\Renderable\POTable;
 use App\Models\Task as TaskModel;
@@ -15,9 +16,9 @@ use App\Admin\Forms\TranslationForm;
 use App\Admin\Renderable\C8CJobsTable;
 use App\Admin\Renderable\TaskInvoiceTable;
 use App\Admin\Actions\Grid\CreatePOByTaskId;
+use App\Admin\Actions\Tools\EstimatedRevenue;
 use Dcat\Admin\Http\Controllers\AdminController;
 use App\Admin\Actions\Grid\CreateInvoiceByTaskId;
-use Illuminate\Support\Carbon;
 
 class TaskController extends AdminController
 {
@@ -27,6 +28,20 @@ class TaskController extends AdminController
         return view('admin.task.view', [
            'task' => $task->load(['job', 'client'])
         ] );
+    }
+    public function estimated_revenue( ){
+
+        $from = request('from', Carbon::now()->startOfMonth()->format('Y-m-d'));
+        $to = request('to', Carbon::now()->endOfMonth()->format('Y-m-d'));
+        $orderby = request('orderby', 'lx_no' );
+
+        $tasks = TaskModel::whereBetween('end_date', [$from, $to])->orderBy($orderby)->get();
+
+        return view('admin.task.estimated_revenue', [
+            'tasks' => $tasks,
+            'from' => $from,
+            'to' => $to,
+        ]);
     }
 
     public function apiGetTask( ModelsTask $task ){
@@ -130,6 +145,7 @@ HTML;
             })
             ->sortable()
             ->editable(true)
+            // ->date()
             // ->editableDate(true)
             ;
             $grid->column('invoices_sum_total')
@@ -176,6 +192,16 @@ HTML;
                 CreatePOByTaskId::make(),
                 // JobPurchaseOrderAction::make()
             ]);
+
+            $grid->tools([
+                EstimatedRevenue::make(),
+            ]);
+            // $grid->tools("<div class='btn-group' id='tools-group' style='margin-right:3px'>
+            // <a data-popup href='/' class='btn btn-primary'>
+            // <i class='feather icon-plus'></i>
+            // <span class='d-none d-sm-inline'>&nbsp;&nbsp;新增</span>
+            // </a>
+            // </div>");
 
             $grid->quickSearch(['id', 'title', 'client.name', 'job.job_code', 'job.jobdescription'])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
 

@@ -46,6 +46,8 @@ Route::group([
     $router->get('invoices/{invoice}/view', [InvoiceController::class, 'view']);
     $router->post('api/invoice', [InvoiceController::class, 'save']);
 
+    // Print
+    $router->get('print/estimated-revenue', [TaskController::class, 'estimated_revenue']);
 
     $router->get('purchase-orders/{po}/view', [PurchaseOrderController::class, 'view']);
     $router->get('api/c8c-jobs/{job:job_id}', [C8CJobController::class, 'apiGetJob']);
@@ -53,5 +55,7 @@ Route::group([
     $router->get('api/tasks/{task}', [TaskController::class, 'apiGetTask']);
     $router->get('api/tasks', [TaskController::class, 'apiSearch']);
     $router->get('api/generate-invoice-no', [InvoiceController::class, 'apiGenerateInvoiceNo']);
+
+
 
 });

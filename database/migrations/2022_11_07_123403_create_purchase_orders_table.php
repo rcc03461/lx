@@ -16,7 +16,7 @@ class CreatePurchaseOrdersTable extends Migration
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('task_id')->nullable();
-            $table->unsignedInteger('vender_id')->nullable();
+            $table->unsignedInteger('vendor_id')->nullable();
             $table->date('job_date')->nullable();
             $table->json('items')->nullable();
             $table->float('total')->default('0');

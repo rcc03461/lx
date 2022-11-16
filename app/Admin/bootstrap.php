@@ -35,6 +35,7 @@ Admin::js('//cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
 // Admin::js('//cdn.jsdelivr.net/npm/vue@2/dist/vue.js');
 Admin::js('//cdn.jsdelivr.net/npm/vue@2.7.13');
 Admin::js('/assets/js/vue.component.js');
+Admin::js('//code.jquery.com/ui/1.10.4/jquery-ui.js');
 // Admin::js('//cdn.tailwindcss.com');
 // <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 // Admin::js('//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js');
@@ -43,6 +44,7 @@ Admin::js('/assets/js/vue.component.js');
 // Admin::js('//unpkg.com/vue-multiselect@2.1.4');
 
 // Admin::css('//cdn.jsdelivr.net/npm/tailwindcss@3.1.8/base.css');
+Admin::css('//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css');
 Admin::css('//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
 // Admin::css('//unpkg.com/vue-multiselect@2.1.4/dist/vue-multiselect.min.css');
 
@@ -51,9 +53,6 @@ Admin::style(<<<CSS
         background-color: #586cb1;
         border-color: #586cb1;
     }
-    .boostrap-datetimepicker-widge{
-        min-width: 300px;
-    }
 
 CSS);
 
@@ -61,5 +60,12 @@ Admin::script(<<<JS
     $(document).off('click.popup').on('click.popup', '[data-popup]', function(event){
         event.preventDefault();
         window.open($(this).attr('href'), '_blank', 'width=1200,height=980');
+    })
+
+    $(document).off('click.popover').on('click.popover', '.popover-body .ie-content-end_date input', function(event){
+        event.preventDefault();
+        $( this ).datepicker({
+            dateFormat: "yy-mm-dd",
+        }).datepicker('show');
     })
 JS);

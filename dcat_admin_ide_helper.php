@@ -79,7 +79,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection abilities
      * @property Grid\Column|Collection last_used_at
      * @property Grid\Column|Collection expires_at
-     * @property Grid\Column|Collection vender_id
+     * @property Grid\Column|Collection vendor_id
      * @property Grid\Column|Collection items
      * @property Grid\Column|Collection client_id
      * @property Grid\Column|Collection lx_no
@@ -156,7 +156,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection abilities(string $label = null)
      * @method Grid\Column|Collection last_used_at(string $label = null)
      * @method Grid\Column|Collection expires_at(string $label = null)
-     * @method Grid\Column|Collection vender_id(string $label = null)
+     * @method Grid\Column|Collection vendor_id(string $label = null)
      * @method Grid\Column|Collection items(string $label = null)
      * @method Grid\Column|Collection client_id(string $label = null)
      * @method Grid\Column|Collection lx_no(string $label = null)
@@ -238,7 +238,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection abilities
      * @property Show\Field|Collection last_used_at
      * @property Show\Field|Collection expires_at
-     * @property Show\Field|Collection vender_id
+     * @property Show\Field|Collection vendor_id
      * @property Show\Field|Collection items
      * @property Show\Field|Collection client_id
      * @property Show\Field|Collection lx_no
@@ -315,7 +315,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection abilities(string $label = null)
      * @method Show\Field|Collection last_used_at(string $label = null)
      * @method Show\Field|Collection expires_at(string $label = null)
-     * @method Show\Field|Collection vender_id(string $label = null)
+     * @method Show\Field|Collection vendor_id(string $label = null)
      * @method Show\Field|Collection items(string $label = null)
      * @method Show\Field|Collection client_id(string $label = null)
      * @method Show\Field|Collection lx_no(string $label = null)
@@ -327,7 +327,7 @@ namespace Dcat\Admin {
     class Show {}
 
     /**
-     
+
      */
     class Form {}
 
@@ -335,19 +335,19 @@ namespace Dcat\Admin {
 
 namespace Dcat\Admin\Grid {
     /**
-     
+
      */
     class Column {}
 
     /**
-     
+
      */
     class Filter {}
 }
 
 namespace Dcat\Admin\Show {
     /**
-     
+
      */
     class Field {}
 }
