@@ -9,7 +9,7 @@ use App\Models\C8CJob;
 use App\Models\Client;
 use Illuminate\Support\Carbon;
 use App\Admin\Repositories\Task;
-use App\Admin\Renderable\POTable;
+use App\Admin\Renderable\TaskPOTable;
 use App\Models\Task as TaskModel;
 use App\Models\Task as ModelsTask;
 use App\Admin\Forms\TranslationForm;
@@ -170,7 +170,7 @@ HTML;
                 return $total ? number_format($total, 2) : "";
             })
             ->expand(function(){
-                return POTable::make([
+                return TaskPOTable::make([
                     "task_id" => $this->id
                 ]);
             });

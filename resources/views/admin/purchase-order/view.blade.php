@@ -306,37 +306,54 @@
                         </tr>
                     </table>
 
-                    <div class="px-2">
+                    <div class="px-2 py-4">
 
                         <table class="text-sm w-full ">
                             <thead>
                               <tr>
-                                <th class="border-b text-left">Item</th>
-                                <th class="border-b text-left">Section</th>
-                                <th class="border-b text-right">Direction</th>
+                                <th class="border-b text-left">No</th>
+                                <th class="border-b text-left">Title</th>
+                                <th class="border-b text-left">Description</th>
+                                <th class="border-b text-left">Qty</th>
+                                <th class="border-b text-left">Unit Price</th>
+                                <th class="border-b text-right">Amount</th>
                               </tr>
                             </thead>
 
                             <tbody>
-                                @if ($po->task->meta)
-                                    @foreach ($po->task->meta as $item)
-                                        <tr>
-                                            <td>{{ $loop->index +1 }}</td>
-                                            <td>{{ $item['section'] }}</td>
-                                            <td class="text-right">
-                                                {{
-                                                    match ($item['direction']) {
-                                                        'e2c' => 'E > C',
-                                                        'c2e' => 'C > E',
-                                                        'cross-translation' => 'Cross-Translation',
-                                                        'client' => 'Client',
-                                                    }
-                                                }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+                                @foreach ($po->items as $item)
+                                    <tr>
+                                        <td>{{ $loop->index +1 }}</td>
+                                        <td>{{ $item['title'] }}</td>
+                                        <td>{{ $item['description'] }}</td>
+                                        <td>{{ number_format($item['qty']) }} {{ $item['unit'] }}</td>
+                                        <td>{{ $item['unit_price'] }}</td>
+                                        <td class="text-right">{{ number_format($item['qty'] * $item['unit_price'], 2) }}</td>
+                                        {{-- <td class="text-right">
+                                            {{
+                                                match ($item['direction']) {
+                                                    'e2c' => 'E > C',
+                                                    'c2e' => 'C > E',
+                                                    'cross-translation' => 'Cross-Translation',
+                                                    'client' => 'Client',
+                                                }
+                                            }}
+                                        </td> --}}
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
                             </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <td class="py-2 border-t  text-right" colspan="5" class="text-right">Total</td>
+                                    <td class="py-2 border-t  text-right font-bold">{{ number_format(collect($po->items)->sum(fn($item)=> $item['qty'] * $item['unit_price'] ), 2) }}</td>
+                                </tr>
                         </table>
                     </div>
 

@@ -20,6 +20,8 @@ class PurchaseOrder extends Model
         'job_date',
         'items',
         'total',
+        'settled_at',
+        'settled_ref',
     ];
 
     protected $casts = [
@@ -28,14 +30,20 @@ class PurchaseOrder extends Model
 
     protected $dates = [
         'job_date',
+        'settled_at',
     ];
 
     protected $appends = [
         'code',
+        'is_settled',
     ];
 
     public function getCodeAttribute(){
         return 'LXPO-' . $this->po_no;
+    }
+
+    public function getIsSettledAttribute(){
+        return $this->settled_at ? true : false;
     }
 
     public function task(){

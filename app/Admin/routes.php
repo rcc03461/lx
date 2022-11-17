@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use App\Admin\Controllers\TaskController;
 use App\Admin\Controllers\C8CJobController;
+use App\Admin\Controllers\VendorController;
 use App\Admin\Controllers\InvoiceController;
 use App\Admin\Controllers\PurchaseOrderController;
 
@@ -48,6 +49,7 @@ Route::group([
 
     // Print
     $router->get('print/estimated-revenue', [TaskController::class, 'estimated_revenue']);
+    $router->get('print/vendors/{vendor}/statement', [VendorController::class, 'statement']);
 
     $router->get('purchase-orders/{po}/view', [PurchaseOrderController::class, 'view']);
     $router->get('api/c8c-jobs/{job:job_id}', [C8CJobController::class, 'apiGetJob']);

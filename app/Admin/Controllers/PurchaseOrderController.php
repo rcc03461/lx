@@ -53,7 +53,7 @@ class PurchaseOrderController extends AdminController
             })
             ->sortable()
             ->editable(true);
-            $grid->column('vendor.name', 'Vendor')->sortable();
+            $grid->column('vendor.name', 'Vendor')->width(300)->sortable();
             $grid->column('task.lx_no', 'LX Ref')->sortable();
             $grid->column('task.title', 'Title')->width(300)->display(function(){
                 return <<<HTML
@@ -69,6 +69,8 @@ class PurchaseOrderController extends AdminController
             ->sortable();
             // $grid->column('items');
             $grid->column('total')->sortable();
+            $grid->column('settled_at')->sortable()->editable(true);
+            $grid->column('settled_ref')->editable(true);
             // $grid->column('created_at');
             // $grid->column('updated_at')->sortable();
 
@@ -98,6 +100,8 @@ class PurchaseOrderController extends AdminController
             $show->field('job_date');
             $show->field('items');
             $show->field('total');
+            $show->field('settled_at');
+            $show->field('settled_ref');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -150,6 +154,8 @@ class PurchaseOrderController extends AdminController
             // ->useTable()
             ;
             $form->decimal('total');
+            $form->date('settled_at');
+            $form->textarea('settled_ref');
 
             $form->display('created_at');
             $form->display('updated_at');

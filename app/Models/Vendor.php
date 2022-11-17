@@ -20,4 +20,9 @@ class Vendor extends Model
         'remark',
     ];
 
+
+    public function purchaseorders()
+    {
+        return $this->hasMany(PurchaseOrder::class);
+    }
 }

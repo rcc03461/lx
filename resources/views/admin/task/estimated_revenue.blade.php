@@ -96,7 +96,7 @@
         document.querySelectorAll('[data-sort]').forEach(el => {
             el.addEventListener('click', (e) => {
                 const sort = e.target.dataset.sort
-                window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}&orderby=${sort}`
+                window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}&orderby=${orderby}`
             })
         })
 
@@ -105,7 +105,7 @@
             const date = dayjs(e.target.value)
             const mfrom = date.startOf('month').format('YYYY-MM-DD')
             const mto = date.endOf('month').format('YYYY-MM-DD')
-            window.location.href = `/admin/print/estimated-revenue?from=${mfrom}&to=${mto}&orderby=${sort}`
+            window.location.href = `/admin/print/estimated-revenue?from=${mfrom}&to=${mto}&orderby=${orderby}`
         })
 
 

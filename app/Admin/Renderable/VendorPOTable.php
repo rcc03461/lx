@@ -3,24 +3,18 @@
 namespace App\Admin\Renderable;
 
 use Dcat\Admin\Grid;
-use Dcat\Admin\Layout\Row;
-use Illuminate\Support\Str;
-use App\Admin\Repositories\Invoice;
-use App\Models\Invoice as InvoiceModel;
 use App\Models\PurchaseOrder;
-use Dcat\Admin\Layout\Column;
-use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Grid\LazyRenderable;
 
-class POTable extends LazyRenderable
+class VendorPOTable extends LazyRenderable
 {
 
     public function grid(): Grid
     {
         // $purchase_order_id = $this->purchase_order_id;
-        return Grid::make(PurchaseOrder::with(['vendor']), function (Grid $grid) {
+        return Grid::make(new PurchaseOrder(), function (Grid $grid) {
             $grid->model()
-                ->where("task_id", $this->task_id)
+                ->where("vendor_id", $this->vendor_id)
                 // ->orderBy('id', 'desc');
                 ;
 
@@ -28,11 +22,14 @@ class POTable extends LazyRenderable
             $grid->column('po_no')->display(function () {
                 return $this->code;
             });
-            $grid->column('vendor.name', 'Vendor');
+            // $grid->column('vendor.name', 'Vendor');
             $grid->column('job_date')->display(function () {
                 return $this->job_date?->format('Y-m-d');
             });
             $grid->column('total');
+            $grid->column('settled_at');
+            $grid->column('settled_ref');
+
             $grid->column('view')->display(function () {
                 return <<<HTML
                 <a class="text-blue-500" data-popup href="/admin/purchase-orders/$this->id/view" target="_blank">View</a>
