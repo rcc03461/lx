@@ -101,7 +101,7 @@ class Invoice extends Model
 
     public function task()
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(Task::class, 'idjob', 'idjob');
     }
 
     public function job()

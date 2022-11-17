@@ -34,18 +34,20 @@ class InvoiceController extends AdminController
             // $grid->column('idjob');
             $grid->column('job.job_code', 'Job No.');
             $grid->column('job.status', 'Job Status');
-            $grid->column('task_id', 'Client')->display(function ($task_id) {
-                if ($task_id) {
-                    return $this->task->client->name;
+            $grid->column('idjob', 'Client')
+            ->display(function ($idjob) {
+                if ($idjob) {
+                    return $this?->task?->client->name ?: "";
                 }else{
                     return 'Cre8';
                 }
             });
-            $grid->column('task.lx_no');
-            $grid
-            ->column('task_id', 'Client\'s Job No.')
-            // ->select('task_id')
-            ->select(Task::doesntHave('invoices')->pluck('lx_no', 'id')->prepend('', 0));
+            $grid->column('task.lx_no')->display(function ($lx_no) {
+                return $this->task?->code ?: "";
+            });
+            // $grid->column('task_id', 'Client\'s Job No.')
+            // // ->select('task_id')
+            // ->select(Task::doesntHave('invoices')->pluck('lx_no', 'id')->prepend('', 0));
             $grid->column('invoiceCode', 'C8 Inv.')->sortable();
             $grid->column('company')->width(300)->display(function(){
                 return <<<HTML
@@ -65,10 +67,7 @@ class InvoiceController extends AdminController
             $grid->column('total')->sortable();
             // $grid->column('vendor_total');
             $grid->column('vendor_total')->display(function () {
-                if ($this->task_id) {
-                    return $this->task->pos->sum('total');
-                }
-                return "";
+                return $this->task?->pos->sum('total') ?: "";
             });
             // $grid->column('tranRemark')->width(300);
             // $grid->column('reviseDate');
