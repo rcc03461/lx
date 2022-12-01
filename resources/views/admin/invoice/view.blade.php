@@ -277,7 +277,7 @@
                         <tr>
                             <td style="vertical-align:middle;width:13%">Client Ref</td>
                             <td style="vertical-align:middle;width:2%">:</td>
-                            <td style="vertical-align:middle;width:45%">{{ $invoice?->job?->job_code ?? ($invoice->task?->code ?? ' - ') }}</td>
+                            <td style="vertical-align:middle;width:45%">{{ $invoice?->job?->job_code ?? $invoice->localtask?->code ?? $invoice->task?->code ?? ' - ' }}</td>
                             <td style="vertical-align:middle;width:1%"></td>
                             <td style="vertical-align:middle;width:20%">Invoice Number</td>
                             <td style="vertical-align:middle;width:2%">:</td>
@@ -288,17 +288,17 @@
                         <tr>
                             <td style="vertical-align:top">Company</td>
                             <td style="vertical-align:top">:</td>
-                            <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{ $invoice->task?->client->name ?? ($cre->name ?? ' - ') }}<br>{{ $invoice->task?->client->address ?: $cre->address ?? ' - ' }}</td>
+                            <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{ $invoice->localtask?->client->name ?? $invoice->task?->client->name ?? ($cre->name ?? ' - ') }}<br>{{$invoice->localtask?->client->address ?? $invoice->task?->client->address ?: $cre->address ?? ' - ' }}</td>
                         </tr>
                         </tr>
                         <tr>
                             <td>Attention</td>
                             <td>:</td>
-                            <td>{{ $invoice->task?->client->attn ?? ($cre->attn ?? ' - ') }}</td>
+                            <td>{{$invoice->localtask?->client->attn ?? $invoice->task?->client->attn ?? ($cre->attn ?? ' - ') }}</td>
                             <td></td>
                             <td>LingXpert Job No.</td>
                             <td>:</td>
-                            <td class="text-right">{{ $invoice->task?->code ?: ' - ' }}</td>
+                            <td class="text-right">{{ $invoice->localtask?->code ?? $invoice->task?->code ?: ' - ' }}</td>
                         </tr>
                         <tr>
                             <td style="vertical-align:middle">Date</td>
@@ -330,7 +330,7 @@
                         <tbody>
                             <tr>
                                 <td>&nbsp;</td>
-                                <td><b>{{ $invoice->job?->company ?? ($invoice->task?->client?->name ?? ' - ') }}<b>
+                                <td><b>{{ $invoice->job?->company ??  $invoice->localtask?->title ?? $invoice->task?->client?->name ?? ' - ' }}<b>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -339,13 +339,24 @@
                             </tr>
                             <tr>
                                 <td>&nbsp;</td>
-                                <td><i><u>{{ $invoice->job?->jobdescription ?? ($invoice->task?->description ?? ' - ') }}</u></i>
+                                <td><i><u>{{ $invoice->job?->jobdescription ?? $invoice->localtask?->description  ?? $invoice->task?->description ?? ' - ' }}</u></i>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                             </tr>
+                            @if ($invoice->localtask?->remark)
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td><i><u>{{ $invoice->localtask?->remark }}</u></i>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            @endif
                             @php
                                 $i = 1;
                             @endphp

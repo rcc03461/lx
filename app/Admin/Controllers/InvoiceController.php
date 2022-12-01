@@ -177,9 +177,10 @@ class InvoiceController extends AdminController
             'task.client',
             'task.job',
             'job',
+            'localtask.client',
         ]);
 
-        // dump($invoice);
+        // dump($invoice->localtask);
 
         return view('admin.invoice.view', [
             'invoice' => $invoice,

@@ -104,6 +104,11 @@ class Invoice extends Model
         return $this->belongsTo(Task::class, 'idjob', 'idjob');
     }
 
+    public function localtask()
+    {
+        return $this->belongsTo(Task::class, 'task_id', 'id');
+    }
+
     public function job()
     {
         return $this->belongsTo(C8CJob::class, 'idjob', 'idjob');
