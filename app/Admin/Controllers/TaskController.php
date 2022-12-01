@@ -64,7 +64,7 @@ class TaskController extends AdminController
 
     protected function grid()
     {
-        return Grid::make(TaskModel::with(['job', 'client', 'invoices'])->withSum('pos', 'total')->withSum('invoices', 'total'), function (Grid $grid) {
+        return Grid::make(TaskModel::with(['job', 'client', 'invoices'])->withSum('pos', 'total')->withSum('invoices', 'total')->withSum('invoicess', 'total'), function (Grid $grid) {
 
 
             $grid->selector(function (Grid\Tools\Selector $selector) {
@@ -159,11 +159,12 @@ HTML;
             $grid->column('invoices_sum_total')
             // ->addTableClass(['text-right'])
             ->display(function($total){
-                return $total ? number_format($total, 2) : "";
+                return $total + $this->invoicess_sum_total ? number_format($total + $this->invoicess_sum_total, 2) : "";
             })
             ->expand(function(){
                 return TaskInvoiceTable::make([
-                    "task_id" => $this->id
+                    "task_id" => $this->id,
+                    "idjob" => $this->idjob
                 ]);
             });
             $grid->column('pos_sum_total')

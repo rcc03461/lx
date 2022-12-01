@@ -40,4 +40,9 @@ class C8CJob extends Model
         return str($this->attributes['job_code'])->between('_', '[')->trim();
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'idjob', 'idjob');
+    }
+
 }

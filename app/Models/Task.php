@@ -62,6 +62,11 @@ class Task extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function invoicess()
+    {
+        return $this->hasManyThrough(Invoice::class, C8CJob::class, 'idjob', 'idjob', 'idjob', 'idjob');
+    }
+
     public function pos()
     {
         return $this->hasMany(PurchaseOrder::class);

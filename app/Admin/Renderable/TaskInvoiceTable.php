@@ -18,8 +18,9 @@ class TaskInvoiceTable extends LazyRenderable
     {
         // $purchase_order_id = $this->purchase_order_id;
         return Grid::make(new Invoice(), function (Grid $grid) {
-            $grid->model()
-                ->where("task_id", $this->task_id)
+            $grid->model()->where("task_id", $this->task_id)->when($this->idjob, function ($query) {
+                $query->orWhere("idjob", $this->idjob);
+            })->orderBy('id', 'desc');
                 // ->orderBy('id', 'desc');
                 ;
 
