@@ -28,7 +28,7 @@ class InvoiceController extends AdminController
     protected function grid()
     {
         // dd(Task::doesntHaveByNonDependentSubquery('invoices')->get());
-        return Grid::make(InvoiceModel::with(['task.client', 'task.pos',  'job']), function (Grid $grid) {
+        return Grid::make(InvoiceModel::with(['task.client', 'task.pos',  'job', 'localtask.client']), function (Grid $grid) {
             $grid->model()->orderBy('id', 'desc');
 
             // $grid->column('idjob');
@@ -37,21 +37,22 @@ class InvoiceController extends AdminController
             $grid->column('idjob', 'Client')
             ->display(function ($idjob) {
                 if ($idjob) {
-                    return $this?->task?->client->name ?: "";
+                    return $this?->task?->client->name ?? "";
                 }else{
-                    return 'Cre8';
+                    return $this->localtask->client->name ?? "";
                 }
             });
             $grid->column('task.lx_no')->display(function ($lx_no) {
-                return $this->task?->code ?: "";
+                return $this->task?->code ?? $this->localtask->code ?? "";
             });
             // $grid->column('task_id', 'Client\'s Job No.')
             // // ->select('task_id')
             // ->select(Task::doesntHave('invoices')->pluck('lx_no', 'id')->prepend('', 0));
             $grid->column('invoiceCode', 'C8 Inv.')->sortable();
             $grid->column('company')->width(300)->display(function(){
+                $displayname =  $this->job?->company ?? $this->localtask?->client->name ?? "";
                 return <<<HTML
-                {$this->job?->company}
+                $displayname
                 <div class="text-gray-400">{$this->job?->jobdescription}</div>
                 HTML;
             });
