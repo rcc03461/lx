@@ -35,7 +35,9 @@ class TaskController extends AdminController
         $to = request('to', Carbon::now()->endOfMonth()->format('Y-m-d'));
         $orderby = request('orderby', 'lx_no' );
 
-        $tasks = TaskModel::whereBetween('end_date', [$from, $to])->orderBy($orderby)->get();
+        $tasks = TaskModel::with([
+            'job'
+        ])->whereBetween('end_date', [$from, $to])->orderBy($orderby)->get();
 
         return view('admin.task.estimated_revenue', [
             'tasks' => $tasks,
