@@ -99,7 +99,7 @@
         document.querySelectorAll('[data-sort]').forEach(el => {
             el.addEventListener('click', (e) => {
                 const sort = e.target.dataset.sort
-                window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}&orderby=${orderby}`
+                window.location.href = `/admin/print/estimated-revenue?from=${from}&to=${to}&orderby=${sort}`
             })
         })
 
