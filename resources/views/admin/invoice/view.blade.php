@@ -383,9 +383,9 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td> - Chinese to English</td>
-                                        <td>${{ $invoice->words->eng?->price }}</td>
-                                        <td>{{ number_format($invoice->words->eng?->words, 2) }}</td>
-                                        <td>Words</td>
+                                        <td>${{ number_format($invoice->words->eng?->price, 2) }}</td>
+                                        <td>{{ number_format($invoice->words->eng?->words) }}</td>
+                                        <td class="text-right">Words</td>
                                         <td>{{ $invoice->words->eng?->words * $invoice->words->eng?->price > 0 ? "$ ". number_format($invoice->words->eng?->words * $invoice->words->eng?->price, 2) : 'Waived' }}
                                         </td>
                                     </tr>
@@ -394,9 +394,9 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td> - English to Chinese</td>
-                                        <td>${{ $invoice->words->chi?->price }}</td>
-                                        <td>{{ number_format($invoice->words->chi?->words, 2) }}</td>
-                                        <td>Words</td>
+                                        <td>${{ number_format($invoice->words->chi?->price, 2) }}</td>
+                                        <td>{{ number_format($invoice->words->chi?->words) }}</td>
+                                        <td class="text-right">Words</td>
                                         <td>{{ $invoice->words->chi?->words * $invoice->words->chi?->price > 0 ? "$ ". number_format($invoice->words->chi?->words * $invoice->words->chi?->price, 2) : 'Waived' }}
                                         </td>
                                     </tr>
@@ -417,9 +417,9 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td> - Chinese to English</td>
-                                        <td>${{ $invoice->pages->eng?->price }}</td>
-                                        <td>{{ number_format($invoice->pages->eng?->pages, 2) }}</td>
-                                        <td>Pages</td>
+                                        <td>${{ number_format($invoice->pages->eng?->price, 2) }}</td>
+                                        <td>{{ number_format($invoice->pages->eng?->pages) }}</td>
+                                        <td class="text-right">Pages</td>
                                         <td>{{ $invoice->pages->eng?->pages * $invoice->pages->eng?->price > 0 ? "$ ". number_format($invoice->pages->eng?->pages * $invoice->pages->eng?->price, 2) : 'Waived' }}
                                         </td>
                                     </tr>
@@ -428,9 +428,9 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td> - English to Chinese</td>
-                                        <td>${{ $invoice->pages->chi?->price }}</td>
-                                        <td>{{ number_format($invoice->pages->chi?->pages, 2) }}</td>
-                                        <td>Pages</td>
+                                        <td>${{ number_format($invoice->pages->chi?->price, 2) }}</td>
+                                        <td>{{ number_format($invoice->pages->chi?->pages) }}</td>
+                                        <td class="text-right">Pages</td>
                                         <td>{{ $invoice->pages->chi?->pages * $invoice->pages->chi?->price > 0 ? "$ ". number_format($invoice->pages->chi?->pages * $invoice->pages->chi?->price, 2) : 'Waived' }}
                                         </td>
                                     </tr>
@@ -443,9 +443,9 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $item['desc'] }}</td>
-                                        <td>${{ $item['price'] }}</td>
-                                        <td>{{ number_format($item['qty'], 2) }}</td>
-                                        <td>{{ $item['unit'] }}</td>
+                                        <td>${{ number_format($item['price'], 2) }}</td>
+                                        <td>{{ number_format($item['qty']) }}</td>
+                                        <td class="text-right">{{ $item['unit'] }}</td>
                                         <td>{{ $item['qty'] * $item['price'] > 0 ? "$ ". number_format($item['qty'] * $item['price'], 2) : 'Waived' }}
                                         </td>
                                     </tr>
@@ -467,9 +467,9 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $item['desc'] }}</td>
-                                        <td>${{ $item['price'] }}</td>
-                                        <td>{{ number_format($item['qty'], 2) }}</td>
-                                        <td>{{ $item['unit'] }}</td>
+                                        <td>${{ number_format($item['price'], 2) }}</td>
+                                        <td>{{ number_format($item['qty']) }}</td>
+                                        <td class="text-right">{{ $item['unit'] }}</td>
                                         <td>({{ $item['qty'] * $item['price'] > 0 ? "$ ". number_format($item['qty'] * $item['price'], 2) : 'Waived' }})
                                         </td>
                                     </tr>
