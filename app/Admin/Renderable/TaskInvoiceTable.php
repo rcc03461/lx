@@ -30,7 +30,7 @@ class TaskInvoiceTable extends LazyRenderable
             $grid->column('InvoiceNo')->display(function ($InvoiceNo) {
                 $code = $this->code ?: '---';
                 return <<<HTML
-                <a href="/admin/invoices/$this->id/edit">$code</a>
+                <a class="text-blue-500" href="/admin/invoices/$this->id/edit">$code</a>
                 HTML;
             });
             $grid->column('version');
