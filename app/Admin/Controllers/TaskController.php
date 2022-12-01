@@ -209,7 +209,7 @@ HTML;
             // </a>
             // </div>");
 
-            $grid->quickSearch(['id', 'title', 'client.name', 'job.job_code', 'job.jobdescription'])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
+            $grid->quickSearch(['id', 'lx_no', 'title', 'client.name', 'job.job_code', 'job.jobdescription'])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
