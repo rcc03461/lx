@@ -44,7 +44,7 @@
                   <tr data-selectable>
                     <th class="text-left border-b ">No</th>
                     <th data-sort="lx_no"               class="cursor-pointer text-left border-b ">Lx Ref</th>
-                    <th data-sort="job_ref"             class="cursor-pointer text-left border-b ">Job Ref</th>
+                    <th                                  class="cursor-pointer text-left border-b ">Job Ref</th>
                     <th data-sort="job_in_date"         class="cursor-pointer text-left border-b ">Job In</th>
                     <th data-sort="end_date"            class="cursor-pointer text-left border-b ">Job End</th>
                     <th data-sort="title"               class="cursor-pointer text-left border-b ">Title</th>
@@ -59,7 +59,7 @@
                             ])>
                                 <td>{{ $loop->index +1 }}</td>
                                 <td>{{ $task->code }}</td>
-                                <td>{{ $task->job?->code }}</td>
+                                <td>{{ $task->job?->job_code }}</td>
                                 <td>{{ $task->job_in_date->format('Y-m-d') }}</td>
                                 <td>{{ $task->end_date->format('Y-m-d') }}</td>
                                 <td>{{ $task->title }}</td>
