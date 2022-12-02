@@ -98,6 +98,16 @@ return [
     */
     'title' => 'Admin',
 
+    'colors' => [
+        "palette1" => [
+            "#845EC2","#D65DB1","#FF6F91","#FF9671","#FFC75F","#F9F871",
+            "#ffadad","#ffd6a5","#fdffb6","#caffbf","#9bf6ff","#a0c4ff","#bdb2ff","#ffc6ff",
+        ],
+        "palette2" => [
+            "#ffadad","#ffd6a5","#fdffb6","#caffbf","#9bf6ff","#a0c4ff","#bdb2ff","#ffc6ff",
+            "#845EC2","#D65DB1","#FF6F91","#FF9671","#FFC75F","#F9F871",
+        ]
+    ],
     /*
     |--------------------------------------------------------------------------
     | Assets hostname

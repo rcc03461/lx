@@ -18,11 +18,12 @@ class LXInvoicesChart extends Line
     protected $chartHeight = 400;
 
     protected $chartOptions = [
-        'colors' => [
-            // '#0088FE', '#00C49F', '#FFBB28', '#FF8042',
-        ],
+        // 'colors' => [
+        //     '#0088FE', '#00C49F', '#FFBB28', '#FF8042',
+        // ],
+        'colors' => ['#77B6EA', '#545454'],
         'chart' => [
-            'type' => 'bar',
+            'type' => 'line',
             // 'stacked' => true,
             // 'stackType'=> '100%',
             // 'toolbar' => [
@@ -37,6 +38,14 @@ class LXInvoicesChart extends Line
                     'left' => 0,
                     'right' => 0,
                 ],
+            ],
+            'dropShadow' => [
+                'enabled' => true,
+                'color' => '#000',
+                'top' => 18,
+                'left' => 7,
+                'blur' => 10,
+                'opacity' => 0.2
             ],
         ],
         'tooltip' => [
@@ -149,7 +158,7 @@ class LXInvoicesChart extends Line
         //     '#FF8042',
         // ]);
         $this->chartOption('colors', config('admin.colors.palette1'));
-        $this->title('Profit and Loss');
+        $this->title('Sales');
         $this->chartStraight();
         $this->dropdown([
             'month' => 'By Month',

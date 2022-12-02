@@ -11,6 +11,7 @@ use Dcat\Admin\Layout\Content;
 use App\Admin\Repositories\Invoice;
 use App\Models\Invoice as InvoiceModel;
 use App\Admin\Actions\Grid\GenerateInvoiceNo;
+use Carbon\Carbon;
 use Dcat\Admin\Http\Controllers\AdminController;
 
 class InvoiceController extends AdminController
@@ -29,6 +30,31 @@ class InvoiceController extends AdminController
     {
         // dd(Task::doesntHaveByNonDependentSubquery('invoices')->get());
         return Grid::make(InvoiceModel::with(['task.client', 'task.pos',  'job', 'localtask.client']), function (Grid $grid) {
+
+
+
+            $grid->selector(function (Grid\Tools\Selector $selector) {
+
+                // $selector->selectOne('client_id', 'Client', Client::pluck('name', 'id'));
+
+                // select month of last year from now
+                $months = [];
+                $maxEndDate = InvoiceModel::max("invoiceDate");
+                $maxEndDate = $maxEndDate ? Carbon::parse($maxEndDate) : now();
+                // dd($maxEndDate);
+                for ($i = 0; $i < 12; $i++) {
+                    $months[$maxEndDate->format('Y-m')] = $maxEndDate->format('Y-m');
+                    $maxEndDate->subMonth();
+                }
+                // dd($months);
+                $selector->selectOne('invoiceDate', 'Month', $months, function($query, $value){
+                    // $value = current($value);
+                    [$year, $month] = explode('-', $value);
+                    $query->whereYear('invoiceDate', $year)->whereMonth('invoiceDate', $month);
+                });
+
+            });
+
             $grid->model()->orderBy('id', 'desc');
 
             // $grid->column('idjob');
