@@ -224,7 +224,7 @@ class LXInvoicesChart extends Line
         ->get()
         ->groupBy(function($item, $key){
             // dd($item);
-            return $item?->task?->client?->name ?? $item?->localtask?->client?->name ?? 'Other';
+            return $item->task?->client?->name ?? $item->localtask?->client?->name ?? 'Other';
         })
         ->map(function($invoices, $client) use($day_series, $format) {
             // dd($invoices);
