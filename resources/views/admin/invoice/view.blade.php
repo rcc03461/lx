@@ -277,7 +277,7 @@
                         <tr>
                             <td style="vertical-align:middle;width:13%">Client Ref</td>
                             <td style="vertical-align:middle;width:2%">:</td>
-                            <td style="vertical-align:middle;width:45%">{{ $invoice?->job?->job_code ?? $invoice->localtask?->code ?? $invoice->task?->code ?? ' - ' }}</td>
+                            <td style="vertical-align:middle;width:45%"><Editable v-model="invoice.self_ref" type="text" @input="()=>edited = true"/></td>
                             <td style="vertical-align:middle;width:1%"></td>
                             <td style="vertical-align:middle;width:20%">Invoice Number</td>
                             <td style="vertical-align:middle;width:2%">:</td>
@@ -288,7 +288,7 @@
                         <tr>
                             <td style="vertical-align:top">Company</td>
                             <td style="vertical-align:top">:</td>
-                            <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{ $invoice->localtask?->client->name ?? $invoice->task?->client->name ?? ($cre->name ?? ' - ') }}<br>{{$invoice->localtask?->client->address ?? $invoice->task?->client->address ?: $cre->address ?? ' - ' }}</td>
+                            <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{ $invoice->localtask?->client->name ?? $invoice->task?->client->name ?? ($cre->name ?? ' - ') }}<br>{!! nl2br($invoice->localtask?->client->address ?? $invoice->task?->client->address ?: $cre->address ?? ' - ') !!}</td>
                         </tr>
                         </tr>
                         <tr>
@@ -640,7 +640,147 @@
             <hr>
         </div>
 
+        <div v-show="edited" class="screen-only fixed bottom-2 right-2 w-24 h-24 flex flex-col justify-center text-center border rounded bg-red-300 hover:bg-red-200 cursor-pointer" @click="submitInvoice">
+            Save
+        </div>
     </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {{-- <script src="/assets/js/vue.component.js"></script> --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    {{-- axios --}}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {{-- <script src="/assets/js/vue.components.js"></script> --}}
+    <script type="module">
+        function displayDollerFormat( doller, min = 0, whenZero = null ){
+            if (+doller == 0 && whenZero) return whenZero;
+            return new Intl.NumberFormat('en-US', {maximumFractionDigits:2, minimumFractionDigits:min}).format(doller)
+        }
+        function uuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        function popup( url ) {
+            window.open(url, '_blank', 'location=yes,height=950,width=1200,scrollbars=yes,status=yes');
+        }
+        // import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+        const { createApp , defineComponent } = Vue;
+
+            const Editable = defineComponent ({
+                template: `<div class="hover:bg-gray-100" @dblclick="startEdit">
+                                <textarea
+                                    class="w-full px-1"
+                                    ref="textarea"
+                                    v-if="editing && type == 'textarea'"
+                                    :value="modelValue"
+                                    @focus="resize"
+                                    @change="handleChange"
+                                    @blur="handleBlur"></textarea>
+                                <input
+                                    class="w-full px-1"
+                                    ref="textarea"
+                                    :type="type"
+                                    v-if="editing && type != 'textarea'"
+                                    :value="modelValue"
+                                    @focus="resize"
+                                    @change="handleChange"
+                                    @blur="handleBlur" />
+                                <div v-show="!editing">@{{prefix}} @{{type == 'number' ? displayDollerFormat(modelValue) : modelValue}} @{{suffix}}</div>
+                                <div v-show="!editing && !modelValue" class="screen-only"> --- </div>
+                            </div>`,
+                props: {
+                    modelValue: String | Number,
+
+                    prefix: {
+                        type: String,
+                        default: ''
+                    },
+                    suffix: {
+                        type: String,
+                        default: ''
+                    },
+                    type: {
+                        type: String,
+                        default: 'textarea'
+                    }
+                },
+                data() {
+                    return {
+                        editing: false,
+                    }
+                },
+                methods: {
+                    displayDollerFormat,
+                    startEdit() {
+                        this.editing = true;
+                        this.$nextTick(() => {
+                            this.$refs.textarea.focus();
+                        });
+                    },
+                    resize() {
+                        const { textarea } = this.$refs;
+                        textarea.style.height = textarea.scrollHeight + 'px';
+                    },
+                    handleChange(){
+                        this.$emit('update:modelValue', this.$refs.textarea.value);
+                        this.resize();
+                    },
+                    handleBlur(){
+                        this.editing = false;
+                        this.$emit('update:modelValue', this.$refs.textarea.value);
+                    }
+                }
+            })
+
+
+            createApp({
+                components: {
+                    Editable
+                },
+                data() {
+                    return {
+                        edited: false,
+                        invoice:{
+                            id: @json($invoice->id),
+                            self_ref: @json($invoice?->self_ref ?? $invoice?->job?->job_code ?? $invoice->localtask?->code ?? $invoice->task?->code ?? ' - '),
+                        }
+                    }
+                },
+                watch:{
+                },
+                methods: {
+                    popup,
+                    displayDollerFormat,
+                    submitInvoice(){
+                        const { invoice } = this;
+                        axios.post('/admin/api/invoice', invoice)
+                        .then(res => {
+                            console.log(res);
+                            this.edited = false;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                        console.log(invoice);
+                    }
+                },
+                mounted() {
+                    // this.getJobsInvoices();
+                    // console.log('this.invoice');
+                }
+            })
+            .mount('#vue-app')
+
+
+    </script>
+
 
 </body>
 

@@ -1,3 +1,6 @@
+// import Vue from 'vue'
+// import _ from 'lodash'
+
 Vue.directive('click-outside', {
     bind: function (el, binding, vnode) {
         el.clickOutsideEvent = function (event) {

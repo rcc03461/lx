@@ -32,6 +32,7 @@ class Invoice extends Model
         "other",
         "less",
         "meta",
+        "self_ref",
     ];
 
 
