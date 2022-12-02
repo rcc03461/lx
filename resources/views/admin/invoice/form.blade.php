@@ -25,7 +25,7 @@
             <div class="flex-1">
                 <div class="input-group">
                     <span class="input-group-prepend"><span class="input-group-text bg-white">Lx-</span></span>
-                    <input v-model.number="form.InvoiceNo" type="number" name="InvoiceNo" value="" class="form-control _normal_" placeholder="Invoice No">
+                    <input v-model.number="form.InvoiceNo" type="number" name="InvoiceNo" class="form-control _normal_" placeholder="Invoice No">
                     <span @click="generateInvoiceNo" class="input-group-prepend cursor-pointer hover:bg-slate-200"><span class="input-group-text bg-white">Generate Invoice No</span></span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <td>
                     <div class="input-group">
                         <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                        <input v-model.number="form.words.eng.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                        <input v-model.number="form.words.eng.price" type="number" name="address" class="form-control field_address _normal_" placeholder="Price">
                     </div>
                 </td>
                 <td>
@@ -86,7 +86,7 @@
                 <td>
                     <div class="input-group">
                         <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                        <input v-model.number="form.words.chi.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                        <input v-model.number="form.words.chi.price" type="number" name="address" class="form-control field_address _normal_" placeholder="Price">
                     </div></td>
                 <td>
                     <select v-model="form.words.chi.unit" class="form-control" name="" id="">
@@ -113,7 +113,7 @@
                 <td>
                     <div class="input-group">
                         <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                        <input v-model.number="form.pages.eng.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                        <input v-model.number="form.pages.eng.price" type="number" name="address" class="form-control field_address _normal_" placeholder="Price">
                     </div>
                 </td>
                 <td>Pages</td>
@@ -124,7 +124,7 @@
                 <td>
                     <div class="input-group">
                         <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                        <input v-model="form.pages.chi.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                        <input v-model="form.pages.chi.price" type="number" name="address" class="form-control field_address _normal_" placeholder="Price">
                     </div>
                 </td>
                 <td>Pages</td>
@@ -146,14 +146,14 @@
             <table class="flex-1">
                 <tr v-for="(item,i) in form.other">
                     <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
-                    <td><input v-model.number="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
+                    <td><input v-model.number="item.qty" class="form-control" name="quantity" type="number" placeholder="Quantity"></td>
                     <td>
                         <div class="input-group">
                             <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                            <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                            <input v-model.number="item.price" type="number" name="address" class="form-control field_address _normal_" placeholder="Price">
                         </div>
                     </td>
-                    <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
+                    <td><input v-model="item.unit" class="form-control" name="unit" type="text" placeholder="Unit"></td>
                     <td>
                         <button class="btn" @click="removeOther(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
                     </td>
@@ -169,14 +169,14 @@
                 <tr v-for="(item,i) in form.less">
 
                     <td><textarea v-model="item.desc" name="description" class="autoHeight form-control" rows="1" placeholder="Description"></textarea></td>
-                    <td><input v-model.number="item.qty" class="form-control" value="" name="quantity" type="number" placeholder="Quantity"></td>
+                    <td><input v-model.number="item.qty" class="form-control" name="quantity" type="number" placeholder="Quantity"></td>
                     <td>
                         <div class="input-group">
                             <span class="input-group-prepend"><span class="input-group-text bg-white">$</span></span>
-                            <input v-model.number="item.price" type="number" name="address" value="" class="form-control field_address _normal_" placeholder="Price">
+                            <input v-model.number="item.price" type="number" name="address" class="form-control field_address _normal_" placeholder="Price">
                         </div>
                     </td>
-                    <td><input v-model="item.unit" class="form-control" value="" name="unit" type="text" placeholder="Unit"></td>
+                    <td><input v-model="item.unit" class="form-control" name="unit" type="text" placeholder="Unit"></td>
                     <td>
                         <button class="btn" @click="removeLess(i)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
                     </td>
@@ -186,7 +186,7 @@
 
     <div class="text-2xl">
         <div>Total : </div>
-        <div>{{total | digi}}</div>
+        <div>{{digi(total)}}</div>
     </div>
 
     </section>
@@ -209,12 +209,138 @@
         Dcat.ready(function () {
             // 写你的逻辑
 
-        // Vue.component('vue-multiselect', window.VueMultiselect.default)
+            const { createApp , defineComponent } = Vue;
+        const selecWithAjaxSearch = defineComponent({
+                props: [
+                    'value',
+                ],
+                data() {
+                    return {
+                        showSearch: false,
+                        options: [],
+                        selected: {},
+                    }
+                },
+                watch:{
+                    value(val) {
+                        const {value} = this;
+                        if (value) {
+                            this.ajaxGet(value);
+                        }
+                    }
+                },
+                mounted(){
+                    if(this.value){
+                        this.ajaxGet(this.value);
+                    }
+                },
+                methods: {
+                    clickOutside: function (e) {
+                        this.showSearch = false;
+                    },
+                    async ajaxGet( id ) {
+                        let {data} = await axios.get('/admin/api/tasks/' + id);
+                        this.selected = data;
+                    },
+                    ajaxSearch: _.debounce(async function (e) {
+                        this.showSearch = true;
+                        if (e.target.value) {
+                            let res = await axios.get('/admin/api/tasks?q=' + e.target.value);
+                            this.options = res.data;
+                        }
+                    }, 300),
+                    select(e) {
+                        // console.log(e);
+                        this.$emit('input', e.id);
+                        this.selected = e;
+                        this.showSearch = false;
+                    },
+                    focusInput(e) {
+                        this.showSearch = true;
+                        // console.log(this.$refs);
+                        setTimeout(() => {
+                            this.$refs.searchinput.focus();
+                        }, 100);
+                    },
+                    clearResult() {
+                        this.selected = {};
+                        this.$emit('input', null);
+                    }
+                },
+                template: `<div class="relative w-full" v-click-outside="clickOutside">
+                    <div class="flex items-center">
+                        <input ref="searchinput" v-show="showSearch" class="form-control w-full outline-none px-1 focus:border-b bg-gray-100 " type="text" @keyup="ajaxSearch" @focus="showSearch = true"/>
+                        <div v-show="!showSearch" class="flex-1 form-control cursor-pointer hover:bg-gray-50" @click="focusInput">
+                            <slot name="selected" :selected="selected">
+                                @{{selected.title}}
+                            </slot>
+                        </div>
+                        <div @click="clearResult" class="w-12 text-center hover:bg-gray-50 cursor-pointer">Clear</div>
+                    </div>
+                    <div v-show="showSearch" class="absolute border shadow-lg left-0 bg-white w-full max-h-72 overflow-y-auto px-1 py-1 z-10" style="top:110%">
+                        <div v-if="options.length == 0" class="text-center">Type to search...</div>
+                        <ul v-else>
+                            <li class="hover:bg-gray-100 cursor-pointer py-0.5 px-0.5" v-for="item in options" @click="select(item)">
+                                <slot name="item" :item="item">
+                                    @{{item.title}}
+                                </slot>
+                            </li>
+                        </ul>
+                    </div>
+                </div>`
+            })
 
-        const app = new Vue({
-            el: '#vue-app',
+            const lxInput = defineComponent('lx-input', {
+                props: [
+                    'value',
+                    'type',
+                    'datalist'
+                ],
+                data() {
+                    return {
+                        editing: false,
+                        // date: dayjs().format('YYYY-MM-DD'),
+                    }
+                },
+                mounted(){
+
+                },
+                methods: {
+                    clickOutside: function (e) {
+                        this.editing = false;
+                    },
+
+                    select(e) {
+                        console.log(e);
+                        this.$emit('input', e.target.value);
+                        this.editing = false;
+                    },
+                    focusInput(e) {
+                        this.editing = true;
+                        // console.log(this.$refs);
+                        setTimeout(() => {
+                            this.$refs.refinput.focus();
+                        }, 100);
+                    }
+                },
+                template: `<div class="relative w-full" v-click-outside="clickOutside">
+                    <input ref="refinput" v-show="editing" class="form-control w-full outline-none px-1 focus:border-b bg-gray-100" :type="type" @input="select" @focus="editing = true"/>
+                    <div v-show="!editing" class="form-control cursor-pointer hover:bg-gray-50" @click="focusInput">
+                        @{{value || ' - '}}
+                    </div>
+
+                </div>`
+            })
+
+
+
+        // Vue.component('vue-multiselect', window.VueMultiselect.default)
+        // const { createApp , defineComponent } = Vue;
+        const app = createApp({
+            // el: '#vue-app',
             components:{
-                // selecWithAjaxSearch
+                selecWithAjaxSearch,
+                lxInput,
             },
             data(){
                return {
@@ -234,11 +360,11 @@
                 },
                }
             },
-            filters:{
-                digi(doller){
-                    return new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits:2}).format(doller)
-                }
-            },
+            // filters:{
+            //     digi(doller){
+            //         return new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits:2}).format(doller)
+            //     }
+            // },
             computed:{
                 total: function(){
                     const {form:{words,pages,other,less}} = this;
@@ -254,7 +380,9 @@
             watch:{
             },
             methods:{
-
+                digi(doller){
+                    return new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits:2}).format(doller)
+                },
                 addOther(){
                     this.form.other.push({desc:"",price:"",qty:1,unit:"Package"})
                 },
@@ -329,7 +457,21 @@
 
 
             }
-        })
+        }).directive('click-outside', {
+                mounted(el, binding, vnode) {
+                    el.clickOutsideEvent = function(event) {
+                    if (!(el === event.target || el.contains(event.target))) {
+                        binding.value(event, el);
+                    }
+                    };
+                    document.body.addEventListener('click', el.clickOutsideEvent);
+                },
+                unmounted(el) {
+                    document.body.removeEventListener('click', el.clickOutsideEvent);
+                }
+            })
+
+        .mount('#vue-app')
 
     console.log('所有JS脚本都加载完了');
     });

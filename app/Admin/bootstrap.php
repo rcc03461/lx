@@ -36,7 +36,7 @@ Admin::js('//cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
 // Admin::js('//cdn.jsdelivr.net/npm/vue@2/dist/vue.js');
 // Admin::js('//cdn.jsdelivr.net/npm/vue@2.7.13');
 Admin::js('//unpkg.com/vue@3/dist/vue.global.js');
-Admin::js('/assets/js/vue.component.js');
+// Admin::js('/assets/js/vue.component.js');
 Admin::js('//code.jquery.com/ui/1.10.4/jquery-ui.js');
 // Admin::js('//cdn.tailwindcss.com');
 // <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
