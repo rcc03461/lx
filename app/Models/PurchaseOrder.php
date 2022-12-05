@@ -39,7 +39,7 @@ class PurchaseOrder extends Model
     ];
 
     public function getCodeAttribute(){
-        return 'LXPO-' . $this->po_no;
+        return 'PO' . $this->po_no;
     }
 
     public function getIsSettledAttribute(){
