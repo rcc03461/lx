@@ -80,6 +80,8 @@ class PurchaseOrderController extends AdminController
             });
 
             $grid->quickSearch(['task.lx_no', 'vendor.name'])->placeholder('task.lx_no, vendor.name');
+
+            $grid->export()->xlsx();
         });
     }
 
