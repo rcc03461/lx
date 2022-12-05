@@ -20,7 +20,15 @@ class VendorController extends AdminController
         $to = request('to', now()->endOfMonth()->format('Y-m-d'));
         $orderby = request('orderby', 'po_no' );
 
-        $pos = PurchaseOrder::whereBetween('job_date', [$from, $to])->orderBy($orderby)->get();
+        $pos = PurchaseOrder::where('vendor_id', $vendor->id)
+        ->when(!request('from'), function($query){
+            $query->whereNull('settled_at');
+        })
+        ->when(request('from'), function($query) use ($from, $to){
+            $query->whereBetween('job_date', [$from, $to]);
+        })
+        ->orderBy($orderby)
+        ->get();
 
         return view('admin.vendor.statement', [
             'from' => $from,

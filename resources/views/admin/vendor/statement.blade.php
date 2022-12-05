@@ -24,13 +24,33 @@
 
         <div class="max-w-3xl mx-auto bg-white p-4">
           <div class="borderContainer">
-
             <section>
                 @include('components.lx-header')
                 <h3 class="text-center text-xl font-bold my-4">Statement</h3>
                 <div class="text-center">{{$from}} -> {{$to}} <input class="screen-only" type="month"> <button id="toggleSettled" class="screen-only border py-1 px-2 rounded hover:bg-gray-300">Toggle Settled</button></div>
 
+
                 <table class="w-full">
+                    <tr>
+                        <td class="w-24">TO</td>
+                        <td></td>
+                        <td>LingXpert Language Services Limited</td>
+                    </tr>
+                    <tr>
+                        <td class="w-24">Address</td>
+                        <td></td>
+                        <td>Room 1106, OfficePlus @Sheung Wan,<br/>93-103 WingLok Street,<br/>Sheung Wan, Hong Kong</td>
+                    </tr>
+                    <tr>
+                        <td class="w-24">Contact</td>
+                        <td></td>
+                        <td>Rose Yip</td>
+                    </tr>
+                    <tr>
+                        <td class="w-24">&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td class="w-24">Name</td>
                         <td></td>
@@ -66,7 +86,7 @@
                     <th data-sort="job_date"            class="cursor-pointer text-left border-b ">Job date</th>
                     <th data-sort="settled_at"          class="cursor-pointer text-left border-b ">Settled At</th>
                     <th                                 class="cursor-pointer text-left border-b ">Ref</th>
-                    <th data-sort="total"               class="cursor-pointer text-right border-b ">Amount</th>
+                    <th data-sort="total"               class="cursor-pointer text-right border-b w-32 pr-2">Amount</th>
                   </tr>
                 </thead>
 
@@ -86,7 +106,7 @@
                             <td>{{ $item->job_date->format('Y-m-d') }}</td>
                             <td>{{ $item->settled_at?->format('Y-m-d') ?: "" }}</td>
                             <td>{{ $item->settled_ref }}</td>
-                            <td class="text-right" data-total="{{$item->total}}">{{ number_format($item->total, 2) }}</td>
+                            <td class="text-right pr-2" data-total="{{$item->total}}">{{ number_format($item->total, 2) }}</td>
                         </tr>
                     @endforeach
                     <tr>
@@ -101,7 +121,11 @@
                         <td class="border-t border-black"></td>
                         <td class="border-t border-black"></td>
                         <td class="border-t border-black"></td>
-                        <td class="border-t border-black text-right font-bold" id="total">{{ number_format($pos->sum('total'), 2) }}</td>
+                        <td class="border-t border-black text-right font-bold">
+                            <div class="border-b-4 border-double border-black  pr-2">
+                                <span>HK$ </span><span id="total">{{ number_format($pos->sum('total'), 2) }}</span>
+                            </div>
+                        </td>
                     </tr>
                 </tfoot>
 
@@ -126,7 +150,9 @@
         let to = '{{$to}}';
 
         function displayDollerFormat( doller ){
-            return new Intl.NumberFormat('en-US', {maximumFractionDigits:2}).format(doller)
+            return new Intl.NumberFormat('en-US', {maximumFractionDigits:2,
+                minimumFractionDigits:2,
+            }).format(doller)
         }
 
 
