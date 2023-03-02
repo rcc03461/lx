@@ -46,7 +46,12 @@ class PurchaseOrderController extends AdminController
 
             $grid->model()->orderBy('id', 'desc');
 
-            $grid->column('id')->sortable();
+            $grid->column('id')->display(function () {
+                $id = $this->id;
+                return <<<HTML
+<a class="text-blue-500" data-popup="" href="/admin/purchase-orders/{$id}/view" target="_blank">$id</a>
+HTML;
+            })->sortable();
             // $grid->column('task_id');
             $grid->column('po_no')->display(function () {
                 return $this->code;
@@ -68,6 +73,18 @@ class PurchaseOrderController extends AdminController
             })
             ->sortable();
             // $grid->column('items');
+            $grid->column('detail')->display(function () {
+                $items_display = collect($this->items)->map(function ($item) {
+                    return <<<HTML
+                    <div class="text-xs text-gray-400">{$item['title']}</div>
+                    <div class="text-xs text-gray-400">{$item['description']}</div>
+                    <div class="text-xs text-gray-400 mb-1">{$item['qty']} {$item['unit']} x HK$ {$item['unit_price']}</div>
+                    HTML;
+                })->implode('');
+                return <<<HTML
+                <div class="text-xs text-gray-400">$items_display</div>
+                HTML;
+            });
             $grid->column('total')->sortable();
             $grid->column('settled_at')->sortable()->editable(true);
             $grid->column('settled_ref')->editable(true);
