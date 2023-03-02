@@ -85,8 +85,20 @@ HTML;
                 <div class="text-xs text-gray-400">$items_display</div>
                 HTML;
             });
-            $grid->column('total')->sortable();
-            $grid->column('attachments');
+            $grid->column('total')->display(function () {
+                return number_format($this->total);
+            })->sortable();
+            $grid->column('attachments')->display(function () {
+                $attachments_display = collect($this->attachments)->map(function ($attachment) {
+                    $filename = basename($attachment);
+                    return <<<HTML
+                    <div class="text-xs text-blue-400"><a href="/storage/{$attachment}" target="_blank">{$filename}</a></div>
+                    HTML;
+                })->implode('');
+                return <<<HTML
+                <div class="text-xs text-gray-400">$attachments_display</div>
+                HTML;
+            });
             $grid->column('wip_at')->sortable()->editable(true);
             $grid->column('settled_at')->sortable()->editable(true);
             $grid->column('settled_ref')->editable(true);
