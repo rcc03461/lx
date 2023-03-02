@@ -64,7 +64,7 @@ Admin::script(<<<JS
         window.open($(this).attr('href'), '_blank', 'width=1200,height=980');
     })
 
-    $(document).off('click.popover').on('click.popover', '.ie-content-end_date input, .ie-content-settled_at input', function(event){
+    $(document).off('click.popover').on('click.popover', '.ie-content-end_date input, .ie-content-settled_at input, .ie-content-wip_at input', function(event){
         event.preventDefault();
         $( this )
         .datepicker({

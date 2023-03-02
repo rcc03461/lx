@@ -86,6 +86,8 @@ HTML;
                 HTML;
             });
             $grid->column('total')->sortable();
+            $grid->column('attachments');
+            $grid->column('wip_at')->sortable()->editable(true);
             $grid->column('settled_at')->sortable()->editable(true);
             $grid->column('settled_ref')->editable(true);
             // $grid->column('created_at');
@@ -185,6 +187,8 @@ HTML;
             // ->useTable()
             ;
             $form->decimal('total');
+            $form->multipleFile('attachments', 'Attachments')->removable();
+            $form->date('wip_at');
             $form->date('settled_at');
             $form->textarea('settled_ref');
 

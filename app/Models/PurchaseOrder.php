@@ -20,12 +20,15 @@ class PurchaseOrder extends Model
         'job_date',
         'items',
         'total',
+        'attachments',
+        'wip_at',
         'settled_at',
         'settled_ref',
     ];
 
     protected $casts = [
         'items' => 'array',
+        'attachments' => 'array',
     ];
 
     protected $dates = [
