@@ -199,7 +199,9 @@ HTML;
             // ->useTable()
             ;
             $form->decimal('total');
-            $form->multipleFile('attachments', 'Attachments')->removable();
+            $form->multipleFile('attachments', 'Attachments')
+            ->autoUpload()
+            ->removable();
             $form->date('wip_at');
             $form->date('settled_at');
             $form->textarea('settled_ref');
