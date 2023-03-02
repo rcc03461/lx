@@ -92,7 +92,7 @@ HTML;
                 $attachments_display = collect($this->attachments)->map(function ($attachment) {
                     $filename = basename($attachment);
                     return <<<HTML
-                    <div class="text-xs text-blue-400"><a href="/storage/{$attachment}" target="_blank">{$filename}</a></div>
+                    <div class="text-xs text-blue-400"><a href="/storage/app/public/{$attachment}" target="_blank">{$filename}</a></div>
                     HTML;
                 })->implode('');
                 return <<<HTML
