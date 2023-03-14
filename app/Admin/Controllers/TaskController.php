@@ -110,15 +110,17 @@ HTML;
             $grid->column('job_')->width(400)->display(function ($job) {
                 // <a data-popup href="/admin/invoices/build?task_id={$this->id}" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" /></svg></a>
                 // {$this->job?->job_code}
-
+                $job_no = $this->job_no ?? $this->job?->job_code;
                 return <<<HTML
                 <div>
-                    {$this->job?->job_code}
+                    {$job_no}
                 </div>
                 <div class="text-xs text-gray-300">{$this->job?->jobdescription}</div>
-HTML;
-            });
-
+                HTML;
+            })
+            // ->editable(true)
+            ;
+            
 //             $grid->column('invoices_')->display(function ($job) {
 //                 $invoices = collect($this->invoices)->map(function ($invoice) {
 //                     return <<<HTML
@@ -265,6 +267,7 @@ HTML;
 
             // $form->text('job_code');
             $form->text('title')->required();
+            $form->text('job_no');
             $form->textarea('description');
             $form->textarea('remark');
             $form->currency('estimated_revenue')->symbol('HK$');

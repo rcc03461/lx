@@ -65,7 +65,10 @@ class InvoiceController extends AdminController
                 if ($idjob) {
                     return $this?->task?->client->name ?? "";
                 }else{
-                    return $this->localtask->client->name ?? "";
+                    $clientname = $this->localtask->client->name ?? "";
+                    return <<<HTML
+                    <div>$clientname</div>
+                    HTML;
                 }
             });
             $grid->column('task.lx_no')->display(function ($lx_no) {
@@ -76,12 +79,14 @@ class InvoiceController extends AdminController
             // ->select(Task::doesntHave('invoices')->pluck('lx_no', 'id')->prepend('', 0));
             $grid->column('invoiceCode', 'C8 Inv.')->sortable();
             $grid->column('company')->width(300)->display(function(){
-                $displayname =  $this->job?->company ?? $this->localtask?->client->name ?? "";
+                $displayname =  $this->job?->company ?? $this->localtask?->title ?? "";
+                $display_description = $this->job?->jobdescription ?? $this->localtask->description;
                 return <<<HTML
                 $displayname
-                <div class="text-gray-400">{$this->job?->jobdescription}</div>
+                <div class="text-gray-400">{$display_description}</div>
                 HTML;
-            });
+            })
+            ;
             $grid->column('job.jobtypeKey')->display(function(){
                 return <<<HTML
                 {$this->job?->jobtypeKey}

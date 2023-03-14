@@ -20,6 +20,7 @@ class Task extends Model
         'idjob',
         // 'job_code',
         'lx_no',
+        'job_no',
         'title',
         'description',
         'remark',
