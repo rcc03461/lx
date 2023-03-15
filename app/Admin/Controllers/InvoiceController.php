@@ -118,6 +118,7 @@ class InvoiceController extends AdminController
             $grid->column('sales')->display(function ($sales) {
                 return $this->job?->meta?->sales?->name;
             });
+            $grid->column('no_more_sync')->switch();
             // $grid->column('created_at')->display(function ($created_at) {
             //     return $created_at->format('Y-m-d');
             // });
@@ -172,6 +173,7 @@ class InvoiceController extends AdminController
             $show->field('other');
             $show->field('less');
             $show->field('meta');
+            $show->field('no_more_sync');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -192,6 +194,7 @@ class InvoiceController extends AdminController
             $form->text('total');
             $form->text('invoiceDate');
             $form->text('reviseDate');
+            $form->switch('no_more_sync');
             $form->text('words');
             $form->text('pages');
             $form->text('other');

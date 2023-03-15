@@ -33,6 +33,7 @@ class Invoice extends Model
         "less",
         "meta",
         "self_ref",
+        "no_more_sync",
     ];
 
 

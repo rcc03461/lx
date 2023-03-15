@@ -68,6 +68,11 @@ Route::post('/lx/translation', function () {
 
     // return request()->all();
     // Log::info('/lx/translation', request()->all());
+    $invoice = Invoice::where('idtranslation', request('idtranslation'))->first();
+    if (  $invoice && $invoice->no_more_sync ){
+        return $invoice;
+    }
+
     return Invoice::updateOrCreate([
         'idtranslation' => request('idtranslation'),
     ],
