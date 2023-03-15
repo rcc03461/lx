@@ -70,7 +70,10 @@ Route::post('/lx/translation', function () {
     // Log::info('/lx/translation', request()->all());
     $invoice = Invoice::where('idtranslation', request('idtranslation'))->first();
     if (  $invoice && $invoice->no_more_sync ){
-        return $invoice;
+        return $invoice->update([
+            "ApproveId" => request('ApproveId'),
+            "Transtatus" => request('Transtatus'),
+        ]);
     }
 
     return Invoice::updateOrCreate([
