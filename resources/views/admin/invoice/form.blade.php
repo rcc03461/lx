@@ -445,6 +445,8 @@
                 this.form = {
                     ...this.form,
                     ...invoice,
+                    other:invoice.other || [],
+                    less:invoice.less || [],
                     invoiceDate: invoice.invoiceDate ? dayjs(invoice.invoiceDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
                 };
 
