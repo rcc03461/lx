@@ -329,15 +329,17 @@
                                         <td class="px-0.5">{{ $loop->index +1 }}</td>
                                         <td class="px-0.5">{{ $item['title'] }}</td>
                                         <td class="px-0.5">{{ $item['description'] }}</td>
-                                        <td class="px-0.5">
-                                            @if (in_array(Str::lower($item['unit']) , ['hours', 'hrs']))
-                                                {{ number_format($item['qty'], 2) }} {{ $item['unit'] }}
-                                                @else
-                                                {{ number_format($item['qty']) }} {{ $item['unit'] }}
-                                            @endif
+                                        <td class="px-0.5 w-24">
+                                            <div class="min-w-min">
+                                                @if (in_array(Str::lower($item['unit']) , ['hours', 'hrs']))
+                                                    {{ number_format($item['qty'], 2) }} {{ $item['unit'] }}
+                                                    @else
+                                                    {{ number_format($item['qty']) }} {{ $item['unit'] }}
+                                                @endif
+                                            </div>
                                         </td>
-                                        <td class="px-0.5">{{ $item['unit_price'] }}</td>
-                                        <td class="text-right px-0.5">{{ number_format($item['qty'] * $item['unit_price'], 2) }}</td>
+                                        <td class="px-0.5 w-16">{{ $item['unit_price'] }}</td>
+                                        <td class="text-right px-0.5 w-20">{{ number_format($item['qty'] * $item['unit_price'], 2) }}</td>
                                         {{-- <td class="text-right">
                                             {{
                                                 match ($item['direction']) {
