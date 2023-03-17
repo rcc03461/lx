@@ -329,7 +329,7 @@
                                         <td>{{ $loop->index +1 }}</td>
                                         <td>{{ $item['title'] }}</td>
                                         <td>{{ $item['description'] }}</td>
-                                        <td>{{ number_format($item['qty']) }} {{ $item['unit'] }}</td>
+                                        <td>{{ number_format($item['qty'], 2) }} {{ $item['unit'] }}</td>
                                         <td>{{ $item['unit_price'] }}</td>
                                         <td class="text-right">{{ number_format($item['qty'] * $item['unit_price'], 2) }}</td>
                                         {{-- <td class="text-right">
