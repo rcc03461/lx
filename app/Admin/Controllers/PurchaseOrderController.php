@@ -192,7 +192,7 @@ HTML;
             $form->array('items', 'Items', function($table) {
                 $table->text('title');
                 $table->textarea('description');
-                $table->number('qty');
+                $table->decimal('qty');
                 $table->text('unit');
                 $table->decimal('unit_price');
             })
