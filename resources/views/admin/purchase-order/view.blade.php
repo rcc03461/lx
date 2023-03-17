@@ -326,12 +326,12 @@
                                 </tr>
                                 @foreach ($po->items as $item)
                                     <tr>
-                                        <td class="px-1">{{ $loop->index +1 }}</td>
-                                        <td class="px-1">{{ $item['title'] }}</td>
-                                        <td class="px-1">{{ $item['description'] }}</td>
-                                        <td class="px-1">{{ number_format($item['qty'], 2) }} {{ $item['unit'] }}</td>
-                                        <td class="px-1">{{ $item['unit_price'] }}</td>
-                                        <td class="text-right px-1">{{ number_format($item['qty'] * $item['unit_price'], 2) }}</td>
+                                        <td class="px-0.5">{{ $loop->index +1 }}</td>
+                                        <td class="px-0.5">{{ $item['title'] }}</td>
+                                        <td class="px-0.5">{{ $item['description'] }}</td>
+                                        <td class="px-0.5">{{ number_format($item['qty'], 2) }} {{ $item['unit'] }}</td>
+                                        <td class="px-0.5">{{ $item['unit_price'] }}</td>
+                                        <td class="text-right px-0.5">{{ number_format($item['qty'] * $item['unit_price'], 2) }}</td>
                                         {{-- <td class="text-right">
                                             {{
                                                 match ($item['direction']) {
