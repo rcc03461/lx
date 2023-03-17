@@ -330,7 +330,7 @@
                                         <td class="px-0.5">{{ $item['title'] }}</td>
                                         <td class="px-0.5">{{ $item['description'] }}</td>
                                         <td class="px-0.5">
-                                            @if (in_array(Str::lower($item['unit']) , ['hours', 'hour', 'hrs', 'hr']))
+                                            @if (in_array(Str::lower($item['unit']) , ['hours', 'hrs']))
                                                 {{ number_format($item['qty'], 2) }} {{ $item['unit'] }}
                                                 @else
                                                 {{ number_format($item['qty']) }} {{ $item['unit'] }}
