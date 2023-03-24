@@ -7,35 +7,37 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Invoice</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script> --}}
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.1.8/base.css"> --}}
     {{-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"> --}}
-    <style media="print">
-        .ui-pnotify.ui-pnotify-fade-normal.ui-pnotify-in.ui-pnotify-fade-in.ui-pnotify-move,
-        .ui-pnotify {
-            display: none !important;
-        }
+    {{-- <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script> --}}
 
-        .pagebreak hr {
-            display: none;
-        }
 
-        .hidden-print {
-            display: none;
-        }
 
-        body {
-            -webkit-print-color-adjust: exact;
-        }
-
-        #footnote {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            padding-bottom: 4px;
-            border-bottom: 8px solid #006600;
-        }
-    </style>
     <style>
+        #payment-note {
+            position: relative;
+            padding-bottom: 4px;
+
+        }
+        .only-screen-display{
+            border-left: 2px solid blue;
+        }
+        @media print {
+            #payment-note:not(.relative) {
+                position: fixed;
+                bottom: 50px;
+                width: 95%;
+                padding-bottom: 4px;
+            }
+            .only-screen-display{
+                border-left: none;
+            }
+        }
+        #pageIndex::after{
+            counter-increment: page;
+            content: counter(page);
+        }
         .datetimepicker {
             position: relative;
         }
@@ -146,7 +148,9 @@
         }
 
         .pagebreak {
+            border-top: 1px solid #000;
             page-break-before: always;
+            /* page-break-inside: avoid; */
         }
 
         .fatBorder {
@@ -175,22 +179,22 @@
             text-align: center;
         }
 
-        table thead tr th {
+        table thead tr.table-head th {
             text-align: center;
             font-weight: bold;
             font-style: italic;
             font-size: 12px;
         }
 
-        table tbody tr td {
+        table tbody.table-body tr td {
             vertical-align: top;
         }
 
-        .borderContainer {
-            border: 2px solid rgb(0, 0, 0);
+        .mainContainer {
+            /* border: 2px solid rgb(0, 0, 0); */
         }
 
-        .borderContainer * {
+        .mainContainer * {
             font-size: 12px;
         }
 
@@ -206,17 +210,17 @@
 
         }
 
-        .detailContent thead {
+        .detailContent thead .table-head {
             background-color: #99ccff !important;
         }
 
         @media print {
-            .detailContent thead {
+            .detailContent thead .table-head {
                 background-color: #99ccff !important;
             }
         }
 
-        .detailContent thead tr th {
+        .detailContent thead tr.table-head  th {
             border-top: 1px solid rgb(0, 0, 0);
             border-bottom: 1px solid rgb(0, 0, 0);
         }
@@ -228,12 +232,12 @@
         border-left: 1px solid rgb(0, 0, 0);
         border-right: 1px solid rgb(0, 0, 0);
       }*/
-        .detailContent tbody tr:last-of-type td {
+        .detailContent tbody.table-body tr:last-of-type td {
             border-bottom: 1px solid rgb(0, 0, 0);
         }
 
         .detailContent thead tr th:not(:last-child),
-        .detailContent tbody tr td:not(:last-child) {
+        .detailContent tbody.table-body tr td:not(:last-child) {
             border-right: 1px solid rgb(0, 0, 0);
         }
 
@@ -241,20 +245,47 @@
             padding: 3px 5px;
         }
 
-        .detailContent tbody tr td {
+        .detailContent tbody.table-body tr td {
             white-space: normal;
             padding: 3px 10px;
         }
 
-        .detailContent tbody tr td:first-child {
+        .detailContent tbody.table-body tr td:first-child {
             text-align: center;
         }
 
-        .detailContent tbody tr td:nth-child(3),
-        .detailContent tbody tr td:nth-child(4),
-        .detailContent tbody tr td:last-child {
+        .detailContent tbody.table-body tr td:nth-child(3),
+        .detailContent tbody.table-body tr td:nth-child(4),
+        .detailContent tbody.table-body tr td:last-child {
             text-align: right;
         }
+    </style>
+    <style media="print">
+        .ui-pnotify.ui-pnotify-fade-normal.ui-pnotify-in.ui-pnotify-fade-in.ui-pnotify-move,
+        .ui-pnotify {
+            display: none !important;
+        }
+
+        .pagebreak hr {
+            display: none;
+        }
+
+        .hidden-print {
+            display: none;
+        }
+
+        body {
+            -webkit-print-color-adjust: exact;
+        }
+
+        #footnote {
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+            padding-bottom: 4px;
+            border-bottom: 8px solid #006600;
+        }
+
     </style>
 </head>
 
@@ -268,66 +299,64 @@
                 @include('components.lx-header')
                 <!-- <span class="typeTitle" style="float:right;">Translation Invoice</span> -->
             </section>
-            <div class="borderContainer">
+            <div class="mainContainer">
 
-                <section>
-
-                    <h3 class="font-black text-lg">INVOICE</h3>
-                    <table class="my-2" style="margin-left:1%;margin-right:1%;width:98%;">
-                        <tr>
-                            <td style="vertical-align:middle;width:13%">Client Ref</td>
-                            <td style="vertical-align:middle;width:2%">:</td>
-                            <td style="vertical-align:middle;width:45%"><Editable v-model="invoice.self_ref" type="text" @input="()=>edited = true"/></td>
-                            <td style="vertical-align:middle;width:1%"></td>
-                            <td style="vertical-align:middle;width:20%">Invoice Number</td>
-                            <td style="vertical-align:middle;width:2%">:</td>
-                            <td style="vertical-align:middle;width:22%" class="text-right">{{ $invoice->code ?? ' - ' }}
-                            </td>
-                        </tr>
-                        <tr>
-                        <tr>
-                            <td style="vertical-align:top">Company</td>
-                            <td style="vertical-align:top">:</td>
-                            <td colspan="5" class="whitespace-pre-line" style="line-height:1.3">{{ $invoice->localtask?->client->name ?? $invoice->task?->client->name ?? ($cre->name ?? ' - ') }}<br>{!! nl2br($invoice->localtask?->client->address ?? $invoice->task?->client->address ?: $cre->address ?? ' - ') !!}</td>
-                        </tr>
-                        </tr>
-                        <tr>
-                            <td>Attention</td>
-                            <td>:</td>
-                            <td>{{$invoice->localtask?->client->attn ?? $invoice->task?->client->attn ?? ($cre->attn ?? ' - ') }}</td>
-                            <td></td>
-                            <td>LingXpert Job No.</td>
-                            <td>:</td>
-                            <td class="text-right">{{ $invoice->localtask?->code ?? $invoice->task?->code ?: ' - ' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="vertical-align:middle">Date</td>
-                            <td style="vertical-align:middle">:</td>
-                            <td style="vertical-align:middle;position:relative">
-                                {{ $invoice->invoiceDate?->format('Y-m-d') ?: ' - ' }}
-                            </td>
-                            <td style="vertical-align:middle"></td>
-                            <td style="vertical-align:middle">Page Number </td>
-                            <td style="vertical-align:middle">:</td>
-                            <td style="text-align:right;vertical-align:middle">1 of 1</td>
-                        </tr>
-                    </table>
-
-                </section>
-
-                <section>
+                <section class="border-x-2 border-b-2 border-black">
                     <table class="detailContent" class="text-sm">
                         <thead>
                             <tr>
+                                <th colspan="6">
+
+                                    <section class="border-t-2 border-black">
+                                        <h3 class="font-black text-lg">INVOICE</h3>
+                                        <table class="my-2" style="margin-left:1%;margin-right:1%;width:98%;">
+                                            <tr>
+                                                <td class="text-left" style="vertical-align:middle;width:13%">Client Ref</td>
+                                                <td class="text-left" style="vertical-align:middle;width:2%">:</td>
+                                                <td class="text-left" style="vertical-align:middle;width:45%"><Editable v-model="invoice.self_ref" type="text" @input="()=>edited = true"/></td>
+                                                <td class="text-left" style="vertical-align:middle;width:20%">Invoice Number</td>
+                                                <td class="text-left" style="vertical-align:middle;width:2%">:</td>
+                                                <td class="text-right" style="vertical-align:middle;width:22%">{{ $invoice->code ?? ' - ' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                            <tr>
+                                                <td class="text-left" style="vertical-align:top">Company</td>
+                                                <td class="text-left" style="vertical-align:top">:</td>
+                                                <td class="text-left whitespace-pre-line" colspan="4" style="line-height:1.3">{{ $invoice->localtask?->client->name ?? $invoice->task?->client->name ?? ($cre->name ?? ' - ') }}<br>{!! nl2br($invoice->localtask?->client->address ?? $invoice->task?->client->address ?: $cre->address ?? ' - ') !!}</td>
+                                            </tr>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Attention</td>
+                                                <td class="text-left">:</td>
+                                                <td class="text-left">{{$invoice->localtask?->client->attn ?? $invoice->task?->client->attn ?? ($cre->attn ?? ' - ') }}</td>
+                                                <td class="text-left">LingXpert Job No.</td>
+                                                <td class="text-left">:</td>
+                                                <td class="text-right">{{ $invoice->localtask?->code ?? $invoice->task?->code ?: ' - ' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left" style="vertical-align:middle">Date</td>
+                                                <td class="text-left" style="vertical-align:middle">:</td>
+                                                <td class="text-left" style="vertical-align:middle;position:relative">{{ $invoice->invoiceDate?->format('Y-m-d') ?: ' - ' }}</td>
+                                                <td class="text-left" style="vertical-align:middle">Page Number </td>
+                                                <td class="text-left" style="vertical-align:middle">:</td>
+                                                <td class="text-right" style="vertical-align:middle;">Page <span id="pageIndex"></span> of <Editable v-model="pages" type="text"/></td>
+                                            </tr>
+                                        </table>
+
+                                    </section>
+                                </th>
+                            </tr>
+                            <tr class="table-head">
                                 <th style="width:6% !important;">Item</th>
                                 <th style="width:43% !important;">Description</th>
                                 <th style="width:12% !important;">Unit Price<br>(HKD)</th>
-                                <th style="width:12% !important;">Quantity</th>
+                                <th style="width:10% !important;">Quantity</th>
                                 <th style="width:14% !important;">Unit</th>
-                                <th style="width:13% !important;">Amount<br>(HKD)</th>
+                                <th style="width:15% !important;">Amount<br>(HKD)</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="table-body">
                             <tr>
                                 <td>&nbsp;</td>
                                 <td><b>{{ $invoice->job?->company ??  $invoice->localtask?->title ?? $invoice->task?->client?->name ?? ' - ' }}<b>
@@ -492,15 +521,12 @@
                                 <td>&nbsp;</td>
                             </tr>
 
-
-                        <tfoot>
                             <tr>
-                                <th colspan="5" style="text-align:right; padding: 10px 15px;">Total : </th>
-                                <th style="padding-right:10px; text-align:right;">
+                                <td class="border-t border-black font-bold align-center" colspan="5" style="text-align:right; padding: 10px 15px; border-right: none;">Total : </td>
+                                <td class="border-t border-black font-bold align-center" style="padding-right:10px; text-align:right; vertical-align: middle">
                                     {{ $invoice->total > 0 ? "$ ". number_format($invoice->total, 2) : 'Waived' }}
-                                </th>
+                                </td>
                             </tr>
-                        </tfoot>
                         {{--
 
                     <tr v-for="item in form.other">
@@ -556,7 +582,9 @@
                     </div>
                 </div>
 
-                <div id="footnote">
+                <div id="payment-note" class="pl-2" :class="{
+                    'relative only-screen-display' : !floatNote,
+                }" @click="floatNote = !floatNote">
 
                     <div class="mb-4">
                         <span class="font-bold">Bank Account Information</span>
@@ -616,6 +644,10 @@
                         <br />
 
                     </div>
+                </div>
+
+                <div id="footnote">
+
                     <div class="text-center mt-2 leading-3">
                         <div class="text-xs my-1 font-black" style="color:#006600">
                             LingXpert Language Services Limited
@@ -636,9 +668,9 @@
         </div>
 
 
-        <div class="pagebreak">
+        {{-- <div class="pagebreak">
             <hr>
-        </div>
+        </div> --}}
 
         <div v-show="edited" class="screen-only fixed bottom-2 right-2 w-24 h-24 flex flex-col justify-center text-center border rounded bg-red-300 hover:bg-red-200 cursor-pointer" @click="submitInvoice">
             Save
@@ -656,6 +688,17 @@
     {{-- axios --}}
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     {{-- <script src="/assets/js/vue.components.js"></script> --}}
+
+    {{-- <script>
+        document.querySelectorAll('.table-body tr').forEach( tr => {
+            tr.addEventListener('click', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log(e.target);
+                e.target.classList.toggle('pagebreak');
+            })
+        })
+    </script> --}}
     <script type="module">
         function displayDollerFormat( doller, min = 0, whenZero = null ){
             if (+doller == 0 && whenZero) return whenZero;
@@ -674,7 +717,7 @@
         const { createApp , defineComponent } = Vue;
 
             const Editable = defineComponent ({
-                template: `<div class="hover:bg-gray-100" @dblclick="startEdit">
+                template: `<div class="hover:bg-gray-100 inline-block" @dblclick="startEdit">
                                 <textarea
                                     class="w-full px-1"
                                     ref="textarea"
@@ -691,7 +734,8 @@
                                     :value="modelValue"
                                     @focus="resize"
                                     @change="handleChange"
-                                    @blur="handleBlur" />
+                                    @blur="handleBlur"
+                                    @keydown.enter="handleBlur"/>
                                 <div v-show="!editing">@{{prefix}} @{{type == 'number' ? displayDollerFormat(modelValue) : modelValue}} @{{suffix}}</div>
                                 <div v-show="!editing && !modelValue" class="screen-only"> --- </div>
                             </div>`,
@@ -722,6 +766,7 @@
                         this.editing = true;
                         this.$nextTick(() => {
                             this.$refs.textarea.focus();
+                            this.$refs.textarea.select();
                         });
                     },
                     resize() {
@@ -729,12 +774,16 @@
                         textarea.style.height = textarea.scrollHeight + 'px';
                     },
                     handleChange(){
-                        this.$emit('update:modelValue', this.$refs.textarea.value);
-                        this.resize();
+                        if (this.$refs.textarea) {
+                            this.$emit('update:modelValue', this.$refs.textarea.value);
+                            this.resize();
+                        }
                     },
                     handleBlur(){
                         this.editing = false;
-                        this.$emit('update:modelValue', this.$refs.textarea.value);
+                        if (this.$refs.textarea) {
+                            this.$emit('update:modelValue', this.$refs.textarea.value);
+                        }
                     }
                 }
             })
@@ -747,6 +796,8 @@
                 data() {
                     return {
                         edited: false,
+                        floatNote: true,
+                        pages: 1,
                         invoice:{
                             id: @json($invoice->id),
                             self_ref: @json($invoice?->self_ref ?? $invoice?->job?->job_code ?? $invoice->localtask?->code ?? $invoice->task?->code ?? ' - '),
@@ -758,6 +809,10 @@
                 methods: {
                     popup,
                     displayDollerFormat,
+                    toggleClass( e, className ){
+                        console.log(e, className);
+                        e.target.classList.toggle(className);
+                    },
                     submitInvoice(){
                         const { invoice } = this;
                         axios.post('/admin/api/invoice', invoice)
@@ -774,6 +829,15 @@
                 mounted() {
                     // this.getJobsInvoices();
                     // console.log('this.invoice');
+
+                    document.querySelectorAll('.table-body tr').forEach( tr => {
+                        tr.addEventListener('click', e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log(e.target);
+                            e.target.parentElement.parentElement.classList.toggle('pagebreak');
+                        })
+                    })
                 }
             })
             .mount('#vue-app')
