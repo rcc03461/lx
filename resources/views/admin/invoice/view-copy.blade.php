@@ -678,7 +678,6 @@
     </section>
 
 
-    <script src="/vendor/dcat-admin/dcat/plugins/vendors.min.js?v2.2.2-beta"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -756,7 +755,6 @@
                         default: 'textarea'
                     }
                 },
-                emits: ['update:modelValue'],
                 data() {
                     return {
                         editing: false,
@@ -801,10 +799,9 @@
                         floatNote: true,
                         pages: 1,
                         invoice:{
-                            ...@json($invoice),
+                            id: @json($invoice->id),
                             self_ref: @json($invoice?->self_ref ?? $invoice?->job?->job_code ?? $invoice->localtask?->code ?? $invoice->task?->code ?? ' - '),
-                        },
-                        items: [],
+                        }
                     }
                 },
                 watch:{
@@ -816,89 +813,6 @@
                         console.log(e, className);
                         e.target.classList.toggle(className);
                     },
-                    // getItems( invoice ){
-                    //     const items = [];
-
-                    //     let running_index = 1;
-
-                    //     // words
-                    //     if(invoice.words.eng.words){
-                    //         items.push({
-                    //             id: uuid(),
-                    //             key: running_index++,
-                    //             type: 'words',
-                    //             desc: ' - Chinese to English',
-                    //             qty: invoice.pages.eng.words,
-                    //             unit: invoice.words.eng.unit,
-                    //             unit_price: invoice.words.eng.price,
-                    //             total: parseFloat(invoice.words.eng.price) * parseFloat(invoice.words.eng.words),
-                    //         })
-                    //     }
-
-                    //     if(invoice.words.chi.words){
-                    //         items.push({
-                    //             id: uuid(),
-                    //             key: running_index++,
-                    //             type: 'words',
-                    //             desc: ' - English to Chinese',
-                    //             qty: invoice.pages.chi.words,
-                    //             unit: invoice.words.chi.unit,
-                    //             unit_price: invoice.words.chi.price,
-                    //             total: parseFloat(invoice.words.chi.price) * parseFloat(invoice.words.chi.words),
-                    //         })
-                    //     }
-
-                    //     //pages
-                    //     if(invoice.pages.eng.words){
-                    //         items.push({
-                    //             id: uuid(),
-                    //             key: running_index++,
-                    //             type: 'pages',
-                    //             desc: ' - Chinese to English',
-                    //             qty: invoice.pages.eng.pages,
-                    //             unit: invoice.pages.eng.unit,
-                    //             unit_price: invoice.pages.eng.price,
-                    //             total: parseFloat(invoice.pages.eng.price) * parseFloat(invoice.pages.eng.pages),
-                    //         })
-                    //     }
-
-                    //     if(invoice.pages.chi.words){
-                    //         items.push({
-                    //             id: uuid(),
-                    //             key: running_index++,
-                    //             type: 'pages',
-                    //             desc: ' - English to Chinese',
-                    //             qty: invoice.pages.chi.pages,
-                    //             unit: invoice.pages.chi.unit,
-                    //             unit_price: invoice.pages.chi.price,
-                    //             total: parseFloat(invoice.pages.chi.price) * parseFloat(invoice.pages.chi.words),
-                    //         })
-                    //     }
-
-                    //     // others
-                    //     if(invoice.other){
-                    //         invoice.other.forEach( other => {
-                    //             items.push({
-                    //                 id: uuid(),
-                    //                 key: running_index++,
-                    //                 type: 'others',
-                    //                 desc: other.desc,
-                    //                 qty: other.qty,
-                    //                 unit: other.unit,
-                    //                 unit_price: other.price,
-                    //                 total: parseFloat(other.price) * parseFloat(other.qty),
-                    //             })
-                    //         })
-                    //     }
-
-
-                    //     console.log(items);
-
-                    //     return [
-                    //         123123
-                    //     ];
-
-                    // },
                     submitInvoice(){
                         const { invoice } = this;
                         axios.post('/admin/api/invoice', invoice)
@@ -913,28 +827,17 @@
                     }
                 },
                 mounted() {
+                    // this.getJobsInvoices();
+                    // console.log('this.invoice');
 
-                    // const { invoice, getItems } = this;
-                    // this.items = Object.assign([], getItems(invoice));
-
-
-
-                    // document.querySelectorAll('.table-body tr').forEach( tr => {
-                    //     tr.addEventListener('click', e => {
-                    //         e.preventDefault();
-                    //         e.stopPropagation();
-                    //         console.log(e.target);
-                    //         e.target.parentElement.parentElement.classList.toggle('pagebreak');
-                    //     })
-                    // })
-
-                        $('.table-body tr').click(function(e) {
+                    document.querySelectorAll('.table-body tr').forEach( tr => {
+                        tr.addEventListener('click', e => {
                             e.preventDefault();
                             e.stopPropagation();
                             console.log(e.target);
-                            $(this).toggleClass('pagebreak');
-                        });
-
+                            e.target.parentElement.parentElement.classList.toggle('pagebreak');
+                        })
+                    })
                 }
             })
             .mount('#vue-app')
