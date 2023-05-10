@@ -233,7 +233,7 @@ class LXInvoicesChart extends Line
         ->get()
         ->groupBy(function($item, $key){
             // dd($item);
-            return $item->task?->client?->name ?? $item->localtask?->client?->name ?? 'Other';
+            return $item->task?->client?->name ?? $item->localtask?->client?->name ?? "Cre8 ( Greater China ) Limited";
         })
         ->map(function($invoices, $client) use($day_series, $format) {
             // dd($invoices);
@@ -248,8 +248,15 @@ class LXInvoicesChart extends Line
         })
         ->values()
         ->toArray();
+        // ->map(function($invs, $key){
+        //     return [
+        //         'name' => $key,
+        //         'data' => $invs->map(fn($inv)=>$inv->id)->toArray(),
+        //     ];
+        // })
         ;
 
+        // dd($series);
         // dd($invoices);
         // Cache::forget("nexgen_profit_loss_{$by}");
 
