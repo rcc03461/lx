@@ -80,7 +80,7 @@ class InvoiceController extends AdminController
             $grid->column('invoiceCode', 'C8 Inv.')->sortable();
             $grid->column('company')->width(300)->display(function(){
                 $displayname =  $this->job?->company ?? $this->localtask?->title ?? "";
-                $display_description = $this->job?->jobdescription ?? $this->localtask->description;
+                $display_description = $this->job?->jobdescription ?? $this->localtask?->description;
                 return <<<HTML
                 $displayname
                 <div class="text-gray-400">{$display_description}</div>
