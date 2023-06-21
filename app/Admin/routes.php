@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Admin\Controllers\TaskController;
 use App\Admin\Controllers\C8CJobController;
 use App\Admin\Controllers\VendorController;
+use App\Admin\Controllers\AccountController;
 use App\Admin\Controllers\InvoiceController;
 use App\Admin\Controllers\PurchaseOrderController;
 
@@ -32,6 +33,8 @@ Route::group([
 
     $router->resource('client', 'ClientController');
     $router->resource('task', 'TaskController');
+    $router->resource('account', 'AccountController');
+    $router->get('account/report/{type}', [AccountController::class, 'report']);
     // $router->resource('invoice', 'InvoiceController');
 
     // $router->get('jobs/build', [JobController::class, 'build']);
