@@ -96,6 +96,9 @@ class InvoiceController extends AdminController
             $grid->column('invoiceDate')->display(function ($invoiceDate) {
                 return $invoiceDate?->format('Y-m-d');
             })->sortable();
+            $grid->column('settlement_date')->display(function ($settlement_date) {
+                return $settlement_date?->format('Y-m-d');
+            })->sortable()->editable(true);
             $grid->column('total')->sortable();
             // $grid->column('vendor_total');
             $grid->column('vendor_total')->display(function () {
@@ -167,6 +170,7 @@ class InvoiceController extends AdminController
             $show->field('tranRemark');
             $show->field('total');
             $show->field('invoiceDate');
+            $show->field('settlement_date');
             $show->field('reviseDate');
             $show->field('words');
             $show->field('pages');
@@ -192,8 +196,9 @@ class InvoiceController extends AdminController
             $form->text('task_id');
             $form->text('tranRemark');
             $form->text('total');
-            $form->text('invoiceDate');
-            $form->text('reviseDate');
+            $form->date('invoiceDate');
+            $form->date('settlement_date');
+            $form->date('reviseDate');
             $form->switch('no_more_sync');
             $form->text('words');
             $form->text('pages');

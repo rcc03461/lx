@@ -26,6 +26,7 @@ class Invoice extends Model
         "tranRemark",
         "total",
         "invoiceDate",
+        "settlement_date",
         "reviseDate",
         "words",
         "pages",
@@ -52,6 +53,7 @@ class Invoice extends Model
 
     protected $dates = [
         'invoiceDate',
+        'settlement_date',
         'reviseDate',
     ];
 

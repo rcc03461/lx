@@ -58,6 +58,7 @@ class AccountController extends Controller
                     "costing" => number_format($cost ?? 0, 2),
                     "net" => number_format($invoice->total - $cost, 2),
                     "due_date" => $due_date,
+                    "settlement_date" => $invoice->settlement_date?->format('Y-m-d'),
                     "jobtypeKey" => $invoice?->job?->jobtypeKey,
                     "view" => "<a data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>",
                 ];
@@ -72,6 +73,7 @@ class AccountController extends Controller
                 ["title" => "Costing", "data" => "costing"],
                 ["title" => "Net Amount", "data" => "net"],
                 ["title" => "Due Date", "data" => "due_date"],
+                ["title" => "Settlement Date", "data" => "settlement_date"],
                 ["title" => "Job Type", "data" => "jobtypeKey"],
                 ["title" => "View", "data" => "view"],
             ]
