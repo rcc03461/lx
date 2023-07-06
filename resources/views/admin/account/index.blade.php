@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 {{-- <label for="">&nbsp;</label> --}}
-                <button class="btn set-settlment-date">Set Selected</button>
+                <button class="btn set-settlment-date">Set Selected Settlement Date </button>
             </div>
         </div>
     </div>
@@ -99,6 +99,7 @@
                     ids: ids.toArray()
                 },
                 success: function(data){
+
                     $('.search').click();
                 }
             });

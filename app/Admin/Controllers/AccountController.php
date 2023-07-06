@@ -46,6 +46,10 @@ class AccountController extends Controller
         return [
             "data" => $invoices->map(function ($invoice) {
                 $cost = $invoice?->localtask?->pos->sum('total') ?? $invoice?->task?->pos->sum('total');
+                $pos = $invoice?->localtask?->pos ?? $invoice?->task?->pos;
+                $pos_btns = collect($pos)->map(function ($po) {
+                    return "<a class='text-blue-500 hover:text-blue-600' data-popup href='/admin/purchase-orders/{$po->id}/view'>PO</a>";
+                })->implode(' | ');
                 $invoice_date = $invoice->invoiceDate?->clone()->format('Y-m-d');
                 $due_date = $invoice->invoiceDate->clone()?->addDays(30)->format('Y-m-d');
                 $net =  $invoice->total - $cost;
@@ -62,7 +66,7 @@ class AccountController extends Controller
                     "due_date" => $due_date,
                     "settlement_date" => $invoice->settlement_date?->format('Y-m-d'),
                     "jobtypeKey" => $invoice?->job?->jobtypeKey,
-                    "view" => "<a class='text-blue-500 hover:text-blue-600' data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>",
+                    "view" => "<a class='text-blue-500 hover:text-blue-600 mr-2' data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>" . $pos_btns,
                 ];
             }),
             "columns" => [
