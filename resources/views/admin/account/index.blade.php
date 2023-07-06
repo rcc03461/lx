@@ -14,12 +14,23 @@
             <button class="btn search">Search</button>
         </div>
     </div>
-    <div class="flex flex-shrink-0 items-end gap-4">
+    <div class="flex flex-shrink-0 items-end gap-4 justify-between">
         <div class="form-group">
             <label for="search_type">Type</label>
             <select class="form-control" name="search_type" id="">
                 <option value="gp">GP Report</option>
             </select>
+        </div>
+        <div id="update-settlement-date" class="flex gap-4">
+            <div class="form-group">
+                {{-- <label for="settlement_date">settlement_date</label> --}}
+                {{-- default month end --}}
+                <input class="form-control" type="date" name="settlement_date" value="{{ date('Y-m-d') }}" id="">
+            </div>
+            <div class="form-group">
+                {{-- <label for="">&nbsp;</label> --}}
+                <button class="btn set-settlment-date">Set Selected</button>
+            </div>
         </div>
     </div>
     <div id="loaded-content">
@@ -52,9 +63,46 @@
                         data: data.data,
                         columns: data.columns
                     });
+                    table.on('click', 'tbody tr', (e) => {
+                        console.log(e.currentTarget, 'clicked');
+                        let classList = e.currentTarget.classList;
+
+                        if (classList.contains('selected')) {
+                            $(e.currentTarget).removeClass('selected bg-blue-500');
+                            // classList.remove('selected bg-blue-500');
+                        }
+                        else {
+                            // table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                            $(e.currentTarget).addClass('selected bg-blue-500');
+                            // classList.add('selected bg-blue-500');
+
+                        }
+                    });
                     // $('datatable').dataTable();
                 }
             });
         });
+
+        // set settlement date
+        $('.set-settlment-date').on('click', function(){
+            const settlement_date = $('input[name="settlement_date"]').val();
+            const selected = $('#datatable').DataTable().rows('.selected').data();
+            // console.log(selected);
+            const ids = selected.map((item) => item.id);
+            console.log(ids.toArray(), settlement_date);
+
+            $.ajax({
+                url: `api/account/update_settlements`,
+                type: "POST",
+                data: {
+                    settlement_date: settlement_date,
+                    ids: ids.toArray()
+                },
+                success: function(data){
+                    $('.search').click();
+                }
+            });
+        });
+
     });
 </script>

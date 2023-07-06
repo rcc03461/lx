@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Invoice;
 use Dcat\Admin\Layout\Row;
+use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Metrics\Examples;
@@ -47,6 +48,7 @@ class AccountController extends Controller
                 $cost = $invoice?->localtask?->pos->sum('total') ?? $invoice?->task?->pos->sum('total');
                 $invoice_date = $invoice->invoiceDate?->clone()->format('Y-m-d');
                 $due_date = $invoice->invoiceDate->clone()?->addDays(30)->format('Y-m-d');
+                $net =  $invoice->total - $cost;
                 return [
                     "id" => $invoice->id,
                     "invoiceCode" => $invoice->invoiceCode,
@@ -56,11 +58,11 @@ class AccountController extends Controller
                     "lx_job_no" => ($invoice->localtask?->lx_no ?? $invoice->task?->lx_no),
                     "total" => number_format($invoice->total, 2),
                     "costing" => number_format($cost ?? 0, 2),
-                    "net" => number_format($invoice->total - $cost, 2),
+                    "net" => '<div class="'. ($net < 0 ? 'bg-red-300' : '') .'">'.number_format($net, 2)."</div>",
                     "due_date" => $due_date,
                     "settlement_date" => $invoice->settlement_date?->format('Y-m-d'),
                     "jobtypeKey" => $invoice?->job?->jobtypeKey,
-                    "view" => "<a data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>",
+                    "view" => "<a class='text-blue-500 hover:text-blue-600' data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>",
                 ];
             }),
             "columns" => [
@@ -77,6 +79,27 @@ class AccountController extends Controller
                 ["title" => "Job Type", "data" => "jobtypeKey"],
                 ["title" => "View", "data" => "view"],
             ]
+        ];
+    }
+
+    public function update_settlements( Request $request )
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'required|integer',
+            'settlement_date' => 'required|date',
+        ]);
+
+        Invoice::whereIn('id', request()->get('ids'))->update([
+            'settlement_date' => request()->get('settlement_date'),
+        ]);
+        // $invoces->each(function ($invoice) {
+        //     $invoice->settlement_date = request()->get('settlement_date');
+        //     $invoice->save();
+        // });
+        return [
+            "status" => "success",
+            "message" => "Settlement date updated",
         ];
     }
 }

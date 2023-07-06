@@ -35,6 +35,7 @@ Route::group([
     $router->resource('task', 'TaskController');
     $router->resource('account', 'AccountController');
     $router->get('account/report/{type}', [AccountController::class, 'report']);
+    $router->post('api/account/update_settlements', [AccountController::class, 'update_settlements']);
     // $router->resource('invoice', 'InvoiceController');
 
     // $router->get('jobs/build', [JobController::class, 'build']);
