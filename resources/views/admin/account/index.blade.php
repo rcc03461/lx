@@ -33,9 +33,10 @@
             </div>
         </div>
     </div>
-    <div id="loaded-content">
-
+    <div class="text-center text-lg font-bold sticky z-10 top-20 bg-white py-2 border shadow-md">
+        Selected Total: <span id="selected-total" class="w-24"></span>
     </div>
+    <div id="loaded-content"></div>
 </section>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
@@ -57,27 +58,61 @@
                 success: function(data){
                     $('#loaded-content').html("");
                     // table.destroy();
-                    const table = $(`<table id="datatable" ></table>`).appendTo('#loaded-content');
-                    table.dataTable({
+                    $(`<table id="datatable" ></table>`).appendTo('#loaded-content');
+                    const table = new DataTable('#datatable', {
                         lengthMenu: [[-1], ["All"]],
                         data: data.data,
-                        columns: data.columns
+                        columns: data.columns,
+                        width: '100%',
+                        select: true,
+                        createdRow( row, data, dataIndex ) {
+                            // console.log(row, data, dataIndex);
+                            // console.log(row);
+                            // $(row).addClass('bg-blue-500');
+                        }
                     });
+
                     table.on('click', 'tbody tr', (e) => {
                         console.log(e.currentTarget, 'clicked');
                         let classList = e.currentTarget.classList;
 
                         if (classList.contains('selected')) {
                             $(e.currentTarget).removeClass('selected bg-blue-500');
-                            // classList.remove('selected bg-blue-500');
                         }
                         else {
-                            // table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
                             $(e.currentTarget).addClass('selected bg-blue-500');
-                            // classList.add('selected bg-blue-500');
-
                         }
+
+                        // selected-total
+                        const selected = $('#datatable').DataTable().rows('.selected').data();
+                        const total = selected.reduce((acc, item) => {
+                            // 18,738.00 => 18738.00
+                            const amount = parseFloat(item.total.replace(/,/g, ''));
+                            return acc + amount;
+                        }, 0);
+                        // format to 18,738.00
+                        $('#selected-total').html(total.toLocaleString('en-US', {minimumFractionDigits: 2}));
                     });
+
+
+                    // Add event listener for opening and closing details
+                    // table.on('click', 'td.dt-control', function (e) {
+                    //     let tr = e.target.closest('tr');
+                    //     let row = table.row(tr);
+                    //     // console.log(table, tr, 'clicked');
+
+                    //     if (row.child.isShown()) {
+                    //         // This row is already open - close it
+                    //         row.child.hide();
+                    //     }
+                    //     else {
+                    //         // Open this row
+                    //         row.child("format(row.data())").show();
+                    //     }
+                    // });
+
+
+
                     // $('datatable').dataTable();
                 }
             });

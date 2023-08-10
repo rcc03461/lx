@@ -70,17 +70,17 @@ class AccountController extends Controller
                 ];
             }),
             "columns" => [
-                ["title" => "Invoice #", "data" => "invoiceCode"],
+                ["title" => "LX Ref", "data" => "lx_no"],
+                // ["title" => "Invoice #", "data" => "invoiceCode"],
                 ["title" => "Invoice Date", "data" => "invoiceDate"],
                 ["title" => "Client", "data" => "client"],
-                ["title" => "Total", "data" => "total", "className" => "text-right"],
                 ["title" => "LX No", "data" => "lx_job_no"],
-                ["title" => "LX Ref", "data" => "lx_no"],
+                ["title" => "Total", "data" => "total", "className" => "text-right"],
                 ["title" => "Costing", "data" => "costing"],
                 ["title" => "Net Amount", "data" => "net"],
                 ["title" => "Due Date", "data" => "due_date"],
                 ["title" => "Settlement Date", "data" => "settlement_date"],
-                ["title" => "Job Type", "data" => "jobtypeKey"],
+                ["title" => "Job Type", "data" => "jobtypeKey", "className" => "dt-control"],
                 ["title" => "View", "data" => "view"],
             ]
         ];
