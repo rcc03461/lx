@@ -227,7 +227,7 @@ class LXInvoicesChart extends Line
             'localtask.client',
         ])
         ->whereDate('invoiceDate', '>=', $StartDate)
-        ->whereDate('invoiceDate', '<=', today())
+        // ->whereDate('invoiceDate', '<=', today())
         // ->selectRaw("DATE_FORMAT(invoiceDate, '{$format}') as date, sum(total) as total")
         // ->groupBy('date')
         ->get()
