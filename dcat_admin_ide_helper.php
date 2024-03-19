@@ -50,6 +50,16 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection email
      * @property Grid\Column|Collection phone
      * @property Grid\Column|Collection address
+     * @property Grid\Column|Collection message_id
+     * @property Grid\Column|Collection from
+     * @property Grid\Column|Collection to
+     * @property Grid\Column|Collection cc
+     * @property Grid\Column|Collection bcc
+     * @property Grid\Column|Collection subject
+     * @property Grid\Column|Collection html_body
+     * @property Grid\Column|Collection text_body
+     * @property Grid\Column|Collection email_datetime
+     * @property Grid\Column|Collection has_attachments
      * @property Grid\Column|Collection uuid
      * @property Grid\Column|Collection connection
      * @property Grid\Column|Collection queue
@@ -67,12 +77,15 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection tranRemark
      * @property Grid\Column|Collection total
      * @property Grid\Column|Collection invoiceDate
+     * @property Grid\Column|Collection settlement_date
      * @property Grid\Column|Collection reviseDate
      * @property Grid\Column|Collection words
      * @property Grid\Column|Collection pages
      * @property Grid\Column|Collection other
      * @property Grid\Column|Collection less
      * @property Grid\Column|Collection lx_code
+     * @property Grid\Column|Collection self_ref
+     * @property Grid\Column|Collection no_more_sync
      * @property Grid\Column|Collection token
      * @property Grid\Column|Collection tokenable_type
      * @property Grid\Column|Collection tokenable_id
@@ -80,12 +93,28 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection last_used_at
      * @property Grid\Column|Collection expires_at
      * @property Grid\Column|Collection vendor_id
+     * @property Grid\Column|Collection job_date
      * @property Grid\Column|Collection items
+     * @property Grid\Column|Collection settled_at
+     * @property Grid\Column|Collection settled_ref
+     * @property Grid\Column|Collection po_no
+     * @property Grid\Column|Collection attachments
+     * @property Grid\Column|Collection wip_at
      * @property Grid\Column|Collection client_id
      * @property Grid\Column|Collection lx_no
+     * @property Grid\Column|Collection job_no
      * @property Grid\Column|Collection remark
      * @property Grid\Column|Collection job_in_date
      * @property Grid\Column|Collection publish_date
+     * @property Grid\Column|Collection end_date
+     * @property Grid\Column|Collection estimated_revenue
+     * @property Grid\Column|Collection sequence
+     * @property Grid\Column|Collection batch_id
+     * @property Grid\Column|Collection family_hash
+     * @property Grid\Column|Collection should_display_on_index
+     * @property Grid\Column|Collection content
+     * @property Grid\Column|Collection entry_uuid
+     * @property Grid\Column|Collection tag
      * @property Grid\Column|Collection email_verified_at
      *
      * @method Grid\Column|Collection id(string $label = null)
@@ -127,6 +156,16 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection email(string $label = null)
      * @method Grid\Column|Collection phone(string $label = null)
      * @method Grid\Column|Collection address(string $label = null)
+     * @method Grid\Column|Collection message_id(string $label = null)
+     * @method Grid\Column|Collection from(string $label = null)
+     * @method Grid\Column|Collection to(string $label = null)
+     * @method Grid\Column|Collection cc(string $label = null)
+     * @method Grid\Column|Collection bcc(string $label = null)
+     * @method Grid\Column|Collection subject(string $label = null)
+     * @method Grid\Column|Collection html_body(string $label = null)
+     * @method Grid\Column|Collection text_body(string $label = null)
+     * @method Grid\Column|Collection email_datetime(string $label = null)
+     * @method Grid\Column|Collection has_attachments(string $label = null)
      * @method Grid\Column|Collection uuid(string $label = null)
      * @method Grid\Column|Collection connection(string $label = null)
      * @method Grid\Column|Collection queue(string $label = null)
@@ -144,12 +183,15 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection tranRemark(string $label = null)
      * @method Grid\Column|Collection total(string $label = null)
      * @method Grid\Column|Collection invoiceDate(string $label = null)
+     * @method Grid\Column|Collection settlement_date(string $label = null)
      * @method Grid\Column|Collection reviseDate(string $label = null)
      * @method Grid\Column|Collection words(string $label = null)
      * @method Grid\Column|Collection pages(string $label = null)
      * @method Grid\Column|Collection other(string $label = null)
      * @method Grid\Column|Collection less(string $label = null)
      * @method Grid\Column|Collection lx_code(string $label = null)
+     * @method Grid\Column|Collection self_ref(string $label = null)
+     * @method Grid\Column|Collection no_more_sync(string $label = null)
      * @method Grid\Column|Collection token(string $label = null)
      * @method Grid\Column|Collection tokenable_type(string $label = null)
      * @method Grid\Column|Collection tokenable_id(string $label = null)
@@ -157,12 +199,28 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection last_used_at(string $label = null)
      * @method Grid\Column|Collection expires_at(string $label = null)
      * @method Grid\Column|Collection vendor_id(string $label = null)
+     * @method Grid\Column|Collection job_date(string $label = null)
      * @method Grid\Column|Collection items(string $label = null)
+     * @method Grid\Column|Collection settled_at(string $label = null)
+     * @method Grid\Column|Collection settled_ref(string $label = null)
+     * @method Grid\Column|Collection po_no(string $label = null)
+     * @method Grid\Column|Collection attachments(string $label = null)
+     * @method Grid\Column|Collection wip_at(string $label = null)
      * @method Grid\Column|Collection client_id(string $label = null)
      * @method Grid\Column|Collection lx_no(string $label = null)
+     * @method Grid\Column|Collection job_no(string $label = null)
      * @method Grid\Column|Collection remark(string $label = null)
      * @method Grid\Column|Collection job_in_date(string $label = null)
      * @method Grid\Column|Collection publish_date(string $label = null)
+     * @method Grid\Column|Collection end_date(string $label = null)
+     * @method Grid\Column|Collection estimated_revenue(string $label = null)
+     * @method Grid\Column|Collection sequence(string $label = null)
+     * @method Grid\Column|Collection batch_id(string $label = null)
+     * @method Grid\Column|Collection family_hash(string $label = null)
+     * @method Grid\Column|Collection should_display_on_index(string $label = null)
+     * @method Grid\Column|Collection content(string $label = null)
+     * @method Grid\Column|Collection entry_uuid(string $label = null)
+     * @method Grid\Column|Collection tag(string $label = null)
      * @method Grid\Column|Collection email_verified_at(string $label = null)
      */
     class Grid {}
@@ -209,6 +267,16 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection email
      * @property Show\Field|Collection phone
      * @property Show\Field|Collection address
+     * @property Show\Field|Collection message_id
+     * @property Show\Field|Collection from
+     * @property Show\Field|Collection to
+     * @property Show\Field|Collection cc
+     * @property Show\Field|Collection bcc
+     * @property Show\Field|Collection subject
+     * @property Show\Field|Collection html_body
+     * @property Show\Field|Collection text_body
+     * @property Show\Field|Collection email_datetime
+     * @property Show\Field|Collection has_attachments
      * @property Show\Field|Collection uuid
      * @property Show\Field|Collection connection
      * @property Show\Field|Collection queue
@@ -226,12 +294,15 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection tranRemark
      * @property Show\Field|Collection total
      * @property Show\Field|Collection invoiceDate
+     * @property Show\Field|Collection settlement_date
      * @property Show\Field|Collection reviseDate
      * @property Show\Field|Collection words
      * @property Show\Field|Collection pages
      * @property Show\Field|Collection other
      * @property Show\Field|Collection less
      * @property Show\Field|Collection lx_code
+     * @property Show\Field|Collection self_ref
+     * @property Show\Field|Collection no_more_sync
      * @property Show\Field|Collection token
      * @property Show\Field|Collection tokenable_type
      * @property Show\Field|Collection tokenable_id
@@ -239,12 +310,28 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection last_used_at
      * @property Show\Field|Collection expires_at
      * @property Show\Field|Collection vendor_id
+     * @property Show\Field|Collection job_date
      * @property Show\Field|Collection items
+     * @property Show\Field|Collection settled_at
+     * @property Show\Field|Collection settled_ref
+     * @property Show\Field|Collection po_no
+     * @property Show\Field|Collection attachments
+     * @property Show\Field|Collection wip_at
      * @property Show\Field|Collection client_id
      * @property Show\Field|Collection lx_no
+     * @property Show\Field|Collection job_no
      * @property Show\Field|Collection remark
      * @property Show\Field|Collection job_in_date
      * @property Show\Field|Collection publish_date
+     * @property Show\Field|Collection end_date
+     * @property Show\Field|Collection estimated_revenue
+     * @property Show\Field|Collection sequence
+     * @property Show\Field|Collection batch_id
+     * @property Show\Field|Collection family_hash
+     * @property Show\Field|Collection should_display_on_index
+     * @property Show\Field|Collection content
+     * @property Show\Field|Collection entry_uuid
+     * @property Show\Field|Collection tag
      * @property Show\Field|Collection email_verified_at
      *
      * @method Show\Field|Collection id(string $label = null)
@@ -286,6 +373,16 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection email(string $label = null)
      * @method Show\Field|Collection phone(string $label = null)
      * @method Show\Field|Collection address(string $label = null)
+     * @method Show\Field|Collection message_id(string $label = null)
+     * @method Show\Field|Collection from(string $label = null)
+     * @method Show\Field|Collection to(string $label = null)
+     * @method Show\Field|Collection cc(string $label = null)
+     * @method Show\Field|Collection bcc(string $label = null)
+     * @method Show\Field|Collection subject(string $label = null)
+     * @method Show\Field|Collection html_body(string $label = null)
+     * @method Show\Field|Collection text_body(string $label = null)
+     * @method Show\Field|Collection email_datetime(string $label = null)
+     * @method Show\Field|Collection has_attachments(string $label = null)
      * @method Show\Field|Collection uuid(string $label = null)
      * @method Show\Field|Collection connection(string $label = null)
      * @method Show\Field|Collection queue(string $label = null)
@@ -303,12 +400,15 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection tranRemark(string $label = null)
      * @method Show\Field|Collection total(string $label = null)
      * @method Show\Field|Collection invoiceDate(string $label = null)
+     * @method Show\Field|Collection settlement_date(string $label = null)
      * @method Show\Field|Collection reviseDate(string $label = null)
      * @method Show\Field|Collection words(string $label = null)
      * @method Show\Field|Collection pages(string $label = null)
      * @method Show\Field|Collection other(string $label = null)
      * @method Show\Field|Collection less(string $label = null)
      * @method Show\Field|Collection lx_code(string $label = null)
+     * @method Show\Field|Collection self_ref(string $label = null)
+     * @method Show\Field|Collection no_more_sync(string $label = null)
      * @method Show\Field|Collection token(string $label = null)
      * @method Show\Field|Collection tokenable_type(string $label = null)
      * @method Show\Field|Collection tokenable_id(string $label = null)
@@ -316,18 +416,34 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection last_used_at(string $label = null)
      * @method Show\Field|Collection expires_at(string $label = null)
      * @method Show\Field|Collection vendor_id(string $label = null)
+     * @method Show\Field|Collection job_date(string $label = null)
      * @method Show\Field|Collection items(string $label = null)
+     * @method Show\Field|Collection settled_at(string $label = null)
+     * @method Show\Field|Collection settled_ref(string $label = null)
+     * @method Show\Field|Collection po_no(string $label = null)
+     * @method Show\Field|Collection attachments(string $label = null)
+     * @method Show\Field|Collection wip_at(string $label = null)
      * @method Show\Field|Collection client_id(string $label = null)
      * @method Show\Field|Collection lx_no(string $label = null)
+     * @method Show\Field|Collection job_no(string $label = null)
      * @method Show\Field|Collection remark(string $label = null)
      * @method Show\Field|Collection job_in_date(string $label = null)
      * @method Show\Field|Collection publish_date(string $label = null)
+     * @method Show\Field|Collection end_date(string $label = null)
+     * @method Show\Field|Collection estimated_revenue(string $label = null)
+     * @method Show\Field|Collection sequence(string $label = null)
+     * @method Show\Field|Collection batch_id(string $label = null)
+     * @method Show\Field|Collection family_hash(string $label = null)
+     * @method Show\Field|Collection should_display_on_index(string $label = null)
+     * @method Show\Field|Collection content(string $label = null)
+     * @method Show\Field|Collection entry_uuid(string $label = null)
+     * @method Show\Field|Collection tag(string $label = null)
      * @method Show\Field|Collection email_verified_at(string $label = null)
      */
     class Show {}
 
     /**
-
+     
      */
     class Form {}
 
@@ -335,19 +451,19 @@ namespace Dcat\Admin {
 
 namespace Dcat\Admin\Grid {
     /**
-
+     
      */
     class Column {}
 
     /**
-
+     
      */
     class Filter {}
 }
 
 namespace Dcat\Admin\Show {
     /**
-
+     
      */
     class Field {}
 }

@@ -31,6 +31,7 @@ class HomeController extends Controller
 
                     // $column->row(new Examples\Sessions());
                     // $column->row(new Examples\ProductOrders());
+                    // $column->row(new Examples\Sessions());
                 });
                 // $row->column(6, function (Column $column) {
                 //     $column->row(function (Row $row) {
@@ -38,7 +39,6 @@ class HomeController extends Controller
                 //         $row->column(6, new Examples\NewDevices());
                 //     });
 
-                //     $column->row(new Examples\Sessions());
                 //     $column->row(new Examples\ProductOrders());
                 // });
             });

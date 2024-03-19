@@ -85,9 +85,10 @@ HTML;
                 <div class="text-xs text-gray-400">$items_display</div>
                 HTML;
             });
-            $grid->column('total')->display(function () {
-                return number_format($this->total);
-            })->sortable();
+            $grid->column('total')
+            ->currency()
+            ->editable(true)
+            ->sortable();
             $grid->column('attachments')->display(function () {
                 $attachments_display = collect($this->attachments)->map(function ($attachment) {
                     $filename = basename($attachment);
@@ -198,7 +199,13 @@ HTML;
             })
             // ->useTable()
             ;
-            $form->decimal('total');
+            $form->decimal('total')->saving(function($value) use ($form) {
+                $total = collect($form->items)->map(function($items){
+                    return floatval($items['qty']) * floatval($items['unit_price']);
+                })->sum();
+                // dd($total);
+                return $total;
+            });
             $form->multipleFile('attachments', 'Attachments')
             ->autoUpload()
             ->removable();

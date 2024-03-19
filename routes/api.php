@@ -3,8 +3,11 @@
 use App\Models\C8CJob;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use App\Services\MailServices;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +23,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/download_messages', function(){
+    $services = new MailServices();
+    $services->download_messages();
+});
+
+Route::get('/update_labels', function(){
+    $services = new MailServices();
+    $services->download_labels();
+});
+
 
 Route::post('/c8c_jobs', function () {
     // return request()->all();

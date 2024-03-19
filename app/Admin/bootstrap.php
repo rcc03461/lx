@@ -38,7 +38,7 @@ Admin::js('//cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
 Admin::js('//unpkg.com/vue@3/dist/vue.global.js');
 // Admin::js('/assets/js/vue.component.js');
 Admin::js('//code.jquery.com/ui/1.10.4/jquery-ui.js');
-// Admin::js('//cdn.tailwindcss.com');
+Admin::js('//cdn.tailwindcss.com');
 // <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 // Admin::js('//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js');
 // Admin::js('//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js');
@@ -47,30 +47,59 @@ Admin::js('//code.jquery.com/ui/1.10.4/jquery-ui.js');
 
 // Admin::css('//cdn.jsdelivr.net/npm/tailwindcss@3.1.8/base.css');
 Admin::css('//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css');
-Admin::css('//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+// Admin::css('//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+
+
+
+Admin::js('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js');
+Admin::js('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.js');
+Admin::css('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.css');
+Admin::css('/assets/css/email_control.css');
+
+Admin::js('//unpkg.com/vue@3/dist/vue.global.js');
+Admin::js('/assets/js/EmailControl.js');
+Admin::js('/assets/js/main.js');
 // Admin::css('//unpkg.com/vue-multiselect@2.1.4/dist/vue-multiselect.min.css');
 
 Admin::style(<<<CSS
+
+    table#grid-table.custom-data-table.data-table.table-slim tr[data-message-id] td{
+        line-height: 1 ;
+        height: auto ;
+    }
+    .row-labels{
+        border: 1px solid #e2e8f0;
+        border-radius: 0.375rem;
+        padding: 0.125rem 0.375rem;
+        box-sizing: border-box;
+    }
+
     [type=button].btn.btn-primary:not(.btn-outline),[type=submit].btn.btn-primary:not(.btn-outline) {
         background-color: #586cb1;
         border-color: #586cb1;
     }
 
+    .contextmenu-max-height .context-menu-list{
+        max-height: 300px;
+        overflow-y: auto;
+
+    }
+
 CSS);
 
 Admin::script(<<<JS
-    $(document).off('click.popup').on('click.popup', '[data-popup]', function(event){
-        event.preventDefault();
-        window.open($(this).attr('href'), '_blank', 'width=1200,height=980');
-    })
 
-    $(document).off('click.popover').on('click.popover',  '.ie-content-settlement_date input, .ie-content-end_date input, .ie-content-settled_at input, .ie-content-wip_at input', function(event){
-        event.preventDefault();
-        $( this )
-        .datepicker({
-            dateFormat: "yy-mm-dd",
-        })
-        .datepicker('show');
-        console.log('datepicker')
-    })
+    tailwind.config = {
+        corePlugins: {
+            preflight: false,
+        },
+        theme: {
+            extend: {
+                colors: {
+                    clifford: '#da373d',
+                }
+            }
+        }
+    }
+
 JS);

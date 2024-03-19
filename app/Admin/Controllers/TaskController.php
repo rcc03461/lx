@@ -7,12 +7,15 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use App\Models\C8CJob;
 use App\Models\Client;
+use Dcat\Admin\Layout\Row;
+use Dcat\Admin\Layout\Column;
+use Dcat\Admin\Layout\Content;
 use Illuminate\Support\Carbon;
 use App\Admin\Repositories\Task;
-use App\Admin\Renderable\TaskPOTable;
 use App\Models\Task as TaskModel;
 use App\Models\Task as ModelsTask;
 use App\Admin\Forms\TranslationForm;
+use App\Admin\Renderable\TaskPOTable;
 use App\Admin\Renderable\C8CJobsTable;
 use App\Admin\Renderable\TaskInvoiceTable;
 use App\Admin\Actions\Grid\CreatePOByTaskId;
@@ -120,7 +123,7 @@ HTML;
             })
             // ->editable(true)
             ;
-            
+
 //             $grid->column('invoices_')->display(function ($job) {
 //                 $invoices = collect($this->invoices)->map(function ($invoice) {
 //                     return <<<HTML

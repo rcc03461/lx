@@ -185,7 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Dacastro4\LaravelGmail\LaravelGmailServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -211,6 +211,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'LaravelGmail' => Dacastro4\LaravelGmail\Facade\LaravelGmail::class,
     ])->toArray(),
 
 ];

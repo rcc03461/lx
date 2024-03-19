@@ -5,10 +5,12 @@ use Dcat\Admin\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use App\Admin\Controllers\TaskController;
+use App\Admin\Controllers\EmailController;
 use App\Admin\Controllers\C8CJobController;
 use App\Admin\Controllers\VendorController;
 use App\Admin\Controllers\AccountController;
 use App\Admin\Controllers\InvoiceController;
+use App\Admin\Controllers\TaskControlController;
 use App\Admin\Controllers\PurchaseOrderController;
 
 Admin::routes();
@@ -34,6 +36,8 @@ Route::group([
     $router->resource('client', 'ClientController');
     $router->resource('task', 'TaskController');
     $router->resource('account', 'AccountController');
+    $router->resource('emails', 'EmailController');
+    $router->resource('labels', 'LabelController');
     $router->get('account/report/{type}', [AccountController::class, 'report']);
     $router->post('api/account/update_settlements', [AccountController::class, 'update_settlements']);
     // $router->resource('invoice', 'InvoiceController');
@@ -63,5 +67,15 @@ Route::group([
     $router->get('api/generate-invoice-no', [InvoiceController::class, 'apiGenerateInvoiceNo']);
 
 
+    // ================================== Control Panel
+
+    // $router->get('control_panel', [TaskControlController::class, 'index']);
+    $router->get('control_panel', [TaskControlController::class, 'inbox']);
+    $router->get('control_panel/action/{message_id}', [TaskControlController::class, 'action']);
+
+
+    $router->get('/api/labels', [EmailController::class, 'labels']);
+    $router->get('/api/emails/{message:message_id}', [EmailController::class, 'info']);
+    $router->put('/api/emails/{message:message_id}/labels', [EmailController::class, 'updateLabels']);
 
 });
