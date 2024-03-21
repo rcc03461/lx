@@ -24,6 +24,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/hook', function(){
+    $services = new MailServices();
+    $services->download_messages();
+});
+
 Route::get('/download_messages', function(){
     $services = new MailServices();
     $services->download_messages();

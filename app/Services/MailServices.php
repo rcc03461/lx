@@ -53,24 +53,24 @@ class MailServices
     public function download_messages( $limit = 5 ){
         $messages = LaravelGmail::check() ? LaravelGmail::message()->take($limit)->preload()->all() : [];
 
-
         foreach ($messages as $key => $message) {
 
             $message_id = $message->getId();
 
             $attachments = [];
-            if ($message->hasAttachments()) {
+
+            $exist = Email::where("message_id", $message_id)->exists();
+
+            if ( $message->hasAttachments() && $exist == false ) {
                 $message->getAttachments()->each(function ($attachment) use($message_id, &$attachments) {
                     // ($path = null, $filename = null, $disk = 'local')
                     $path = str($attachment->saveAttachmentTo( "public/attachments/{$message_id}" ))->replace("public/", "");
                     $attachments[] = $path;
                 });
-
             }
 
-            $email = Email::updateOrCreate([
-                "message_id" => $message_id,
-            ], [
+
+            $toBeUpdate = [
                 "message_id" => $message_id,
                 "subject" => $message->getSubject(),
                 "from" => $message->getFrom(),
@@ -82,9 +82,18 @@ class MailServices
                 "email_datetime" => $message->getDate()->format('Y-m-d H:i:s'),
                 "has_attachments" => $message->hasAttachments(),
                 "attachments" => $attachments,
-            ]);
-            $email->syncLabels($message->getLabels());
+            ];
+
+            if ( Email::where("message_id", $message_id)->exists() ) {
+                Email::where("message_id", $message_id)->update($toBeUpdate);
+            } else {
+                $email = Email::create($toBeUpdate);
+                $email->syncLabels($message->getLabels());
+            }
+
         }
+
+        return "success";
     }
 
     public function download_message( string $message_id ){
