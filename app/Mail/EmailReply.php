@@ -24,13 +24,23 @@ class EmailReply extends Mailable
     public function __construct($input)
     {
         // dd($input);
+        $this->input = $input;
         // $this->to = $input['to'];
         // $this->cc = $input['cc'];
         // $this->bcc = $input['bcc'];
         $this->subject = $input['subject'];
         $this->m_body = $input['body'];
+        // $this->attachments = $input['attachments'];
 
-        // dd($this);
+        // dump($input['attachments']);
+        if(isset($input['attachments'])) {
+            foreach($input['attachments'] as $path) {
+                // dump($input['attachments']);
+                $this->attachFromStorageDisk('public', $path);
+            }
+        }
+        // dd($input['attachments']);
+        // dd($this->attachments);
     }
 
     /**

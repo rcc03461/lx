@@ -54,7 +54,7 @@ class ReplyEmailForm extends Form implements LazyRenderable
             'bcc' => $bcc,
             'subject' => $input['subject'],
             'body' => $input['body'],
-            'attachments' => null,
+            'attachments' => $input['attachments'],
         ];
         return $model;
     }
@@ -80,6 +80,10 @@ class ReplyEmailForm extends Form implements LazyRenderable
         $this->editor('body')->options([
             "content_css" => '/assets/css/editor_content.css'
         ]);
+        $this->multipleFile('attachments')
+        ->downloadable()
+        ->autoUpload(true)
+        ->removable();
     }
 
     /**
@@ -95,15 +99,18 @@ class ReplyEmailForm extends Form implements LazyRenderable
         $receiver = match($this->payload['title']){
             'Reply All' => [
                 'to' => collect([])->push($email->from),
-                'cc' => $email->cc
+                'cc' => $email->cc,
+                'attachments' => [],
             ],
             'Reply' => [
                 'to' => collect([])->push($email->from),
-                'cc' => []
+                'cc' => [],
+                'attachments' => [],
             ],
             'Forward' =>[
                 'to' => [],
-                'cc' => []
+                'cc' => [],
+                'attachments' => $email->attachments,
             ],
         };
 
@@ -113,7 +120,7 @@ class ReplyEmailForm extends Form implements LazyRenderable
             'cc' => $receiver['cc'],
             'subject' => "Re: " . $email->subject,
             'body' => $this->wrapOldMessage($email, $email->html_body ),
-            'attachments' => null,
+            'attachments' => $receiver['attachments'],
         ];
     }
 

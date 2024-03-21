@@ -53,22 +53,37 @@ class MailServices
     public function download_messages( $limit = 5 ){
         $messages = LaravelGmail::check() ? LaravelGmail::message()->take($limit)->preload()->all() : [];
 
-        foreach ($messages as $key => $value) {
-            $message = Email::updateOrCreate([
-                "message_id" => $value->getId(),
+
+        foreach ($messages as $key => $message) {
+
+            $message_id = $message->getId();
+
+            $attachments = [];
+            if ($message->hasAttachments()) {
+                $message->getAttachments()->each(function ($attachment) use($message_id, &$attachments) {
+                    // ($path = null, $filename = null, $disk = 'local')
+                    $path = str($attachment->saveAttachmentTo( "public/attachments/{$message_id}" ))->replace("public/", "");
+                    $attachments[] = $path;
+                });
+
+            }
+
+            $email = Email::updateOrCreate([
+                "message_id" => $message_id,
             ], [
-                "message_id" => $value->getId(),
-                "subject" => $value->getSubject(),
-                "from" => $value->getFrom(),
-                "to" => $value->getTo(),
-                "cc" => $value->getCc(),
-                "bcc" => $value->getBcc(),
-                // "text_body" => $value->getPlainTextBody(),
-                "html_body" => $value->getHtmlBody(),
-                "email_datetime" => $value->getDate()->format('Y-m-d H:i:s'),
-                "has_attachments" => $value->hasAttachments(),
+                "message_id" => $message_id,
+                "subject" => $message->getSubject(),
+                "from" => $message->getFrom(),
+                "to" => $message->getTo(),
+                "cc" => $message->getCc(),
+                "bcc" => $message->getBcc(),
+                // "text_body" => $message->getPlainTextBody(),
+                "html_body" => $message->getHtmlBody(),
+                "email_datetime" => $message->getDate()->format('Y-m-d H:i:s'),
+                "has_attachments" => $message->hasAttachments(),
+                "attachments" => $attachments,
             ]);
-            $message->syncLabels($value->getLabels());
+            $email->syncLabels($message->getLabels());
         }
     }
 

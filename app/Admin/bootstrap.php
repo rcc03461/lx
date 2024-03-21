@@ -57,11 +57,15 @@ Admin::css('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.con
 Admin::css('/assets/css/email_control.css');
 
 Admin::js('//unpkg.com/vue@3/dist/vue.global.js');
-Admin::js('/assets/js/EmailControl.js');
+// Admin::js('/assets/js/EmailControl.js');
 Admin::js('/assets/js/main.js');
 // Admin::css('//unpkg.com/vue-multiselect@2.1.4/dist/vue-multiselect.min.css');
 
 Admin::style(<<<CSS
+
+    .collapse{
+        visibility: inherit;
+    }
 
     table#grid-table.custom-data-table.data-table.table-slim tr[data-message-id] td{
         line-height: 1 ;
@@ -85,6 +89,7 @@ Admin::style(<<<CSS
 
     }
 
+
 CSS);
 
 Admin::script(<<<JS
@@ -92,13 +97,6 @@ Admin::script(<<<JS
     tailwind.config = {
         corePlugins: {
             preflight: false,
-        },
-        theme: {
-            extend: {
-                colors: {
-                    clifford: '#da373d',
-                }
-            }
         }
     }
 

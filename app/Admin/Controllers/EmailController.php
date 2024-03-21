@@ -81,10 +81,11 @@ class EmailController extends AdminController
             // $grid->column('bcc');
             $grid->column('subject')
             ->display(function($val){
-                return view('admin.rows.labels', [
+                return view('admin.rows.subject', [
                     'labels' => $this->labels,
                     'subject' => $val,
-                    'email_datetime' => $this->email_datetime
+                    'email_datetime' => $this->email_datetime,
+                    'has_attachments' => $this->has_attachments
                 ]);
             });
             // ->modal(function (Grid\Displayers\Modal $modal) {

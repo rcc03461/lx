@@ -24,6 +24,7 @@ class Email extends Model
         "text_body",
         "email_datetime",
         "has_attachments",
+        "attachments"
     ];
 
     protected $casts = [
@@ -33,6 +34,7 @@ class Email extends Model
         "cc" => "array",
         "bcc" => "array",
         "email_datetime" => "datetime",
+        "attachments" => "array"
     ];
 
 }

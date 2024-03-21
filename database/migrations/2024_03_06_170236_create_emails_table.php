@@ -25,6 +25,7 @@ class CreateEmailsTable extends Migration
             $table->mediumText('text_body')->nullable();
             $table->dateTime('email_datetime')->nullable();
             $table->boolean('has_attachments')->nullable();
+            $table->json('attachments')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
