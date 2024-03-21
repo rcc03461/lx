@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/hook', function(){
+    Log::info('hook');
     $services = new MailServices();
     $services->download_messages();
 });
