@@ -36,9 +36,7 @@ export function inlineHtml ( message ) {
 
     } );
 
-    return {
-        html
-    };
+    return html;
 }
 
 function getCid ( html ) {

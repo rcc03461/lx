@@ -11,8 +11,13 @@ const props = defineProps({
 })
 
 const form = ref({
+    from:{},
+    to:[],
+    cc:[],
+    bcc:[],
     subject: props.message.subject,
-    message: props.message.html_body
+    message: props.message.html_body,
+    attachments: props.message.attachments
 })
 
 
@@ -112,5 +117,17 @@ const editorOptions = {
           :init="editorOptions"
           v-model="form.message"
          />
+         <div>
+            <ul class="flex gap-2">
+                <li v-for="attachment in message.attachments" :key="attachment.id">
+                    <a :href="`/storage/` + attachment.path" target="_blank">
+                        <img class="size-24 object-cover" :src="`/storage/` + attachment.path" alt="">
+                        <p>
+                            {{ attachment.name }}
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
