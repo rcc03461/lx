@@ -53,6 +53,9 @@ class MailServices
     public function download_messages( $limit = 5 ){
         $messages = LaravelGmail::check() ? LaravelGmail::message()->take($limit)->preload()->all() : [];
 
+
+        // dump($messages);
+
         foreach ($messages as $key => $message) {
 
             $message_id = $message->getId();
@@ -61,13 +64,44 @@ class MailServices
 
             $exist = Email::where("message_id", $message_id)->exists();
 
-            if ( $message->hasAttachments() && $exist == false ) {
-                $message->getAttachments()->each(function ($attachment) use($message_id, &$attachments) {
+            // $htmlPlain = $message->getPlainTextBody();
+            // $htmlRaw = $message->getRawPlainTextBody ();
+            $html = $message->getHtmlBody();
+            // $headers = $message->getHeaders();
+            // echo $htmlPlain;
+            // echo $htmlRaw;
+            // echo $html;
+
+            if ( $message->hasAttachments()  ) {
+                $message->getAttachments()->each(function ($attachment) use($message_id, &$attachments, $html) {
+
+                    // dd($attachment->getData());
+
                     // ($path = null, $filename = null, $disk = 'local')
-                    $path = str($attachment->saveAttachmentTo( "public/attachments/{$message_id}" ))->replace("public/", "");
-                    $attachments[] = $path;
+                    $newNameUuid = str()->uuid();
+                    $newName = $newNameUuid . ".". $attachment->getFileName();
+
+                    // print_r($attachment->headerDetails);
+                    $path = str($attachment->saveAttachmentTo( "public/attachments/{$message_id}", $newName ))->replace("public/", "");
+                    $content_id = isset($attachment->headerDetails['Content-ID']) ? str($attachment->headerDetails['Content-ID'])->replace("<", "")->replace(">", "") : NULL;
+                    $attachments[] = [
+                        "path" => $path,
+                        // "html" => $html,
+                        "attachment_id" => $attachment->getId(),
+                        // "headers" => $headers,
+                        "attachment" => $attachment,
+                        "is_inline" => $content_id && str($html)->contains(  "cid:" . $content_id ) ? true : false,
+                        // "mime_type" => $attachment->getMimeType(),
+                        // "size" => $attachment->getSize(),
+                    ];
+                    // $attachments[] = $attachment->getData();
+
+                    // print_r($attachments);
                 });
+                // return ($attachments);
             }
+
+            // return $attachments;
 
 
             $toBeUpdate = [
@@ -84,6 +118,8 @@ class MailServices
                 "attachments" => $attachments,
             ];
 
+            // dd($toBeUpdate);
+
             if ( Email::where("message_id", $message_id)->exists() ) {
                 Email::where("message_id", $message_id)->update($toBeUpdate);
             } else {
@@ -93,7 +129,7 @@ class MailServices
 
         }
 
-        return "success";
+        return true;
     }
 
     public function download_message( string $message_id ){

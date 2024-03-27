@@ -51,6 +51,8 @@ Admin::css('//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css');
 
 
 
+
+
 Admin::js('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js');
 Admin::js('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.js');
 Admin::css('//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.css');
@@ -59,6 +61,7 @@ Admin::css('/assets/css/email_control.css');
 Admin::js('//unpkg.com/vue@3/dist/vue.global.js');
 // Admin::js('/assets/js/EmailControl.js');
 Admin::js('/assets/js/main.js');
+Admin::js('/build/assets/app.js');
 // Admin::css('//unpkg.com/vue-multiselect@2.1.4/dist/vue-multiselect.min.css');
 
 Admin::style(<<<CSS

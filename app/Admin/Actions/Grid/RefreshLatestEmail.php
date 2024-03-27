@@ -27,7 +27,8 @@ class RefreshLatestEmail extends AbstractTool
     public function handle(Request $request)
     {
         $mailServices = new MailServices();
-        $mailServices->download_messages();
+        $data = $mailServices->download_messages();
+        // return $data;
         return $this->response()->success('Processed successfully.')->refresh();
     }
 

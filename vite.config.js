@@ -22,4 +22,19 @@ export default defineConfig({
             },
         }),
     ],
+    build: {
+        rollupOptions: {
+    //         output: {
+    //             dir: 'assets/js',
+    //             file: 'bundle.js',
+    //             format: 'umd',
+    //             name: 'MyBundle'
+    //         }
+                output: {
+                    entryFileNames: `assets/[name].js`,
+                    chunkFileNames: `assets/[name].js`,
+                    assetFileNames: `assets/[name].[ext]`
+                }
+        }
+    }
 });

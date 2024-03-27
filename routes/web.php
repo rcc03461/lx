@@ -189,9 +189,9 @@ Route::get('/lx/invoices/{invoice}/view', function (InvoiceModel $invoice) {
 //     Route::resource('tasks', TaskController::class);
 // });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::resource('tasks', TaskController::class);
 // // Route::get('/tasks', function () {

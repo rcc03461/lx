@@ -5,6 +5,7 @@
                 <span
                 {{-- class="row-labels" --}}
                 @class([
+                    'email-label',
                     'row-labels',
                     "text-[".$item->color?->textColor."]" => true,
                     "bg-[".$item->color?->backgroundColor."]" => true,
@@ -13,7 +14,7 @@
             @endif
         @endforeach
     </div>
-    <span class="line-clamp-1 flex-1">
+    <span class="email-subject line-clamp-1 flex-1">
         {{ $subject }}
     </span>
     @if ($has_attachments)

@@ -27,6 +27,12 @@ $.ajax({
     }
 })
 
+$(document).off('click.label-select').on('click.label-select', '.email-subject', function(event){
+    event.preventDefault();
+    const message_id = $(this).closest('tr').attr('data-message-id');
+    readEmail(message_id);
+})
+
 $.contextMenu({
     // define which elements trigger this menu
     className: 'contextmenu-max-height',
