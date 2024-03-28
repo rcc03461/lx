@@ -24,7 +24,7 @@ const form = ref({
 const apiKey = import.meta.env.VITE_TINYMCE_API_KEY
 const uploadUrl = import.meta.env.VITE_UPLOAD_URL + '?for_type=editor&dir=editor'
 const editorOptions = {
-    height: 650,
+    height: 600,
     menubar: false,
     toolbar_mode: 'sliding',
     plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount textcolor',

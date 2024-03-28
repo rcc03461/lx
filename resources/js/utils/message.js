@@ -28,7 +28,7 @@ export function inlineHtml ( message ) {
 
             if ( cids.includes( content_id ) ) {
                 // console.log(`replacing ${cid} with ${path}`);
-                html = html.replace( cid, '/storage/' + path );
+                html = html.replaceAll( cid, '/storage/' + path );
                 // console.log(html);
             }
 
