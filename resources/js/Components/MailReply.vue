@@ -22,24 +22,23 @@ const form = ref({
 
 
 const apiKey = import.meta.env.VITE_TINYMCE_API_KEY
-const uploadUrl = import.meta.env.VITE_UPLOAD_URL
-
+const uploadUrl = import.meta.env.VITE_UPLOAD_URL + '?for_type=editor&dir=editor'
 const editorOptions = {
-    height: 750,
+    height: 650,
     menubar: false,
     toolbar_mode: 'sliding',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount textcolor',
+    toolbar: 'undo redo | blocks fontfamily fontsize forecolor backcolor | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
     automatic_uploads: true,
     // block_unsupported_drop: false,
-    images_upload_url: uploadUrl + '?for_type=editor&dir=editor', // return ['location' => url]
+    images_upload_url: uploadUrl, // return ['location' => url]
     /*
         URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
         images_upload_url: 'postAcceptor.php',
         here we add custom filepicker only to Image dialog
     */
     file_picker_types: 'image',
-    images_file_types: "jpg,svg,webp",
+    // images_file_types: "png,jpeg,gif,jpg,svg,webp",
     block_unsupported_drop: false,
     // images_upload_url: 'postAcceptor.php',
     /* and here's our custom image picker*/
@@ -81,12 +80,14 @@ const editorOptions = {
                 fetch(uploadUrl, {
                     method: 'POST',
                     body: formdata,
-                    headers: {
-                        'Content-Type':'multipart/form-data'
-                    }
-                }).then(({data}) => {
-                    console.log(data);
-                    cb(`${data.files[0].url}`.trim('/'), { title: file.name });
+                    // headers: {
+                    //     'Content-Type':'multipart/form-data'
+                    // }
+                })
+                .then(response => response.json())
+                .then((data) => { // return ['location' => url]
+                    // console.log(data);
+                    cb(data.location, { title: "" });
                     // resolve( {
                     //     default: data.files[0].url
                     // } );
@@ -102,8 +103,6 @@ const editorOptions = {
         input.click();
     },
 }
-
-
 
 
 </script>

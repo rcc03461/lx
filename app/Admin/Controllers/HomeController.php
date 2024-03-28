@@ -3,12 +3,14 @@
 namespace App\Admin\Controllers;
 
 use Dcat\Admin\Layout\Row;
+use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Metrics\Examples;
 use App\Http\Controllers\Controller;
 use Dcat\Admin\Http\Controllers\Dashboard;
 use App\Admin\Metrics\Examples\LXInvoicesChart;
+use Illuminate\Support\Facades\Request as RequestFacade;
 
 class HomeController extends Controller
 {
@@ -43,4 +45,6 @@ class HomeController extends Controller
                 // });
             });
     }
+
+
 }

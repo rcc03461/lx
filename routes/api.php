@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
+use Illuminate\Support\Facades\Request as RequestFacade;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,76 @@ use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post('/upload', function (Request $request)
+{
+
+    // return request()->file('file');
+
+    $dir = "public/uploads/" . date("Y-m");
+
+    $paths = [];
+    $files = RequestFacade::allFiles();
+
+    // return $dir;
+    // return $files;
+    // return ($request->all());
+    if ($files) {
+
+        foreach ($files as $key => $file) {
+
+            // $file = $request->file('file');
+            $path = $file->storeAs(
+                $dir,
+                str()->uuid() . "." . $file->getClientOriginalExtension()
+                // 'storage'
+            );
+            // $url = str()->replaceFirst('app/public', '/storage');
+
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            $mine = $file->getMimeType();
+
+            // $file = File::create([
+            //     "name" => $name,
+            //     "size" => $file->getSize(),
+            //     "ext" => $ext,
+            //     "mine" => $mine,
+            //     "path" => $path,
+            //     "url" => $url,
+            //     "fileable_id" => $request->input("fileable_id") ?? null,
+            //     "fileable_type" => $request->input("fileable_type") ?? null,
+            //     "fileable_category" => $request->input("fileable_category") ?? null,
+            //     "uploaded_id" => $_SESSION['id'] ?? null,
+            // ]);
+
+            // $paths[] = $file->load("uploader");
+            $path = str($path)->replaceFirst('public', '/storage');
+            $paths[] = $path;
+        }
+
+        if ( request('for_type') == 'editor' ){
+            return response()->json([
+                'location' => $path,
+            ]);
+        }
+
+        return response()->json([
+            "files" => $paths,
+        ]) ;
+    }
+
+    // if ($request->base64) {
+    //     $file = Storage::put('app/public/extfile/', base64_decode($request->base64));
+    //     return $file;
+    // }
+
+    return [
+        "files" => $paths
+    ];
+});
+
 
 Route::get('/hook', function(){
     Log::info('hook');

@@ -24,7 +24,8 @@ const props = defineProps({
 <template>
     <div class="message-container">
         <h2>{{ message.subject }}</h2>
-        <div v-html="message.html_body"></div>
+        <iframe class="border-none" height="650" width="100%" :srcdoc="message.html_body"></iframe>
+        <!-- <div v-html="message.html_body"></div> -->
         <div>
             <ul class="flex gap-2">
                 <li v-for="attachment in message.attachments" :key="attachment.id">

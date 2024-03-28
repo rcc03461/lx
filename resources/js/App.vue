@@ -17,16 +17,15 @@ const props = defineProps({
 const message = ref([])
 const drawer = ref(null)
 const action = ref('view')
+function setAction(type = 'reply'){
+    action.value = type
+}
 
 function closeDrawer() {
     // drawer.value.closeModal()
     // console.log('drawer closed', drawer.value.closeModal() )
     // alert('Drawer closed')
     emit('close')
-}
-
-function reply(type = 'reply'){
-    action.value = type
 }
 
 onMounted(async () => {
@@ -47,9 +46,10 @@ onMounted(async () => {
         </div>
         <template #drawer-footer>
             <div class="flex flex-row justify-end items-center w-full p-2 gap-2">
-                <button @click="reply()">Reply</button>
-                <button @click="reply('reply-all')">Reply All</button>
-                <button @click="reply('forward')">Forward</button>
+                <button @click="setAction('view')">View</button>
+                <button @click="setAction('reply')">Reply</button>
+                <button @click="setAction('reply-all')">Reply All</button>
+                <button @click="setAction('forward')">Forward</button>
 
             </div>
         </template>

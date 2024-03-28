@@ -22,12 +22,13 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
-    $router->get('/try', function(){
-        return Task::with([
-            'client',
-            'invoices'
-        ])->get();
-    });
+    $router->post('/upload', 'HomeController@upload');
+    // $router->get('/try', function(){
+    //     return Task::with([
+    //         'client',
+    //         'invoices'
+    //     ])->get();
+    // });
 
     $router->resource('c8c_job', 'C8CJobController');
     $router->resource('vendors', 'VendorController');
