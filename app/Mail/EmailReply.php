@@ -3,9 +3,10 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use App\Services\HtmlImageFullPath;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class EmailReply extends Mailable
 {
@@ -29,18 +30,32 @@ class EmailReply extends Mailable
         // $this->cc = $input['cc'];
         // $this->bcc = $input['bcc'];
         $this->subject = $input['subject'];
-        $this->m_body = $input['body'];
+        $this->m_body = $input['body'] ?? $input['message'];
+
+        $this->m_body = $this->replaceImagePath($this->m_body);
+
+        // dd($this->m_body);
         // $this->attachments = $input['attachments'];
 
         // dump($input['attachments']);
         if(isset($input['attachments'])) {
             foreach($input['attachments'] as $path) {
                 // dump($input['attachments']);
-                $this->attachFromStorageDisk('public', $path);
+                $this->attachFromStorageDisk('public', $path['path'], $path['name']);
             }
         }
         // dd($input['attachments']);
         // dd($this->attachments);
+    }
+
+    public function replaceImagePath($body)
+    {
+        $base_url = env('APP_URL');
+        // dd($base_url);
+        $pattern = '/src="(.*?)\/storage/i';
+        $replace = 'src="'.$base_url.'/storage';
+        $body = preg_replace($pattern, $replace, $body);
+        return $body;
     }
 
     /**

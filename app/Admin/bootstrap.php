@@ -61,6 +61,8 @@ Admin::css('/assets/css/email_control.css');
 Admin::js('//unpkg.com/vue@3/dist/vue.global.js');
 // Admin::js('/assets/js/EmailControl.js');
 Admin::js('/assets/js/main.js');
+Admin::css('/build/assets/app.css');
+Admin::css('//unpkg.com/element-plus/dist/index.css');
 Admin::js('/build/assets/app.js');
 // Admin::css('//unpkg.com/vue-multiselect@2.1.4/dist/vue-multiselect.min.css');
 

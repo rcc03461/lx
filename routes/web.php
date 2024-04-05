@@ -34,6 +34,15 @@ Route::get('/oauth/gmail/logout', function (){
     return redirect()->to('/admin/emails');
 });
 
+Route::get('/message/{message_id}', function ($message_id) {
+    $message = LaravelGmail::message()->get( $message_id );
+    return (nl2br($message->getPlainTextBody()));
+    return response()->json($message->getHTMLBody());
+    return response()->json($message->getHeaders());
+    // return Carbon\Carbon::parse(+$message->getInternalDate() / 1000)->setTimezone('Asia/Hong_Kong')->toDateTimeString();
+    // return response()->json($message->getInternalDate());
+    return response()->json($message);
+});
 Route::get('/try', function () {
 
     /** @var \Webklex\PHPIMAP\Client $client */
@@ -63,9 +72,9 @@ Route::get('/try', function () {
         $aMessages = $folder->query()
         // ->setFetchFlags(false)
         // ->setFetchBody(false)
-        ->since('06.03.2024')
+        ->since('02.04.2024')
         // ->recent()
-        ->limit(5)
+        ->limit(10)
         ->get()
         ->each(function($message){
             // dump($message->subject, $message->getFlags(), $message->getAttributes() );
@@ -73,19 +82,19 @@ Route::get('/try', function () {
             // dump($message->getAttributes());
             // dd($message->getFolder());
             // dd($message->getAttributes());
-            // dd ([
-            //     "uid" => $message->getAttributes()['uid'],
-            //     "date" => $message->getDate(),
-            //     "flags" => $message->getFlags(),
-            //     "tag" => $message->getTag(),
-            //     // "from" => $message->getFrom(),
-            //     // "to" => $message->getTo(),
-            //     // "cc" => $message->getCc(),
-            //     // "bcc" => $message->getBcc(),
-            //     "subject" => $message->getSubject(),
-            //     // "text" => $message->getTextBody(),
-            //     // "body" => $message->getHTMLBody()
-            // ]);
+            dump ([
+                "uid" => $message->getAttributes()['uid'],
+                // "date" => $message->getDate(),
+                // "flags" => $message->getFlags(),
+                // "tag" => $message->getTag(),
+                // "from" => $message->getFrom(),
+                // "to" => $message->getTo(),
+                // "cc" => $message->getCc(),
+                // "bcc" => $message->getBcc(),
+                "subject" => $message->getSubject(),
+                // "text" => $message->getTextBody(),
+                "body" => $message->getHTMLBody()
+            ]);
             // return $message->subject;
         })
         ;

@@ -1,34 +1,80 @@
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, reactive, defineProps, onMounted } from 'vue'
+import { ElUpload, ElButton, ElInput} from 'element-plus'
+// import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
 import Editor from '@tinymce/tinymce-vue'
+import MailContact from './MailContact.vue'
+import MailAttachments from './MailAttachments.vue'
+import { fetchSend } from '@/api'
+
+function nl2br (str, is_xhtml) {
+    if (typeof str === 'undefined' || str === null) {
+        return '';
+    }
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
 
 const props = defineProps({
     message: {
         type: Object,
         required: true
+    },
+    action: {
+        type: String,
+        required: true
     }
 })
 
-const form = ref({
-    from:{},
+const form = reactive({
+    // from:{},
     to:[],
     cc:[],
     bcc:[],
-    subject: props.message.subject,
-    message: props.message.html_body,
-    attachments: props.message.attachments
+    subject: "",
+    message: "",
+    attachments: []
 })
+
+onMounted(() => {
+    const content = props.message.html_body || nl2br(props.message.text_body);
+
+    if (props.action === 'reply') {
+        form.to = [props.message.from]
+        form.subject = `Re: ${props.message.subject}`
+        form.message = `${content}`
+    }
+
+    if (props.action === 'forward') {
+        form.to = []
+        // form.cc = props.message.cc
+        form.attachments = props.message.attachments
+        form.subject = `Fwd: ${props.message.subject}`
+        form.message = `${content}`
+    }
+
+    if (props.action === 'reply-all') {
+        form.to = [props.message.from, ...props.message.to]
+        form.cc = props.message.cc
+        form.subject = `Re: ${props.message.subject}`
+        form.message = `${content}`
+    }
+
+    console.log(props.action)
+})
+
+
 
 
 const apiKey = import.meta.env.VITE_TINYMCE_API_KEY
 const uploadUrl = import.meta.env.VITE_UPLOAD_URL + '?for_type=editor&dir=editor'
 const editorOptions = {
-    height: 600,
+    height: 550,
     menubar: false,
     toolbar_mode: 'sliding',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount textcolor',
-    toolbar: 'undo redo | blocks fontfamily fontsize forecolor backcolor | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    plugins: 'anchor autolink charmap code codesample emoticons image link lists media searchreplace table visualblocks wordcount textcolor',
+    toolbar: 'undo redo | blocks fontfamily fontsize forecolor backcolor | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat | codesample | code',
     automatic_uploads: true,
     // block_unsupported_drop: false,
     images_upload_url: uploadUrl, // return ['location' => url]
@@ -105,28 +151,40 @@ const editorOptions = {
 }
 
 
+
+const handleSubmit = () => {
+    // console.log(form)
+    fetchSend(form).then(response => {
+        console.log(response)
+    }).catch(error => {
+        console.error(error)
+    })
+}
 </script>
 
 <template>
     <div class="message-container">
         <!-- <h2>{{ message.subject }}</h2> -->
-        <input class="subject-input w-full p-.5 mb-2 border-b border-black" type="text" v-model="form.subject" >
+        <div class="my-2 flex flex-col gap-2">
+            <el-input class="w-full" v-model="form.subject" placeholder="Subject" />
+            <!-- <input class="subject-input w-full p-.5 mb-2 border-b border-black" type="text" v-model="form.subject" > -->
+            <MailContact v-model="form.to" title="To" />
+            <MailContact v-model="form.cc" title="cc" />
+            <MailContact v-model="form.bcc" title="bcc" />
+
+        </div>
+        <!-- <MailContact v-model="form.cc" />
+        <MailContact v-model="form.bcc" /> -->
         <Editor
           :api-key="apiKey"
           :init="editorOptions"
           v-model="form.message"
          />
          <div>
-            <ul class="flex gap-2">
-                <li v-for="attachment in message.attachments" :key="attachment.id">
-                    <a :href="`/storage/` + attachment.path" target="_blank">
-                        <img class="size-24 object-cover" :src="`/storage/` + attachment.path" alt="">
-                        <p>
-                            {{ attachment.name }}
-                        </p>
-                    </a>
-                </li>
-            </ul>
+            <MailAttachments v-model="form.attachments" />
+        </div>
+        <div>
+            <el-button type="primary" @click="handleSubmit">Send</el-button>
         </div>
     </div>
 </template>

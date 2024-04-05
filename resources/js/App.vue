@@ -1,4 +1,5 @@
 <script setup>
+// import 'element-plus/es/components/message/style/css'
 import { ref, defineEmits, defineProps, onMounted } from 'vue';
 import Drawer from './Components/Drawer.vue';
 import MailView from './Components/MailView.vue'
@@ -40,9 +41,10 @@ onMounted(async () => {
     <Drawer ref="drawer" @close="closeDrawer" >
         <div v-if="action === 'view'">
             <MailView :message="message" />
+
         </div>
         <div v-else>
-            <MailReply :message="message" />
+            <MailReply :message="message" :action="action" />
         </div>
         <template #drawer-footer>
             <div class="flex flex-row justify-end items-center w-full p-2 gap-2">
@@ -50,7 +52,6 @@ onMounted(async () => {
                 <button @click="setAction('reply')">Reply</button>
                 <button @click="setAction('reply-all')">Reply All</button>
                 <button @click="setAction('forward')">Forward</button>
-
             </div>
         </template>
     </Drawer>

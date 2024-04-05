@@ -37,4 +37,25 @@ class Email extends Model
         "attachments" => "array"
     ];
 
+
+
+    // public function getToAttribute($value)
+    // {
+    //     return collect(json_decode($value))->filter(function ($item) {
+    //         return filter_var($item->email, FILTER_VALIDATE_EMAIL);
+    //     })->toArray();
+    // }
+    // public function getCcAttribute($value)
+    // {
+    //     return collect(json_decode($value))->filter(function ($item) {
+    //         return filter_var($item->email, FILTER_VALIDATE_EMAIL);
+    //     })->toArray();
+    // }
+    // public function getBccAttribute($value)
+    // {
+    //     return collect(json_decode($value))->filter(function ($item) {
+    //         return filter_var($item->email, FILTER_VALIDATE_EMAIL);
+    //     })->toArray();
+    // }
+
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Email;
 use App\Models\Label;
+use Illuminate\Support\Carbon;
 use Webklex\IMAP\Facades\Client;
 use Illuminate\Support\Facades\Http;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
@@ -51,8 +52,8 @@ class MailServices
     }
 
     public function download_messages( $limit = 5 ){
-        $messages = LaravelGmail::check() ? LaravelGmail::message()->take($limit)->preload()->all() : [];
 
+        $messages = LaravelGmail::check() ? LaravelGmail::message()->take($limit)->preload()->all() : [];
 
         // dump($messages);
 
@@ -87,12 +88,14 @@ class MailServices
                     $attachments[] = [
                         "path" => $path,
                         // "html" => $html,
+                        "name" => $attachment->getFileName(),
                         "attachment_id" => $attachment->getId(),
                         // "headers" => $headers,
                         "attachment" => $attachment,
                         "is_inline" => $content_id && str($html)->contains(  "cid:" . $content_id ) ? true : false,
                         // "mime_type" => $attachment->getMimeType(),
                         // "size" => $attachment->getSize(),
+                        "content_id" => $content_id,
                     ];
                     // $attachments[] = $attachment->getData();
 
@@ -108,12 +111,20 @@ class MailServices
                 "message_id" => $message_id,
                 "subject" => $message->getSubject(),
                 "from" => $message->getFrom(),
-                "to" => $message->getTo(),
-                "cc" => $message->getCc(),
-                "bcc" => $message->getBcc(),
-                // "text_body" => $message->getPlainTextBody(),
+                "to" => collect($message->getTo())->filter(function($item){
+                    return filter_var($item['email'], FILTER_VALIDATE_EMAIL);
+                })->toArray(),
+                "cc" => collect($message->getCc())->filter(function($item){
+                    return filter_var($item['email'], FILTER_VALIDATE_EMAIL);
+                })->toArray(),
+                "bcc" => collect($message->getBcc())->filter(function($item){
+                    return filter_var($item['email'], FILTER_VALIDATE_EMAIL);
+                })->toArray(),
+                "text_body" => $message->getPlainTextBody(),
                 "html_body" => $message->getHtmlBody(),
-                "email_datetime" => $message->getDate()->format('Y-m-d H:i:s'),
+                "email_datetime" => Carbon::parse(+$message->getInternalDate() / 1000)->setTimezone('Asia/Hong_Kong')->toDateTimeString(),
+                // "internal_date" => $message->getInternalDate() / 1000,
+                // "headers" => $message->getHeaders(),
                 "has_attachments" => $message->hasAttachments(),
                 "attachments" => $attachments,
             ];

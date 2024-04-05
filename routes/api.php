@@ -2,10 +2,12 @@
 
 use App\Models\C8CJob;
 use App\Models\Invoice;
+use App\Mail\EmailReply;
 use Illuminate\Http\Request;
 use App\Services\MailServices;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use Illuminate\Support\Facades\Request as RequestFacade;
@@ -26,6 +28,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+Route::post('/mail/send', function (Request $request){
+
+    $inputModel = $request->all();
+    Mail::to(request('to'))
+    ->cc(request('cc'))
+    ->bcc(request('bcc'))
+    // ->subject($inputModel['subject'])
+    ->send(new EmailReply($inputModel));
+
+    return response()->json([
+        "message" => "Email sent successfully"
+    ]);
+
+});
+
 Route::post('/upload', function (Request $request)
 {
 
@@ -44,6 +61,7 @@ Route::post('/upload', function (Request $request)
         foreach ($files as $key => $file) {
 
             // $file = $request->file('file');
+            // dd($file);
             $path = $file->storeAs(
                 $dir,
                 str()->uuid() . "." . $file->getClientOriginalExtension()
@@ -69,13 +87,17 @@ Route::post('/upload', function (Request $request)
             // ]);
 
             // $paths[] = $file->load("uploader");
-            $path = str($path)->replaceFirst('public', '/storage');
-            $paths[] = $path;
+            $path = str($path)->replaceFirst('public', '');
+            $paths[] = [
+                'name' => $name,
+                'path' => $path,
+                'is_inline' => false,
+            ];
         }
 
         if ( request('for_type') == 'editor' ){
             return response()->json([
-                'location' => $path,
+                'location' => '/storage'.$path,
             ]);
         }
 
