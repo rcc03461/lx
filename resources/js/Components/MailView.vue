@@ -28,11 +28,11 @@ const props = defineProps({
             <MailContact v-model="message.bcc" title="bcc" :editable="false"/>
         </div>
         <div>
-            <iframe v-if="message.html_body" class="border-none" height="500" width="100%" :srcdoc="message.html_body" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+20)+'px';"></iframe>
-            <div v-else class="border-none whitespace-pre-line" v-html="message.text_body"></div>
+            <iframe v-if="message.html_body" class="border-none no-scrollbar" width="100%" :srcdoc="message.html_body" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+50)+'px';this.contentWindow.document.body.style.overflow='hidden';"></iframe>
+            <div v-else class="border-none whitespace-pre-line no-scrollbar" v-html="message.text_body"></div>
         </div>
         <!-- <div v-html="message.html_body"></div> -->
-        <div class="mt-4 w-full sticky bottom-0 bg-white">
+        <div class="mt-4 w-full bg-white">
             <hr class="my-2">
             <ul class="flex gap-2">
                 <li class="size-28 border rounded " v-for="attachment in message.attachments" :key="attachment.id">

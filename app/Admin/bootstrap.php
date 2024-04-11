@@ -94,6 +94,10 @@ Admin::style(<<<CSS
 
     }
 
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
 
 CSS);
 

@@ -1,12 +1,13 @@
 
 <script setup>
-import { ref, reactive, defineProps, onMounted } from 'vue'
+import { ref, reactive, defineProps, onMounted, defineExpose } from 'vue'
 import { ElUpload, ElButton, ElInput} from 'element-plus'
 // import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
 import Editor from '@tinymce/tinymce-vue'
 import MailContact from './MailContact.vue'
 import MailAttachments from './MailAttachments.vue'
 import { fetchSend } from '@/api'
+import { uniqBy } from 'lodash';
 
 function nl2br (str, is_xhtml) {
     if (typeof str === 'undefined' || str === null) {
@@ -55,7 +56,7 @@ onMounted(() => {
     }
 
     if (props.action === 'reply-all') {
-        form.to = [props.message.from, ...props.message.to]
+        form.to = uniqBy([props.message.from, ...props.message.to], 'email')
         form.cc = props.message.cc
         form.subject = `Re: ${props.message.subject}`
         form.message = `${content}`
@@ -70,7 +71,7 @@ onMounted(() => {
 const apiKey = import.meta.env.VITE_TINYMCE_API_KEY
 const uploadUrl = import.meta.env.VITE_UPLOAD_URL + '?for_type=editor&dir=editor'
 const editorOptions = {
-    height: 550,
+    height: 350,
     menubar: false,
     toolbar_mode: 'sliding',
     plugins: 'anchor autolink charmap code codesample emoticons image link lists media searchreplace table visualblocks wordcount textcolor',
@@ -152,26 +153,40 @@ const editorOptions = {
 
 
 
-const handleSubmit = () => {
+
+const handleSend = () => {
     // console.log(form)
+    //
+    if (form.to.length === 0) {
+        alert('Please select at least one recipient')
+        return
+    }
+    if (form.subject.trim() === '') {
+        alert('Please enter a subject')
+        return
+    }
     fetchSend(form).then(response => {
         console.log(response)
     }).catch(error => {
         console.error(error)
     })
 }
+
+defineExpose({
+    handleSend
+})
 </script>
 
 <template>
     <div class="message-container">
         <!-- <h2>{{ message.subject }}</h2> -->
-        <div class="my-2 flex flex-col gap-2">
-            <el-input class="w-full" v-model="form.subject" placeholder="Subject" />
+        <div class="flex flex-col gap-2">
             <!-- <input class="subject-input w-full p-.5 mb-2 border-b border-black" type="text" v-model="form.subject" > -->
             <MailContact v-model="form.to" title="To" />
             <MailContact v-model="form.cc" title="cc" />
             <MailContact v-model="form.bcc" title="bcc" />
 
+            <el-input class="w-full" v-model="form.subject" placeholder="Subject" />
         </div>
         <!-- <MailContact v-model="form.cc" />
         <MailContact v-model="form.bcc" /> -->
@@ -183,8 +198,8 @@ const handleSubmit = () => {
          <div>
             <MailAttachments v-model="form.attachments" />
         </div>
-        <div>
-            <el-button type="primary" @click="handleSubmit">Send</el-button>
-        </div>
+        <!-- <div>
+            <el-button type="primary" @click="handleSend">Send</el-button>
+        </div> -->
     </div>
 </template>

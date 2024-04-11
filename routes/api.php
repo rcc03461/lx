@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use Illuminate\Support\Facades\Request as RequestFacade;
+// use Dacastro4\LaravelGmail\Services\Message\Mail as Gmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,36 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/mail/send', function (Request $request){
 
     $inputModel = $request->all();
+
+    // // return $inputModel['to'];
+    // $mail = new Gmail;
+
+    // $mail->from('translation@lingxpert.com');
+    // // $mail->to(collect($inputModel['to'])->map(fn($email) => $email['email'])->toArray());
+    // $mail->to('ych8815@gmail.com');
+    // $mail->cc('');
+    // $mail->bcc('');
+    // // // $mail->cc( $cc, $name = null );
+    // // // $mail->bcc( $bcc, $name = null )
+    // $mail->subject( "test subject" );
+
+    // $mail->message( "test message" );
+
+    // // $mail->view( 'view.name', $dataArray )
+
+    // // $mail->markdown( 'view.name', $dataArray )
+    // // $attachments = collect($inputModel['attachments']);
+    // // $attachments->each(function($attachment) use ($mail){
+    // //     $mail->attach( $attachment['path']);
+    // // });
+    // // $mail->attach(  )
+
+    // // $mail->priority( $priority )
+
+    // return $mail->send();
+    // dd($mail);
+
+    // ------------------------
     Mail::to(request('to'))
     ->cc(request('cc'))
     ->bcc(request('bcc'))
