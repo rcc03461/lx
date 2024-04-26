@@ -62,8 +62,23 @@ class EmailController extends AdminController
                 // $selector->select('category', '类别', ['茶几', '地柜式', '边几', '布艺沙发', '茶台', '炕几']);
                 // $selector->select('style', '风格', ['现代简约', '新中式', '田园风', '明清古典', '北欧', '轻奢', '古典']);
                 // $selector->selectOne('price', '售价', ['0-599', '600-1999', '1999-4999', '5000+']);
+                $selector->select('is_sent', 'Is Sent', [
+                    'Inbox' => 'Inbox',
+                    'Sent' => 'Sent',
+                ], function($query, $value){
+                    $value = current($value);
+                    if($value == 'Inbox'){
+                        $query->doesntHaveByNonDependentSubquery('labels', function($q) use($value){
+                            $q->where('ref_id', 'SENT');
+                        });
+                    }
+                    if($value == 'Sent'){
+                        $query->hasByNonDependentSubquery('labels', function($q) use($value){
+                            $q->where('ref_id', 'SENT');
+                        });
+                    }
+                });
             });
-
 
             $grid
             ->model()

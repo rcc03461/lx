@@ -65,6 +65,7 @@ class LabelController extends AdminController
     {
         return Form::make(new Label(), function (Form $form) {
             $form->display('id');
+            $form->select('type')->options(['system', 'user']);
             $form->text('ref_id');
             $form->text('ref_code');
             $form->text('name');

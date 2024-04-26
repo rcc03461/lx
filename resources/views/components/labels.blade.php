@@ -7,7 +7,14 @@
     $is_sent = $labels->contains('name', 'SENT');
     $is_personal = $labels->contains('name', 'CATEGORY_PERSONAL');
     $labels = $labels->filter(function ($label) {
-        return !in_array($label['name'], ['UNREAD', 'INBOX', 'DRAFT', 'IMPORTANT', 'SENT', 'CATEGORY_PERSONAL']);
+        return !in_array($label['name'], [
+            'UNREAD',
+            'INBOX',
+            'DRAFT',
+            'SENT',
+            'IMPORTANT',
+            'CATEGORY_PERSONAL'
+        ]);
     });
 @endphp
 
@@ -20,11 +27,11 @@
 @endif --}}
 {{-- @if ($is_inbox)
     <span>Inbox</span>
-@endif --}}
+@endif
 @if ($is_draft)
     <span class="text-gray-500 font-black">Draft</span>
 @endif
-{{-- @if ($is_sent)
+@if ($is_sent)
     <span>Sent</span>
 @endif --}}
 @foreach ($labels as $item)
