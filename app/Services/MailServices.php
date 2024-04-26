@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Models\Email;
 use App\Models\Label;
+use App\Mail\EmailReply;
 use Illuminate\Support\Carbon;
 use Webklex\IMAP\Facades\Client;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 
 class MailServices
@@ -51,6 +53,9 @@ class MailServices
         }
     }
 
+    public function is_downloaded( $message_id ){
+        return Email::where("message_id", $message_id)->exists();
+    }
     public function download_messages( $limit = 5 ){
 
         $messages = LaravelGmail::check() ? LaravelGmail::message()->take($limit)->preload()->all() : [];
@@ -68,10 +73,14 @@ class MailServices
             // $htmlPlain = $message->getPlainTextBody();
             // $htmlRaw = $message->getRawPlainTextBody ();
             $html = $message->getHtmlBody();
+            $labels = $message->getLabels();
             // $headers = $message->getHeaders();
             // echo $htmlPlain;
             // echo $htmlRaw;
             // echo $html;
+            if ( in_array('DRAFT', $labels) ) continue;
+            if ( $this->is_downloaded($message_id) ) continue;
+
 
             if ( $message->hasAttachments()  ) {
                 $message->getAttachments()->each(function ($attachment) use($message_id, &$attachments, $html) {
@@ -135,12 +144,20 @@ class MailServices
                 Email::where("message_id", $message_id)->update($toBeUpdate);
             } else {
                 $email = Email::create($toBeUpdate);
-                $email->syncLabels($message->getLabels());
+                $email->syncLabels($labels);
             }
 
         }
 
         return true;
+    }
+
+    public function send_email( $inputModel ){
+        Mail::to(request('to'))
+        ->cc(request('cc'))
+        ->bcc(request('bcc'))
+        // ->subject($inputModel['subject'])
+        ->send(new EmailReply($inputModel));
     }
 
     public function download_message( string $message_id ){

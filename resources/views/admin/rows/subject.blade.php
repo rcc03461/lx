@@ -1,20 +1,23 @@
 <div class="flex gap-1 items-center">
     <div>
-        @foreach ($labels as $item)
-            @if ( $item->type == 'user')
+        <x-labels :labels="$labels" />
+        {{-- @foreach ($labels as $item)
                 <span
-                {{-- class="row-labels" --}}
                 @class([
                     'email-label',
                     'row-labels',
                     "text-[".$item->color?->textColor."]" => true,
                     "bg-[".$item->color?->backgroundColor."]" => true,
+                    "bg-yellow-500" => $item['name'] == 'INBOX',
+                    "bg-green-500" => $item['name'] == 'DRAFT',
+                    "bg-blue-500" => $item['name'] == 'IMPORTANT',
+                    "bg-red-500" => $item['name'] == 'SENT',
+                    "text-bold" => $item['name'] == 'UNREAD',
                 ])
                 >{{$item['name']}}</span>
-            @endif
-        @endforeach
+        @endforeach --}}
     </div>
-    <span class="email-subject line-clamp-1 flex-1">
+    <span class="email-subject line-clamp-2 flex-1">
         {{ $subject }}
     </span>
     @if ($has_attachments)

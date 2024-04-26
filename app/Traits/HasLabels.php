@@ -8,9 +8,11 @@ trait HasLabels
 {
     public function labels( $type = 'user' ){
         // return $this->morphToMany(Label::class, 'labelable');
-        return $this->morphToMany(Label::class, 'labelable')->when($type = 'user', function($q) use($type){
-            $q->where('type', $type);
-        });
+        return $this->morphToMany(Label::class, 'labelable')
+        // ->when($type == 'user', function($q) use($type){
+        //     $q->where('type', $type);
+        // })
+        ;
     }
 
     public function syncLabels($ids){

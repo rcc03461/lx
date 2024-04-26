@@ -52,6 +52,7 @@ Route::group([
     $router->get('invoices/create', [InvoiceController::class, 'invoiceCreate']);
     $router->get('invoices/{invoice}', [InvoiceController::class, 'single']);
     $router->put('invoices/{invoice}', [InvoiceController::class, 'update']);
+    $router->delete('invoices/{invoice}', [InvoiceController::class, 'destroy']);
     $router->get('invoices/{invoice}/edit', [InvoiceController::class, 'invoiceEdit']);
     $router->get('invoices/{invoice}/view', [InvoiceController::class, 'view']);
     $router->post('api/invoice', [InvoiceController::class, 'save']);

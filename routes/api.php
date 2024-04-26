@@ -62,11 +62,8 @@ Route::post('/mail/send', function (Request $request){
     // dd($mail);
 
     // ------------------------
-    Mail::to(request('to'))
-    ->cc(request('cc'))
-    ->bcc(request('bcc'))
-    // ->subject($inputModel['subject'])
-    ->send(new EmailReply($inputModel));
+    $services = new MailServices();
+    $services->send_email($inputModel);
 
     return response()->json([
         "message" => "Email sent successfully"

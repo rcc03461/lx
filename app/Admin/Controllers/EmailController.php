@@ -50,7 +50,9 @@ class EmailController extends AdminController
 
             $grid->selector(function (Grid\Tools\Selector $selector) {
 
-                $selector->select('labels', 'Labels', Label::where('type', 'user')->orderBy('name')->pluck('name', 'ref_id'), function($query, $value){
+                $labels = Label::where('type', 'user')->orderBy('name')->pluck('name','ref_id');
+
+                $selector->select('labels', 'Labels', $labels, function($query, $value){
                     $value = current($value);
                     // dd($value);
                     $query->hasByNonDependentSubquery('labels', function($q) use($value){
@@ -63,7 +65,12 @@ class EmailController extends AdminController
             });
 
 
-            $grid->model()->orderByDesc('email_datetime');
+            $grid
+            ->model()
+            ->doesntHaveByNonDependentSubquery('labels', function($q){
+                $q->whereIn('ref_id', [ 'DRAFT' ]);
+            })
+            ->orderByDesc('email_datetime');
 
             $grid->addTableClass('table-slim');
             // $grid->setKeyName("123");
@@ -71,12 +78,12 @@ class EmailController extends AdminController
             // $grid->column('message_id')
             // // ->setAttributes(['data-message-id' => $grid->model])
             // ;
-            // $grid->column('from')->display(function($val){
-            //     return $val->name;
-            // });
-            $grid->column('to')->display(function($vals){
-                return collect($vals)->map(fn($v)=>$v['name'])->join(', ');
+            $grid->column('from')->display(function($val){
+                return '<div title="'. $val->email. '">'. $val->name. '</div>';
             });
+            // $grid->column('to')->display(function($vals){
+            //     return collect($vals)->map(fn($v)=>$v['name'])->join(', ');
+            // });
             // $grid->column('cc');
             // $grid->column('bcc');
             $grid->column('subject')
