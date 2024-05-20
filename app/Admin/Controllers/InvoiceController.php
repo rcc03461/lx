@@ -53,9 +53,20 @@ class InvoiceController extends AdminController
                     $query->whereYear('invoiceDate', $year)->whereMonth('invoiceDate', $month);
                 });
 
+                // $selector->selectOne('invoiceDate', 'Sort By', [
+                //     'invoiceDate' => 'Invoice Date',
+                //     'id' => 'ID',
+                //     'invoice_no' => 'Invoice No.',
+                // ], function($query, $value){
+                //     // $value = current($value);
+                //     // [$year, $month] = explode('-', $value);
+                //     // $query->whereYear('invoiceDate', $year)->whereMonth('invoiceDate', $month);
+                //     $query->orderBy($value, 'desc');
+                // });
+
             });
 
-            $grid->model()->orderBy('id', 'desc');
+            // $grid->model()->orderByRaw('-invoice_no DESC');
 
             // $grid->column('idjob');
             $grid->column('job.job_code', 'Job No.');

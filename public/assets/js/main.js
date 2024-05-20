@@ -79,24 +79,24 @@ $.contextMenu({
                     name: "Task",
                     // items: labels_items
                 },
-                reply_all: {
-                    name: "Reply All",
-                    callback: function( itemKey, opt, e ){
-                        triggerRowAction(opt.$trigger, 'Reply All');
-                    }
-                },
-                reply: {
-                    name: "Reply",
-                    callback: function( itemKey, opt, e ){
-                        triggerRowAction(opt.$trigger, 'Reply');
-                    }
-                },
-                forwards: {
-                    name: "Forward",
-                    callback: function( itemKey, opt, e ){
-                        triggerRowAction(opt.$trigger, 'Forward');
-                    }
-                },
+                // reply_all: {
+                //     name: "Reply All",
+                //     callback: function( itemKey, opt, e ){
+                //         triggerRowAction(opt.$trigger, 'Reply All');
+                //     }
+                // },
+                // reply: {
+                //     name: "Reply",
+                //     callback: function( itemKey, opt, e ){
+                //         triggerRowAction(opt.$trigger, 'Reply');
+                //     }
+                // },
+                // forwards: {
+                //     name: "Forward",
+                //     callback: function( itemKey, opt, e ){
+                //         triggerRowAction(opt.$trigger, 'Forward');
+                //     }
+                // },
                 labels: {
                     name: "Labels",
                     items: labels_items

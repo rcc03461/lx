@@ -66,7 +66,7 @@ function injectStyle(email_body, style){
 <style>
 
 .message-container{
-    padding: 1rem;
+    /* padding: 1rem; */
     /* background-color: hsl(0, 0%, 97%); */
 }
 

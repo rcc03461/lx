@@ -62,7 +62,7 @@ class EmailController extends AdminController
                 // $selector->select('category', '类别', ['茶几', '地柜式', '边几', '布艺沙发', '茶台', '炕几']);
                 // $selector->select('style', '风格', ['现代简约', '新中式', '田园风', '明清古典', '北欧', '轻奢', '古典']);
                 // $selector->selectOne('price', '售价', ['0-599', '600-1999', '1999-4999', '5000+']);
-                $selector->select('is_sent', 'Is Sent', [
+                $selector->select('mailbox', 'Is Sent', [
                     'Inbox' => 'Inbox',
                     'Sent' => 'Sent',
                 ], function($query, $value){
@@ -96,9 +96,11 @@ class EmailController extends AdminController
             $grid->column('from')->display(function($val){
                 return '<div title="'. $val->email. '">'. $val->name. '</div>';
             });
-            // $grid->column('to')->display(function($vals){
-            //     return collect($vals)->map(fn($v)=>$v['name'])->join(', ');
-            // });
+            if (str(url()->full())->contains('Sent')) {
+                $grid->column('to')->display(function($vals){
+                    return collect($vals)->map(fn($v)=>$v['name'])->join(', ');
+                });
+            }
             // $grid->column('cc');
             // $grid->column('bcc');
             $grid->column('subject')
@@ -144,7 +146,7 @@ class EmailController extends AdminController
                 'from', 'to', 'subject'
             ]);
             // $grid->showQuickEditButton();
-            // $grid->disableActions();
+            $grid->disableActions();
             $grid->disableViewButton();
             $grid->disableEditButton();
             $grid->disableDeleteButton();
@@ -153,11 +155,11 @@ class EmailController extends AdminController
             $grid->tools([
                 RefreshLatestEmail::make(),
             ]);
-            $grid->actions([
-                ReplyAction::make('Reply All'),
-                ReplyAction::make('Reply'),
-                ReplyAction::make('Forward'),
-            ]);
+            // $grid->actions([
+            //     ReplyAction::make('Reply All'),
+            //     ReplyAction::make('Reply'),
+            //     ReplyAction::make('Forward'),
+            // ]);
         });
     }
 
