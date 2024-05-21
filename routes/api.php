@@ -32,23 +32,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/mail/send', function (Request $request){
 
 
-    $request->validate([
-        // to
-        // cc
-        // bcc
-        // subject
-        // message
-        // attachments
-        'to' => 'required|array',
-        'to.*.email' => 'required|email',
-        'subject' => 'required|string',
-        'message' => 'required|string',
-        'attachments' => 'array',
-    ]);
+    // $request->validate([
+    //     // to
+    //     // cc
+    //     // bcc
+    //     // subject
+    //     // message
+    //     // attachments
+    //     'to' => 'required|array',
+    //     'to.*.email' => 'required|email',
+    //     'subject' => 'required|string',
+    //     'message' => 'required|string',
+    //     'attachments' => 'array',
+    // ]);
 
 
     $inputModel = $request->all();
-    return $inputModel;
+    // return $inputModel;
 
     // // return $inputModel['to'];
     // $mail = new Gmail;
