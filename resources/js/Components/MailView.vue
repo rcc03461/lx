@@ -3,6 +3,7 @@
 import { defineExpose , onMounted,  computed } from 'vue';
 import { fileThumbnail } from '@/utils/doctype'
 import MailContact from './MailContact.vue'
+
 const props = defineProps({
     message: {
         type: Object,
@@ -19,9 +20,14 @@ p {
 </style>`) )
 
 function injectStyle(email_body, style){
-    console.log(email_body, "html");
+    // console.log(email_body, "html");
     return style + email_body;
 }
+
+// onMounted(() => {
+//     console.log(props.message);
+
+// })
 
 
 </script>

@@ -77,6 +77,7 @@ Route::group([
 
 
     $router->get('/api/labels', [EmailController::class, 'labels']);
+    $router->get('/api/emails/contacts', [EmailController::class, 'contacts']);
     $router->get('/api/emails/{message:message_id}', [EmailController::class, 'info']);
     $router->put('/api/emails/{message:message_id}/labels', [EmailController::class, 'updateLabels']);
 

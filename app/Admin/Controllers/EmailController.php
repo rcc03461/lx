@@ -239,6 +239,27 @@ class EmailController extends AdminController
         });
     }
 
+    public function contacts(){
+        $from = ModelEmail::select('from')
+        ->distinct( 'from' )
+        // ->take(100)
+        ->get()
+        ->pluck('from.email')
+        //remove null
+        ->filter();
+        $to = ModelEmail::select('to')
+        ->latest()
+        ->take(500)
+        ->get()
+        ->pluck('to.*.email')
+        ->flatten()
+
+        ->filter();
+
+        return $from->merge($to)->unique()->sort()->values();
+
+    }
+
     public function labels(){
         return Label::all();
     }

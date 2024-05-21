@@ -53,6 +53,24 @@ class InvoiceController extends AdminController
                     $query->whereYear('invoiceDate', $year)->whereMonth('invoiceDate', $month);
                 });
 
+                $selector->selectOne('invoiceCode', 'Invoice No', [
+                    'NoInv' => 'No Invoice No.',
+                    'Cre8' => 'Cre8',
+                    'LI' => 'LX',
+                ], function($query, $value){
+                    // $value = current($value);
+
+                    // dd($value);
+                    if ($value == 'NoInv') {
+                        $query->whereNull('lx_code');
+                    } else if ($value == 'Cre8' || $value == 'LI') {
+                        $query->where('lx_code', 'like', $value . '-%');
+                    }
+                    // $query->where('invoiceCode', $value);
+                    // [$year, $month] = explode('-', $value);
+                    // $query->whereYear('invoiceDate', $year)->whereMonth('invoiceDate', $month);
+                });
+
                 // $selector->selectOne('invoiceDate', 'Sort By', [
                 //     'invoiceDate' => 'Invoice Date',
                 //     'id' => 'ID',
@@ -158,8 +176,10 @@ class InvoiceController extends AdminController
             ]);
 
             $grid->quickSearch(['lx_code', 'invoiceCode', 'job.company', 'job.job_code', 'job.status', 'job.meta'])
-            ->placeholder('lx_code, invoiceCode, company, job_code, status, meta')
-            ;
+            ->placeholder('lx_code, invoiceCode, company, job_code, status, meta');
+
+            $grid->paginate(50);
+            $grid->simplePaginate();
 
 
         });

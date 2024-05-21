@@ -1,5 +1,6 @@
 <script>
     import { ElAutocomplete, ElTag, ElInput, ElButton } from 'element-plus'
+
     export default {
         name: 'MailContact',
         components: {
@@ -20,6 +21,12 @@
             modelValue: {
                 type: Array,
                 default: () => []
+            },
+            contacts: {
+                type: Array,
+                default: () => [
+                // { email: '123@123.com', value: '123@123.com' },
+                ]
             }
         },
         emits: ['update:modelValue'],
@@ -27,6 +34,9 @@
             return {
                 inputVisible: false,
                 inputValue: '',
+                // emailsOptions: [
+                //     { email: '123@123.com', value: '123@123.com' },
+                // ],
             }
         },
         methods: {
@@ -39,7 +49,10 @@
                 })
             },
             querySearch(queryString, cb) {
-                const results = queryString ? this.options.filter(this.createFilter(queryString)) : this.options;
+                // const { contacts } = this;
+                // console.log(contacts, "contacts");
+                const results = queryString ? this.contacts.filter(this.createFilter(queryString)) : this.contacts;
+                // console.log(results, "res");
                 cb(results)
             },
             showInput() {
@@ -62,9 +75,23 @@
                 this.inputVisible = true
                 this.inputValue = ''
             },
+            // auto complete
+            createFilter(queryString) {
+                return (item) => {
+                    return item.email.toLowerCase().indexOf(queryString.toLowerCase()) > -1
+                }
+            },
+            handleSelected(item) {
+                this.modelValue.push(item)
+                this.$emit('update:modelValue', this.modelValue)
+            }
+
+
+
         },
         mounted() {
-            console.log(this.modelValue);
+            console.log(this.contacts, "contacts");
+            // console.log(this.modelValue);
         }
     }
 </script>
@@ -72,8 +99,11 @@
 <template>
     <div class="flex gap-2 items-center">
         <label for="">{{ title }}</label>
-        <div class="flex gap-2 flex-wrap">
-            <div class="flex gap-2 flex-wrap">
+        <!-- <div>
+            <span v-for="item in contacts">{{ item.value }}</span>
+        </div> -->
+        <div class="flex gap-2 flex-1">
+            <div class="flex gap-2 flex-wrap w-full">
                 <el-tag
                     v-for="item in modelValue"
                     @click.stop="handleSelect(item)"
@@ -84,7 +114,20 @@
                 >
                 {{ item.email }}
                 </el-tag>
-                <el-input
+                <el-autocomplete
+                    ref="InputRef"
+                    v-if="inputVisible"
+                    v-model="inputValue"
+                    :fetch-suggestions="querySearch"
+                    class="inline-block w-48"
+                    size="small"
+                    clearable
+                    placeholder="Please Input"
+                    @select="handleInputConfirm"
+                    @blur="handleInputConfirm"
+                    @keyup.enter="handleInputConfirm"
+                />
+                <!-- <el-input
                     v-if="inputVisible"
                     ref="InputRef"
                     v-model="inputValue"
@@ -92,7 +135,7 @@
                     size="small"
                     @keyup.enter="handleInputConfirm"
                     @blur="handleInputConfirm"
-                />
+                /> -->
                 <el-button v-if="!inputVisible && editable" class="button-new-tag" size="small" @click="showInput">
                 + New
                 </el-button>

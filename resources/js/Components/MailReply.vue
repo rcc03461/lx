@@ -6,7 +6,7 @@ import { ElUpload, ElButton, ElInput} from 'element-plus'
 import Editor from '@tinymce/tinymce-vue'
 import MailContact from './MailContact.vue'
 import MailAttachments from './MailAttachments.vue'
-import { fetchSend } from '@/api'
+import { fetchSend, fetchContacts } from '@/api'
 import { uniqBy } from 'lodash';
 
 function nl2br (str, is_xhtml) {
@@ -28,6 +28,8 @@ const props = defineProps({
     }
 })
 
+const contacts = ref()
+
 const form = reactive({
     // from:{},
     to:[],
@@ -38,7 +40,11 @@ const form = reactive({
     attachments: []
 })
 
-onMounted(() => {
+onMounted( async () => {
+
+    contacts.value = await fetchContacts();
+    console.log(contacts.value, "contacts monted");
+
     const content = props.message.html_body || nl2br(props.message.text_body);
 
     if (props.action === 'reply') {
@@ -172,6 +178,7 @@ const handleSend = () => {
     })
 }
 
+
 defineExpose({
     handleSend
 })
@@ -182,9 +189,9 @@ defineExpose({
         <!-- <h2>{{ message.subject }}</h2> -->
         <div class="flex flex-col gap-2">
             <!-- <input class="subject-input w-full p-.5 mb-2 border-b border-black" type="text" v-model="form.subject" > -->
-            <MailContact v-model="form.to" title="To" />
-            <MailContact v-model="form.cc" title="cc" />
-            <MailContact v-model="form.bcc" title="bcc" />
+            <MailContact v-model="form.to" title="To" :contacts="contacts" />
+            <MailContact v-model="form.cc" title="cc" :contacts="contacts" />
+            <MailContact v-model="form.bcc" title="bcc" :contacts="contacts" />
 
             <el-input class="w-full" v-model="form.subject" placeholder="Subject" />
         </div>
