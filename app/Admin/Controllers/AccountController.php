@@ -9,6 +9,7 @@ use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Metrics\Examples;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Dcat\Admin\Http\Controllers\Dashboard;
 use App\Admin\Metrics\Examples\LXInvoicesChart;
 
@@ -37,14 +38,25 @@ class AccountController extends Controller
 
     public function report_gp($date_from, $date_to)
     {
-        $invoices = Invoice::with([
-            'task.pos',
-            'task.client',
-            'localtask.client',
-            'job',
-        ])
-        ->whereBetween('invoiceDate', [$date_from, $date_to .' 23:59:59'])
-        ->get();
+
+        $invoices = Cache::remember("lx_account_{$date_from}_{$date_to}", 60, function () use ($date_from, $date_to) {
+            $invoices = Invoice::with([
+                'task.pos',
+                'task.client',
+                'localtask.client',
+                'job',
+            ])
+            ->whereBetween('invoiceDate', [$date_from, $date_to .' 23:59:59'])
+            // ->dd()
+            ->get()
+            ;
+
+            return $invoices;
+
+        });
+
+        // return $invoices;
+
 
         return [
             "data" => $invoices->map(function ($invoice) {
@@ -63,6 +75,7 @@ class AccountController extends Controller
                     "client" => $invoice->localtask?->client?->name ?? $invoice->task?->client?->name,
                     "lx_no" => $invoice->lx_code,
                     "lx_job_no" => ($invoice->localtask?->lx_no ?? $invoice->task?->lx_no),
+                    "job_ref" => $invoice?->job?->job_code ?? '',
                     // "pos" => $pos_btns,
                     "total" => number_format($invoice->total, 2),
                     "costing" => number_format($cost ?? 0, 2),
@@ -80,6 +93,7 @@ class AccountController extends Controller
                 ["title" => "Invoice Date", "data" => "invoiceDate"],
                 ["title" => "Client", "data" => "client"],
                 ["title" => "LX No", "data" => "lx_job_no"],
+                ["title" => "Job Ref", "data" => "job_ref"],
                 // ["title" => "POs", "data" => "pos"],
                 ["title" => "Total", "data" => "total", "className" => "text-right"],
                 ["title" => "Costing", "data" => "costing"],

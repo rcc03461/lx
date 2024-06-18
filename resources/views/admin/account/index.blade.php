@@ -38,15 +38,40 @@
     </div>
     <div id="loaded-content"></div>
 </section>
-
+<style>
+    #loaded-content tr:nth-child(3n + 1) {
+        background-color: #cfcfcf;
+    }
+    #loaded-content tr:hover {
+        background-color: #c9c9c9;
+    }
+</style>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 <script>
     $(document).ready(function(){
-        $('.search').click(function(){
+
+        loadPresetDate();
+
+        function loadPresetDate() {
+            const date_from = localStorage.getItem('date_from');
+            const date_to = localStorage.getItem('date_to');
+            const search_type = localStorage.getItem('search_type');
+
+            if (date_from && date_to && search_type) {
+                search()
+            }
+        }
+
+        function search() {
             const date_from = $('input[name="date_from"]').val();
             const date_to = $('input[name="date_to"]').val();
             const search_type = $('select[name="search_type"]').val();
+
+            localStorage.setItem('date_from', date_from);
+            localStorage.setItem('date_to', date_to);
+            localStorage.setItem('search_type', search_type);
+
             $.ajax({
                 url: `account/report/${search_type}`,
                 type: "GET",
@@ -116,7 +141,9 @@
                     // $('datatable').dataTable();
                 }
             });
-        });
+        }
+
+        $('.search').click(search);
 
         // set settlement date
         $('.set-settlment-date').on('click', function(){
