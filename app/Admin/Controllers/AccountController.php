@@ -72,10 +72,12 @@ class AccountController extends Controller
                     "id" => $invoice->id,
                     "invoiceCode" => $invoice->invoiceCode,
                     "invoiceDate" => $invoice_date,
+                    "invoicestatus" => $invoice->invoicestatus,
                     "client" => $invoice->localtask?->client?->name ?? $invoice->task?->client?->name,
                     "lx_no" => $invoice->lx_code,
                     "lx_job_no" => ($invoice->localtask?->lx_no ?? $invoice->task?->lx_no),
                     "job_ref" => $invoice?->job?->job_code ?? '',
+                    "job_status" => $invoice?->job?->status ?? '',
                     // "pos" => $pos_btns,
                     "total" => number_format($invoice->total, 2),
                     "costing" => number_format($cost ?? 0, 2),
@@ -85,15 +87,18 @@ class AccountController extends Controller
                     "jobtypeKey" => $invoice?->job?->jobtypeKey,
                     "pos" => $pos_btns,
                     "view" => "<a class='text-blue-500 hover:text-blue-600 mr-2' data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>",
+                    "edit" => "<a class='text-blue-500 hover:text-blue-600 mr-2' data-popup href='/admin/invoices/{$invoice->id}/edit'>Edit</a>",
                 ];
             }),
             "columns" => [
                 ["title" => "LX Ref", "data" => "lx_no"],
                 // ["title" => "Invoice #", "data" => "invoiceCode"],
                 ["title" => "Invoice Date", "data" => "invoiceDate"],
+                ["title" => "Invoice Status", "data" => "invoicestatus"],
                 ["title" => "Client", "data" => "client"],
                 ["title" => "LX No", "data" => "lx_job_no"],
                 ["title" => "Job Ref", "data" => "job_ref"],
+                ["title" => "Job Status", "data" => "job_status"],
                 // ["title" => "POs", "data" => "pos"],
                 ["title" => "Total", "data" => "total", "className" => "text-right"],
                 ["title" => "Costing", "data" => "costing"],
@@ -103,6 +108,7 @@ class AccountController extends Controller
                 ["title" => "Job Type", "data" => "jobtypeKey"], // , "className" => "dt-control"
                 ["title" => "PO", "data" => "pos"],
                 ["title" => "View", "data" => "view"],
+                ["title" => "Edit", "data" => "edit"],
             ]
         ];
     }
