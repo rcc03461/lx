@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Dcat\Admin\Http\Controllers\Dashboard;
 use App\Admin\Metrics\Examples\LXInvoicesChart;
-
+use Dcat\EasyExcel\Excel;
 class AccountController extends Controller
 {
     public function index(Content $content)
@@ -21,6 +21,60 @@ class AccountController extends Controller
             ->header('Account')
             ->description('Description...')
             ->body(view('admin.account.index'));
+    }
+
+    public function export_xero(Request $request){
+
+        $date_from = request()->get('date_from');
+        $date_to = request()->get('date_to');
+        $type = request()->get('type');
+
+        $invoices = Invoice::with([
+            'task.pos',
+            'task.client',
+            'localtask.client',
+            'job',
+        ])
+        ->whereBetween('invoiceDate', [$date_from, $date_to .' 23:59:59'])
+        // ->dd()
+        ->orderBy('lx_code')
+        ->get()
+        ->transform(function ($invoice) {
+            $invoiceNo = $invoice->lx_code;
+            return [
+                "*ContactName" => "Lingxpert Language Services Limited",
+                "EmailAddress" => "",
+                "POAddressLine1" => "",
+                "POAddressLine2" => "",
+                "POAddressLine3" => "",
+                "POAddressLine4" => "",
+                "POCity" => "",
+                "PORegion" => "",
+                "POPostalCode" => "",
+                "POCountry" => "",
+                "*InvoiceNumber" => $invoiceNo . ($invoice->invoiceCode ? '('. $invoice->invoiceCode .')' : ''),
+                "*InvoiceDate" => $invoice->invoiceDate->format('Y-m-d'),
+                // 2 months from invoice date
+                "*DueDate" => $invoice->invoiceDate->clone()->addMonths(2)->format('Y-m-d'),
+                "Total" => number_format($invoice->total, 2),
+                "InventoryItemCode" => "",
+                "Description" => $invoiceNo,
+                "*Quantity" => 1,
+                "*UnitAmount" => number_format($invoice->total, 2),
+                "*AccountCode" => "4213030",
+                "*TaxType" => "Tax Exempt",
+                "TaxAmount" => "",
+                "TrackingName1" => "",
+                "TrackingOption1" => "",
+                "TrackingName2" => "",
+                "TrackingOption2" => "",
+                "Currency" => "HKD",
+            ];
+        })
+        ->toArray();
+
+        Excel::export($invoices)->download('Cre8_lx_xero_'.$date_from. '_to_' . $date_to .'.csv');
+
     }
 
     public function report($type)
@@ -101,8 +155,8 @@ class AccountController extends Controller
                 ["title" => "Job Status", "data" => "job_status"],
                 // ["title" => "POs", "data" => "pos"],
                 ["title" => "Total", "data" => "total", "className" => "text-right"],
-                ["title" => "Costing", "data" => "costing"],
-                ["title" => "Net Amount", "data" => "net"],
+                ["title" => "Costing", "data" => "costing", "className" => "text-right"],
+                ["title" => "Net Amount", "data" => "net", "className" => "text-right"],
                 ["title" => "Due Date", "data" => "due_date"],
                 ["title" => "Settlement Date", "data" => "settlement_date"],
                 ["title" => "Job Type", "data" => "jobtypeKey"], // , "className" => "dt-control"

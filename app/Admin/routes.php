@@ -36,6 +36,7 @@ Route::group([
 
     $router->resource('client', 'ClientController');
     $router->resource('task', 'TaskController');
+    $router->get('account/export_xero', [AccountController::class, 'export_xero']);
     $router->resource('account', 'AccountController');
     $router->resource('emails', 'EmailController');
     $router->resource('labels', 'LabelController');

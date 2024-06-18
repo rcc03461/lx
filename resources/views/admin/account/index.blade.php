@@ -11,7 +11,10 @@
             <input class="form-control" type="date" name="date_to" value="{{ date('Y-m-t') }}" id="">
         </div>
         <div class="form-group">
-            <button class="btn search">Search</button>
+            <button class="btn btn-primary search">Search</button>
+        </div>
+        <div class="form-group">
+            <button class="btn export_xero">Export to Xero (Cre8)</button>
         </div>
     </div>
     <div class="flex flex-shrink-0 items-end gap-4 justify-between">
@@ -33,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="text-center text-lg font-bold sticky z-10 top-20 bg-white py-2 border shadow-md">
+    <div class="text-center text-lg font-bold sticky z-10 top-20 bg-white py-2 border shadow-md my-2">
         Selected Total: <span id="selected-total" class="w-24"></span>
     </div>
     <div id="loaded-content"></div>
@@ -144,6 +147,14 @@
         }
 
         $('.search').click(search);
+
+        $('.export_xero').on('click', function(){
+            const date_from = $('input[name="date_from"]').val();
+            const date_to = $('input[name="date_to"]').val();
+            const search_type = $('select[name="search_type"]').val();
+
+            window.open('account/export_xero?date_from='+date_from+'&date_to='+date_to+'&search_type='+search_type, '_blank');
+        })
 
         // set settlement date
         $('.set-settlment-date').on('click', function(){
