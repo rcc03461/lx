@@ -92,7 +92,7 @@ class AccountController extends Controller
             }),
             "columns" => [
                 ["title" => "LX Ref", "data" => "lx_no"],
-                // ["title" => "Invoice #", "data" => "invoiceCode"],
+                ["title" => "Invoice #", "data" => "invoiceCode"],
                 ["title" => "Invoice Date", "data" => "invoiceDate"],
                 ["title" => "Invoice Status", "data" => "invoicestatus"],
                 ["title" => "Client", "data" => "client"],
