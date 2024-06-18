@@ -42,13 +42,16 @@ class AccountController extends Controller
             'task.client',
             'localtask.client',
             'job',
-        ])->whereBetween('invoiceDate', [$date_from, $date_to])->get();
+        ])
+        ->whereBetween('invoiceDate', [$date_from, $date_to .' 23:59:59'])
+        ->get();
+
         return [
             "data" => $invoices->map(function ($invoice) {
                 $cost = $invoice?->localtask?->pos->sum('total') ?? $invoice?->task?->pos->sum('total');
                 $pos = $invoice?->localtask?->pos ?? $invoice?->task?->pos;
                 $pos_btns = collect($pos)->map(function ($po) {
-                    return "<a class='text-blue-500 hover:text-blue-600' data-popup href='/admin/purchase-orders/{$po->id}/view'>PO</a>";
+                    return "<a class='text-blue-500 hover:text-blue-600' data-popup href='/admin/purchase-orders/{$po->id}/view'>PO{$po->po_no}</a>";
                 })->implode(' | ');
                 $invoice_date = $invoice->invoiceDate?->clone()->format('Y-m-d');
                 $due_date = $invoice->invoiceDate->clone()?->addDays(30)->format('Y-m-d');
@@ -60,13 +63,15 @@ class AccountController extends Controller
                     "client" => $invoice->localtask?->client?->name ?? $invoice->task?->client?->name,
                     "lx_no" => $invoice->lx_code,
                     "lx_job_no" => ($invoice->localtask?->lx_no ?? $invoice->task?->lx_no),
+                    // "pos" => $pos_btns,
                     "total" => number_format($invoice->total, 2),
                     "costing" => number_format($cost ?? 0, 2),
                     "net" => '<div class="'. ($net < 0 ? 'bg-red-300' : '') .'">'.number_format($net, 2)."</div>",
                     "due_date" => $due_date,
                     "settlement_date" => $invoice->settlement_date?->format('Y-m-d'),
                     "jobtypeKey" => $invoice?->job?->jobtypeKey,
-                    "view" => "<a class='text-blue-500 hover:text-blue-600 mr-2' data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>" . $pos_btns,
+                    "pos" => $pos_btns,
+                    "view" => "<a class='text-blue-500 hover:text-blue-600 mr-2' data-popup href='/admin/invoices/{$invoice->id}/view'>View</a>",
                 ];
             }),
             "columns" => [
@@ -75,12 +80,14 @@ class AccountController extends Controller
                 ["title" => "Invoice Date", "data" => "invoiceDate"],
                 ["title" => "Client", "data" => "client"],
                 ["title" => "LX No", "data" => "lx_job_no"],
+                // ["title" => "POs", "data" => "pos"],
                 ["title" => "Total", "data" => "total", "className" => "text-right"],
                 ["title" => "Costing", "data" => "costing"],
                 ["title" => "Net Amount", "data" => "net"],
                 ["title" => "Due Date", "data" => "due_date"],
                 ["title" => "Settlement Date", "data" => "settlement_date"],
-                ["title" => "Job Type", "data" => "jobtypeKey", "className" => "dt-control"],
+                ["title" => "Job Type", "data" => "jobtypeKey"], // , "className" => "dt-control"
+                ["title" => "PO", "data" => "pos"],
                 ["title" => "View", "data" => "view"],
             ]
         ];

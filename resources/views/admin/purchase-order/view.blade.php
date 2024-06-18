@@ -311,12 +311,12 @@
                         <table class="text-sm w-full ">
                             <thead>
                               <tr>
-                                <th class="border-b text-left">No</th>
-                                <th class="border-b text-left">Title</th>
-                                <th class="border-b text-left">Description</th>
-                                <th class="border-b text-left">Qty</th>
-                                <th class="border-b text-left">Unit Price</th>
-                                <th class="border-b text-right">Amount</th>
+                                <th class="border-b px-1 text-left">No</th>
+                                <th class="border-b px-0.5 text-left">Title</th>
+                                <th class="border-b px-0.5 text-left">Description</th>
+                                <th class="border-b px-0.5 text-left">Qty</th>
+                                <th class="border-b px-0.5 text-left">Unit Price</th>
+                                <th class="border-b px-0.5 text-right">Amount</th>
                               </tr>
                             </thead>
 
@@ -328,7 +328,7 @@
                                     <tr>
                                         <td class="px-0.5">{{ $loop->index +1 }}</td>
                                         <td class="px-0.5">{{ $item['title'] }}</td>
-                                        <td class="px-0.5">{{ $item['description'] }}</td>
+                                        <td class="px-0.5 whitespace-pre-line">{{ $item['description'] }}</td>
                                         <td class="px-0.5 w-24">
                                             <div class="min-w-min">
                                                 @if (in_array(Str::lower($item['unit']) , ['hours', 'hrs']))
