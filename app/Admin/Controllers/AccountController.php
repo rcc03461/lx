@@ -27,7 +27,7 @@ class AccountController extends Controller
 
         $date_from = request()->get('date_from');
         $date_to = request()->get('date_to');
-        $type = request()->get('type');
+        $type = request()->get('type');   // GP
 
         $invoices = Invoice::with([
             'task.pos',
