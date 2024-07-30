@@ -24,7 +24,8 @@ class Email extends Model
         "text_body",
         "email_datetime",
         "has_attachments",
-        "attachments"
+        "attachments",
+        "ref"
     ];
 
     protected $casts = [

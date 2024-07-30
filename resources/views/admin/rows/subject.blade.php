@@ -19,6 +19,9 @@
     </div>
     <span class="email-subject line-clamp-2 flex-1">
         {{ $subject }}
+        @if ($ref)
+            <span class="text-gray-300 font-normal text-sm ml-1">{{$ref}}</span>
+        @endif
     </span>
     @if ($has_attachments)
     <span>

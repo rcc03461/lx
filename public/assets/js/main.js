@@ -51,6 +51,8 @@ $.contextMenu({
         // trigger.data('runCallbackThingie')()
         // pull a callback from the trigger
         const id = trigger.attr('data-message-id');
+        const ref = trigger.attr('data-ref') || "";
+        const guessCode = trigger.attr('data-guess');
         const labels = JSON.parse(trigger.attr('data-message-labels'));
         // console.log(id, JSON.parse(labels));
 
@@ -76,9 +78,22 @@ $.contextMenu({
         return {
             items:{
                 task: {
-                    name: "Task",
+                    name: "Task: " + ref,
                     // items: labels_items
+                    callback: function(itemKey, opt){
+                        const mew_ref = window.prompt("Enter task number:", ref || guessCode);
+                        if( mew_ref ){
+                            updateEmail(id, {
+                                ref: mew_ref
+                            })
+                        }
+                    }
                 },
+                // items : {
+                //     name: "textfield",
+                //     type: "text",
+                //     value: "welcome!"
+                // },
                 // reply_all: {
                 //     name: "Reply All",
                 //     callback: function( itemKey, opt, e ){
@@ -114,16 +129,23 @@ $.contextMenu({
             $.contextMenu.getInputValues(opt, this.data());
             // console.log( opt, 'hide', this.data() );
 
-            const {messageId, messageLabels, contextMenu, ...selected} = this.data();
+            let {messageId, messageLabels, contextMenu, ...selected} = this.data();
             // console.log(messageId, messageLabels, 'selected', selected);
 
             const label_ids = []
             Object.entries(selected).map(function([key, value]){
-                if( value ){
+                if( value == true ){
                     // console.log(key, value);
                     label_ids.push(key)
                 }
             })
+            const excepts = ['CATEGORY_PERSONAL', 'IMPORTANT', 'INBOX']
+            messageLabels = messageLabels.filter(function(label){
+                return !excepts.includes(label)
+            })
+
+            // console.log(messageLabels, "messageLabels");
+
 
             // console.log(label_ids, messageLabels, arraysAreEqual(label_ids, messageLabels));
             if (!arraysAreEqual(label_ids, messageLabels)) {
@@ -148,6 +170,7 @@ function triggerRowAction(element, action) {
 function arraysAreEqual(array1, array2) {
     const arr1 = array1.sort();
     const arr2 = array2.sort();
+    // console.log(array1, array2, "eq");
 
     if (arr1.length !== arr2.length) {
         return false;
@@ -164,6 +187,20 @@ function updateLabels( id, labels ){
         data: {
             labels
         },
+        success: function(data){
+            // console.log(data);
+            Dcat.reload()
+            // Dcat.loading.done();
+        }
+    })
+}
+
+function updateEmail( id, playload ){
+    // console.log('updateLabels', id, labels);
+    $.ajax({
+        url: `/admin/api/emails/` + id,
+        type: 'PUT',
+        data: playload,
         success: function(data){
             // console.log(data);
             Dcat.reload()

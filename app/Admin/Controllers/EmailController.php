@@ -34,7 +34,15 @@ class EmailController extends AdminController
             ->body($this->grid());
     }
 
+    public function guessRef( String $str ){
+        // RE: New ADV : 23908_AD(1) : 1130 - Appointment of ED  => 23908_AD(1)
+        // New ADV : 23908_AD(1) : 1130 - Appointment of ED => 23908_AD(1)
+        // <Cmts>: 23869_Cir : Okura - Circular on amendments to 1st Series Bond (Eng) => 23869_Cir
+        // 23771_AD[1] - Okura Holding - MAJOR TRANSACTION FURTHER AMENDMENTS TO THE TERMS AND CONDITIONS OF THE 1ST SERIES BOND - ADV will announce today => 23771_AD[1]
+        return str($str)->match('/(\d+_[a-zA-Z]+[\(\[]?.?[\)\]]?)/')->trim();
+        // return preg_replace('//', '_', $str);
 
+    }
 
     /**
      * Make a grid builder.
@@ -108,6 +116,7 @@ class EmailController extends AdminController
                 return view('admin.rows.subject', [
                     'labels' => $this->labels,
                     'subject' => $val,
+                    'ref' => $this->ref,
                     'email_datetime' => $this->email_datetime,
                     'has_attachments' => $this->has_attachments
                 ]);
@@ -136,14 +145,16 @@ class EmailController extends AdminController
                 $rows = $rows->each(function ($item, $key) {
                     $item->setAttributes([
                         'data-message-id' => $item->message_id,
-                        'data-message-labels' => collect($item->labels)->pluck('ref_id')
+                        'data-message-labels' => collect($item->labels)->pluck('ref_id'),
+                        'data-ref' => $item->ref,
+                        'data-guess' => $this->guessRef($item->subject),
                     ]);
                 });
             });
             $grid->simplePaginate();
             $grid->tableCollapse(false);
             $grid->quickSearch([
-                'from', 'to', 'subject'
+                'from', 'to', 'subject', 'ref'
             ]);
             // $grid->showQuickEditButton();
             $grid->disableActions();
@@ -269,5 +280,10 @@ class EmailController extends AdminController
         $message->labels()->sync($label_id);
         // dd($message);
         // dd(request()->all());
+    }
+    public function updateEmail( ModelEmail $message ){
+        // dd(request()->all());
+        // return $message;
+        $message->update(request()->all());
     }
 }
