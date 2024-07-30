@@ -78,7 +78,7 @@ $.contextMenu({
         return {
             items:{
                 task: {
-                    name: "Task: " + ref,
+                    name: "Ref: " + ref,
                     // items: labels_items
                     callback: function(itemKey, opt){
                         const mew_ref = window.prompt("Enter task number:", ref || guessCode);
