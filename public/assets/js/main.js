@@ -139,7 +139,7 @@ $.contextMenu({
                     label_ids.push(key)
                 }
             })
-            const excepts = ['CATEGORY_PERSONAL', 'IMPORTANT', 'INBOX']
+            const excepts = ['CATEGORY_PERSONAL', 'IMPORTANT', 'INBOX', 'UNREAD']
             messageLabels = messageLabels.filter(function(label){
                 return !excepts.includes(label)
             })
@@ -148,7 +148,9 @@ $.contextMenu({
 
 
             // console.log(label_ids, messageLabels, arraysAreEqual(label_ids, messageLabels));
-            if (!arraysAreEqual(label_ids, messageLabels)) {
+            const equal = arraysAreEqual(label_ids, messageLabels)
+            // console.log(equal);
+            if (!equal) {
                 updateLabels( messageId, label_ids );
             }
 
@@ -170,7 +172,7 @@ function triggerRowAction(element, action) {
 function arraysAreEqual(array1, array2) {
     const arr1 = array1.sort();
     const arr2 = array2.sort();
-    // console.log(array1, array2, "eq");
+    console.log(array1, array2, "eq");
 
     if (arr1.length !== arr2.length) {
         return false;
@@ -179,17 +181,24 @@ function arraysAreEqual(array1, array2) {
     return arr1.every((value, index) => value === arr2[index]);
 }
 
-function updateLabels( id, labels ){
-    // console.log('updateLabels', id, labels);
+function updateLabels( id, labels = [] ){
+    console.log('updateLabels', id, labels);
     $.ajax({
         url: `/admin/api/emails/` + id + `/labels`,
         type: 'PUT',
         data: {
-            labels
+            labels : labels
         },
         success: function(data){
+            if( data?.status  ){
+                Dcat.reload()
+            }
+
+            if( data?.message ){
+                Dcat.success(data.message)
+            }
             // console.log(data);
-            Dcat.reload()
+            // Dcat.reload()
             // Dcat.loading.done();
         }
     })

@@ -7,6 +7,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use App\Models\Label;
 use Dcat\Admin\Admin;
+use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Content;
 use App\Admin\Repositories\Email;
 use Illuminate\Support\Collection;
@@ -274,10 +275,36 @@ class EmailController extends AdminController
     public function labels(){
         return Label::all();
     }
-    public function updateLabels( ModelEmail $message ){
+    public function updateLabels( Request $request, ModelEmail $message ){
 
-        $label_id = Label::whereIn('ref_id',request()->labels)->pluck('id');
-        $message->labels()->sync($label_id);
+        // $request->validate([
+        //     'labels' => 'array|required'
+        // ]);
+        $labels = request('labels', []);
+        if(count($labels)){
+            $label_id = Label::whereIn('ref_id',request('labels'))->pluck('id');
+            $message->labels()->sync($label_id);
+            return response()->json([
+                // "code" => 0,
+                'status' => true,
+                'message' => 'Labels updated successfully.']
+            );
+        }else{
+            $message->labels()->detach();
+            return response()->json([
+                // "code" => 0,
+                'status' => true,
+                'message' => 'Labels updated successfully.']
+            );
+        }
+        // return response()->json([
+        //     // 'code' => 401,
+        //     'status' => false,
+        //     'message' => 'Labels updated successfully.']
+        // );
+        // dd($labels);
+        // return  $labels;
+
         // dd($message);
         // dd(request()->all());
     }
