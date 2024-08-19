@@ -58,7 +58,7 @@ class AccountController extends Controller
                 "*DueDate" => $invoice->invoiceDate->clone()->addMonths(2)->format('Y-m-d'),
                 "Total" => number_format($invoice->total, 2),
                 "InventoryItemCode" => "",
-                "Description" => $invoiceNo,
+                "Description" => $invoice?->job?->job_code ?? '',
                 "*Quantity" => 1,
                 "*UnitAmount" => number_format($invoice->total, 2),
                 "*AccountCode" => "4213030",
