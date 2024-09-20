@@ -45,6 +45,8 @@ Route::get('/message/{message_id}', function ($message_id) {
 });
 Route::get('/try', function () {
 
+    return date("Y");
+    return;
     /** @var \Webklex\PHPIMAP\Client $client */
     // $client = Webklex\IMAP\Facades\Client::account('default');
 

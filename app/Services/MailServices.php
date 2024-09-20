@@ -91,8 +91,10 @@ class MailServices
                     $newNameUuid = str()->uuid();
                     $newName = $newNameUuid . ".". $attachment->getFileName();
 
+                    $year = date("Y");
+                    
                     // print_r($attachment->headerDetails);
-                    $path = str($attachment->saveAttachmentTo( "public/attachments/{$message_id}", $newName ))->replace("public/", "");
+                    $path = str($attachment->saveAttachmentTo( "public/attachments/{$year}/{$message_id}", $newName ))->replace("public/", "");
                     $content_id = isset($attachment->headerDetails['Content-ID']) ? str($attachment->headerDetails['Content-ID'])->replace("<", "")->replace(">", "") : NULL;
                     $attachments[] = [
                         "path" => $path,
