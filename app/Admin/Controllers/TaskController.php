@@ -217,7 +217,29 @@ HTML;
             // </a>
             // </div>");
 
-            $grid->quickSearch(['id', 'lx_no', 'title', 'client.name', 'job.job_code', 'job.jobdescription'])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
+            // $grid->quickSearch([
+            //     'id', 
+            //     'lx_no', 
+            //     'title', 
+            //     'client.name', 
+            //     'job.job_code', 
+            //     'job.jobdescription'
+            // ])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
+
+            $grid->quickSearch(function($query, $search_key){
+                return $query->where(function($query) use($search_key){
+                    $query->where('id', 'like', "%$search_key%")
+                        ->orWhere('lx_no', 'like', "%$search_key%")
+                        ->orWhere('title', 'like', "%$search_key%")
+                        ->orHasByNonDependentSubquery('client', function($query) use($search_key){
+                            $query->where('name', 'like', "%$search_key%");
+                        })
+                        ->orHasByNonDependentSubquery('job', function($query) use($search_key){
+                            $query->where('job_code', 'like', "%$search_key%");
+                        })
+                        ;
+                });
+            });
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');

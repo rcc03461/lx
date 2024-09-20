@@ -175,7 +175,34 @@ class InvoiceController extends AdminController
                 // JobPurchaseOrderAction::make()
             ]);
 
-            $grid->quickSearch(['lx_code', 'invoiceCode', 'job.company', 'job.job_code', 'job.status', 'job.meta'])
+            // $grid->quickSearch([
+            //     'lx_code', 
+            //     'invoiceCode', 
+            //     'job.job_code', 
+            //     'job.company', 
+            //     'job.meta'
+            // ])
+            // ->placeholder('lx_code, invoiceCode, company, job_code, status, meta');
+            $grid->quickSearch(function($query, $search_key){
+                if (str($search_key)->lower()->startsWith('c8-')) {
+                    return $query->where('invoiceCode', 'like', "$search_key%");
+                }
+                if (str($search_key)->lower()->startsWith('cre8-')) {
+                    return $query->where('lx_code', 'like', "$search_key%");
+                }
+                return $query->where(function($query) use($search_key){
+                    $query->where('lx_code', 'like', "%$search_key%")
+                        ->orWhere('invoiceCode', 'like', "%$search_key%")
+                    ->orHasByNonDependentSubquery('job', function($query) use($search_key){
+                        $query->where('job_code', 'like', "%$search_key%")
+                            ->orWhere('company', 'like', "%$search_key%")
+                            // ->orWhereJsonContains('meta->sales->name', $search_key."%") // 基于完全匹配
+                            ->orWhereRaw("JSON_EXTRACT(meta, '$.sales.name') LIKE ?", ["%{$search_key}%"])
+                            // ->orWhere('meta', 'like', "%$search_key%")
+                            ;
+                        });
+                });
+            })
             ->placeholder('lx_code, invoiceCode, company, job_code, status, meta');
 
             $grid->paginate(50);
