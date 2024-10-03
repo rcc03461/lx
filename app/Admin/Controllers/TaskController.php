@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use App\Admin\Repositories\Task;
 use App\Models\Task as TaskModel;
 use App\Models\Task as ModelsTask;
+use Illuminate\Support\Collection;
 use App\Admin\Forms\TranslationForm;
 use App\Admin\Renderable\TaskPOTable;
 use App\Admin\Renderable\C8CJobsTable;
@@ -65,9 +66,32 @@ class TaskController extends AdminController
             ->get();
     }
 
+    public function lx_job (Content $content)
+    {
+        return $content
+            ->header('LX Job')
+            // ->description('合并表头功能示例')
+            ->body(function ($row) {
+                $row->column(12, <<<HTML
+            <div class="my-1 flex flex-start">
+                <div class="flex gap-2 items-center justify-center">
+                    <span style="background: #feffea" class="h-6 w-20 inline-block"></span> <span>已開單</span>
+                </div>
+            </div>
+HTML);
+                // $row->column(4, new TotalUsers());
+                // $row->column(4, new NewUsers());
+                // $row->column(4, new NewDevices());
+            })
+            ->body($this->grid());
+    }
+    
     protected function grid()
     {
-        return Grid::make(TaskModel::with(['job', 'client', 'invoices'])->withSum('pos', 'total')->withSum('invoices', 'total')->withSum('invoicess', 'total'), function (Grid $grid) {
+        return Grid::make(TaskModel::with(['job', 'client', 'invoices', 'invoicess'])
+        ->withSum('pos', 'total')
+        ->withSum('invoices', 'total')
+        ->withSum('invoicess', 'total'), function (Grid $grid) {
 
 
             $grid->selector(function (Grid\Tools\Selector $selector) {
@@ -107,7 +131,7 @@ class TaskController extends AdminController
             ->display(function ($job) {
                 return <<<HTML
                 <div class="text-blue-500 hover:text-blue-300" data-popup href="/admin/task/{$this->id}/view" target="_blank">{$this->title}</div>
-                <div class="text-xs text-gray-300">{$this->description}</div>
+                <div class="text-xs text-gray-400">{$this->description}</div>
 HTML;
             });
             $grid->column('job_')->width(400)->display(function ($job) {
@@ -118,7 +142,7 @@ HTML;
                 <div>
                     {$job_no}
                 </div>
-                <div class="text-xs text-gray-300">{$this->job?->jobdescription}</div>
+                <div class="text-xs text-gray-400">{$this->job?->jobdescription}</div>
                 HTML;
             })
             // ->editable(true)
@@ -162,9 +186,9 @@ HTML;
             // ->editableDate(true)
             ;
             $grid->column('invoices_sum_total')
-            // ->addTableClass(['text-right'])
+            // ->addTableClass(['text-red-500'])
             ->display(function($total){
-                return $total + $this->invoicess_sum_total ? number_format($total + $this->invoicess_sum_total, 2) : "";
+                return ($total + $this->invoicess_sum_total) ? number_format($total + $this->invoicess_sum_total, 2) : "";
             })
             ->expand(function(){
                 return TaskInvoiceTable::make([
@@ -225,6 +249,19 @@ HTML;
             //     'job.job_code', 
             //     'job.jobdescription'
             // ])->placeholder('id, title, client.name, job.job_code, job.jobdescription');
+
+            $grid->rows(function (Collection $rows) {
+                $rows = $rows->each(function ($item, $key) {
+                    // dump($item->invoicess);
+                    if ($item->invoicess_sum_total > 0 || count($item->invoices) || count($item->invoicess)) {
+                        $item->setAttributes([
+                            'style' => 'background: #feffea;',
+                            // 'class' => '#bg-red-100'
+                        ]);
+                    }
+                });
+            });
+
 
             $grid->quickSearch(function($query, $search_key){
                 return $query->where(function($query) use($search_key){

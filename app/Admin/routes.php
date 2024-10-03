@@ -35,6 +35,7 @@ Route::group([
     $router->resource('purchase_orders', 'PurchaseOrderController');
 
     $router->resource('client', 'ClientController');
+    $router->get('lx_job', 'TaskController@lx_job');
     $router->resource('task', 'TaskController');
     $router->get('account/export_xero', [AccountController::class, 'export_xero']);
     $router->resource('account', 'AccountController');

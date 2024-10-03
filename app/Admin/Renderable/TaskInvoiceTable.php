@@ -37,7 +37,7 @@ class TaskInvoiceTable extends LazyRenderable
             $grid->column('ApproveId');
             $grid->column('total');
             $grid->column('invoiceDate')->display(function ($invoiceDate) {
-                return $invoiceDate->format('d/m/Y') ?: '---';
+                return $invoiceDate?->format('d/m/Y') ?: '---';
             });
             $grid->column('reviseDate');
             $grid->column('view')->display(function () {
