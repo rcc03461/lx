@@ -2,17 +2,19 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Metrics\Examples;
+use App\Admin\Metrics\Examples\LXInvoicesChart;
+use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\Invoice;
-use Dcat\Admin\Layout\Row;
-use Illuminate\Http\Request;
+use Dcat\Admin\Http\Controllers\Dashboard;
 use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
-use App\Admin\Metrics\Examples;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
-use Dcat\Admin\Http\Controllers\Dashboard;
-use App\Admin\Metrics\Examples\LXInvoicesChart;
+use Dcat\Admin\Layout\Row;
 use Dcat\EasyExcel\Excel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+
 class AccountController extends Controller
 {
     public function index(Content $content)
@@ -110,10 +112,10 @@ class AccountController extends Controller
         });
 
         // return $invoices;
-
+        $defaultClientName = Client::find(1)->name;
 
         return [
-            "data" => $invoices->map(function ($invoice) {
+            "data" => $invoices->map(function ($invoice) use ($defaultClientName) {
                 $cost = $invoice?->localtask?->pos->sum('total') ?? $invoice?->task?->pos->sum('total');
                 $pos = $invoice?->localtask?->pos ?? $invoice?->task?->pos;
                 $pos_btns = collect($pos)->map(function ($po) {
@@ -127,7 +129,7 @@ class AccountController extends Controller
                     "invoiceCode" => $invoice->invoiceCode,
                     "invoiceDate" => $invoice_date,
                     "invoicestatus" => $invoice->invoicestatus,
-                    "client" => $invoice->localtask?->client?->name ?? $invoice->task?->client?->name,
+                    "client" => $invoice->localtask?->client?->name ?? $invoice->task?->client?->name ?? $defaultClientName,
                     "lx_no" => $invoice->lx_code,
                     "lx_job_no" => ($invoice->localtask?->lx_no ?? $invoice->task?->lx_no),
                     "job_ref" => $invoice?->job?->job_code ?? '',

@@ -41,16 +41,36 @@ class InvoiceController extends AdminController
                 $months = [];
                 $maxEndDate = InvoiceModel::max("invoiceDate");
                 $maxEndDate = $maxEndDate ? Carbon::parse($maxEndDate) : now();
-                // dd($maxEndDate);
                 for ($i = 0; $i < 12; $i++) {
                     $months[$maxEndDate->format('Y-m')] = $maxEndDate->format('Y-m');
                     $maxEndDate->subMonth();
                 }
-                // dd($months);
                 $selector->selectOne('invoiceDate', 'Month', $months, function($query, $value){
                     // $value = current($value);
                     [$year, $month] = explode('-', $value);
                     $query->whereYear('invoiceDate', $year)->whereMonth('invoiceDate', $month);
+                });
+
+
+                // select years
+                
+                $fromDate = InvoiceModel::min("invoiceDate");
+                $toDate = InvoiceModel::max("invoiceDate");
+
+                $years = [];
+                $fromDate = Carbon::parse($fromDate);
+                $toDate = Carbon::parse($toDate);
+                while ($fromDate <= $toDate) {
+                    $years[$fromDate->format('Y')] = $fromDate->format('Y');
+                    $fromDate->addYear();
+                }
+                
+                
+
+                    
+                $selector->selectOne('invoiceYear', 'Year', $years, function($query, $value){
+                    // $value = current($value);
+                    $query->whereYear('invoiceDate', $value);
                 });
 
                 $selector->selectOne('invoiceCode', 'Invoice No', [
