@@ -44,7 +44,7 @@ class Task extends Model
     ];
 
     public function getCodeAttribute(){
-        return 'L' . $this->lx_no;
+        return $this->lx_no ? 'L' . $this->lx_no : '';
     }
 
 

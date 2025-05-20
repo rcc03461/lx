@@ -55,14 +55,16 @@ class AccountController extends Controller
                 "POPostalCode" => "",
                 "POCountry" => "",
                 "*InvoiceNumber" => $invoiceNo . ($invoice->invoiceCode ? '('. $invoice->invoiceCode .')' : ''),
+                "Reference" => "",
                 "*InvoiceDate" => $invoice->invoiceDate->format('Y-m-d'),
                 // 2 months from invoice date
                 "*DueDate" => $invoice->invoiceDate->clone()->addMonths(2)->format('Y-m-d'),
                 "Total" => number_format($invoice->total, 2),
                 "InventoryItemCode" => "",
-                "Description" => $invoice?->job?->job_code ?? '',
+                "*Description" => $invoice?->job?->job_code ?? '',
                 "*Quantity" => 1,
                 "*UnitAmount" => number_format($invoice->total, 2),
+                // "Discount" => "",
                 "*AccountCode" => "4213030",
                 "*TaxType" => "Tax Exempt",
                 "TaxAmount" => "",
@@ -71,6 +73,7 @@ class AccountController extends Controller
                 "TrackingName2" => "",
                 "TrackingOption2" => "",
                 "Currency" => "HKD",
+                // "BrandingTheme" => "",
             ];
         })
         ->toArray();
@@ -108,6 +111,7 @@ class AccountController extends Controller
                 "POPostalCode" => "",
                 "POCountry" => "",
                 "*InvoiceNumber" => $invoiceNo . ($invoice->invoiceCode ? '('. $invoice->invoiceCode .')' : ''),
+                "Reference" => $invoice->task->code ?? $invoice->localtask->code ?? '',
                 "*InvoiceDate" => $invoice->invoiceDate->format('Y-m-d'),
                 // 2 months from invoice date
                 "*DueDate" => $invoice->invoiceDate->clone()->addMonths(2)->format('Y-m-d'),
@@ -116,6 +120,7 @@ class AccountController extends Controller
                 "Description" => $invoice?->job?->job_code ?? '',
                 "*Quantity" => 1,
                 "*UnitAmount" => number_format($invoice->total, 2),
+                "Discount" => "",
                 "*AccountCode" => match ($invoice?->job?->jobtypeKey ?? '') {
                     "MR"      => 	"4112004",
                     "NDR"     => 	"4112004",
@@ -149,6 +154,7 @@ class AccountController extends Controller
                 "TrackingName2" => "",
                 "TrackingOption2" => "",
                 "Currency" => "HKD",
+                "BrandingTheme" => "",
             ];
         })
         ->toArray();
