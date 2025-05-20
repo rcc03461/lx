@@ -14,7 +14,8 @@
             <button class="btn btn-primary search">Search</button>
         </div>
         <div class="form-group">
-            <button class="btn export_xero">Export to Xero (Cre8)</button>
+            <button class="btn export_xero_cre8">Export to Xero (Cre8)</button>
+            <button class="btn export_xero_lx">Export to Xero (Lx)</button>
         </div>
     </div>
     <div class="flex flex-shrink-0 items-end gap-4 justify-between">
@@ -148,12 +149,19 @@
 
         $('.search').click(search);
 
-        $('.export_xero').on('click', function(){
+        $('.export_xero_cre8').on('click', function(){
             const date_from = $('input[name="date_from"]').val();
             const date_to = $('input[name="date_to"]').val();
             const search_type = $('select[name="search_type"]').val();
 
-            window.open('account/export_xero?date_from='+date_from+'&date_to='+date_to+'&search_type='+search_type, '_blank');
+            window.open('account/export_xero_cre8?date_from='+date_from+'&date_to='+date_to+'&search_type='+search_type, '_blank');
+        })
+        $('.export_xero_lx').on('click', function(){
+            const date_from = $('input[name="date_from"]').val();
+            const date_to = $('input[name="date_to"]').val();
+            const search_type = $('select[name="search_type"]').val();
+
+            window.open('account/export_xero_lx?date_from='+date_from+'&date_to='+date_to+'&search_type='+search_type, '_blank');
         })
 
         // set settlement date

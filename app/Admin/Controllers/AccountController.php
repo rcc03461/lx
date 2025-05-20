@@ -25,7 +25,7 @@ class AccountController extends Controller
             ->body(view('admin.account.index'));
     }
 
-    public function export_xero(Request $request){
+    public function export_xero_cre8(Request $request){
 
         $date_from = request()->get('date_from');
         $date_to = request()->get('date_to');
@@ -76,6 +76,84 @@ class AccountController extends Controller
         ->toArray();
 
         Excel::export($invoices)->download('Cre8_lx_xero_'.$date_from. '_to_' . $date_to .'.csv');
+
+    }
+    public function export_xero_lx(Request $request){
+
+        $date_from = request()->get('date_from');
+        $date_to = request()->get('date_to');
+        $type = request()->get('type');   // GP
+
+        $invoices = Invoice::with([
+            'task.pos',
+            'task.client',
+            'localtask.client',
+            'job',
+        ])
+        ->whereBetween('invoiceDate', [$date_from, $date_to .' 23:59:59'])
+        // ->dd()
+        ->orderBy('lx_code')
+        ->get()
+        ->transform(function ($invoice) {
+            $invoiceNo = $invoice->lx_code;
+            return [
+                "*ContactName" => $invoice->task->client->name ?? $invoice->localtask->client->name ?? '',
+                "EmailAddress" => "",
+                "POAddressLine1" => $invoice->task->client->address ?? $invoice->localtask->client->address ?? '',
+                "POAddressLine2" => "",
+                "POAddressLine3" => "",
+                "POAddressLine4" => "",
+                "POCity" => "",
+                "PORegion" => "",
+                "POPostalCode" => "",
+                "POCountry" => "",
+                "*InvoiceNumber" => $invoiceNo . ($invoice->invoiceCode ? '('. $invoice->invoiceCode .')' : ''),
+                "*InvoiceDate" => $invoice->invoiceDate->format('Y-m-d'),
+                // 2 months from invoice date
+                "*DueDate" => $invoice->invoiceDate->clone()->addMonths(2)->format('Y-m-d'),
+                "Total" => number_format($invoice->total, 2),
+                "InventoryItemCode" => "",
+                "Description" => $invoice?->job?->job_code ?? '',
+                "*Quantity" => 1,
+                "*UnitAmount" => number_format($invoice->total, 2),
+                "*AccountCode" => match ($invoice?->job?->jobtypeKey ?? '') {
+                    "MR"      => 	"4112004",
+                    "NDR"     => 	"4112004",
+                    "IPO"     => 	"4112006",
+                    "CIR"     => 	"4112003",
+                    "GM"      => 	"4112002",
+                    "FormF"   => 	"4112007",
+                    "AD"      => 	"4112004",
+                    "AR"      => 	"4112001",
+                    "OM"      => 	"4112003",
+                    "OC"      => 	"4112003",
+                    "AP"      => 	"4112006",
+                    "ESG"     => 	"4112001",
+                    "AF"      => 	"4112006",
+                    "Others"  => 	"4112009",
+                    "PHIP"    => 	"4112006",
+                    "Form"    => 	"4112006",
+                    "QR"      => 	"4112001",
+                    "IR"      => 	"4112001",
+                    "TR"      => 	"4112007",
+                    "RR"      => 	"4112007",
+                    "TCFD"    => 	"4112007",
+                    "EForm"   => 	"4112007",
+                    "DOD"     => 	"4112007",
+                    default   => 	"4112009",
+                },
+                "*TaxType" => "Tax Exempt",
+                "TaxAmount" => "",
+                "TrackingName1" => "",
+                "TrackingOption1" => "",
+                "TrackingName2" => "",
+                "TrackingOption2" => "",
+                "Currency" => "HKD",
+            ];
+        })
+        ->toArray();
+
+        Excel::export($invoices)->download('Lx_xero_'.$date_from. '_to_' . $date_to .'.csv');
 
     }
 
